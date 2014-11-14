@@ -1,0 +1,31 @@
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = ons 29 okt 2014 18:28:24
+
+BeginCmp
+TimeStamp = /54513DF5;
+Reference = U1;
+ValeurCmp = XC95288-208;
+IdModule  = PQFP208;
+EndCmp
+
+BeginCmp
+TimeStamp = /54513E13;
+Reference = U2;
+ValeurCmp = MC68030;
+IdModule  = PQFP132M;
+EndCmp
+
+BeginCmp
+TimeStamp = /54513E04;
+Reference = U3;
+ValeurCmp = MC68882;
+IdModule  = PLCC68MS;
+EndCmp
+
+BeginCmp
+TimeStamp = /5451481F;
+Reference = U4;
+ValeurCmp = IDT71V416;
+IdModule  = TSSOP-48;
+EndCmp
+
+EndListe

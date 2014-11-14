@@ -1,0 +1,8 @@
+*.bak
+*.swp
+*.o
+*.elf
+*.hex
+*.orig
+*.a
+build/
