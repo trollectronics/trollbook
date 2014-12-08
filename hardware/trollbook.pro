@@ -1,4 +1,4 @@
-update=sön  7 dec 2014 21:09:34
+update=mån  8 dec 2014 14:15:22
 version=1
 last_client=cvpcb
 [pcbnew]
@@ -38,6 +38,7 @@ LibName14=dip_sockets
 LibName15=pga_sockets
 LibName16=valves
 LibName17=RPACK8_SMD
+LibName18=trollbook
 LibDir=
 [general]
 version=1
