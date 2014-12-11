@@ -1,10 +1,31 @@
-Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = mån  8 dec 2014 15:35:23
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = tor 11 dec 2014 22:29:25
 
 BeginCmp
-TimeStamp = /5484D5D3;
-Reference = J2;
-ValeurCmp = VGAF;
-IdModule  = SUPER_CAP;
+TimeStamp = /548A9199;
+Reference = K1;
+ValeurCmp = CONN_3;
+IdModule  = PIN_ARRAY_3X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /548A2ADD;
+Reference = P1;
+ValeurCmp = VGA;
+IdModule  = PIN_ARRAY-6X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /548AAD44;
+Reference = P2;
+ValeurCmp = LCD;
+IdModule  = FH12-50S-0.5SH;
+EndCmp
+
+BeginCmp
+TimeStamp = /548BB6AD;
+Reference = P3;
+ValeurCmp = SPI;
+IdModule  = pin_array_8x1;
 EndCmp
 
 BeginCmp
@@ -155,13 +176,6 @@ IdModule  = PLCC32MS;
 EndCmp
 
 BeginCmp
-TimeStamp = /5484AA70;
-Reference = U8;
-ValeurCmp = MCP660;
-IdModule  = SO14E;
-EndCmp
-
-BeginCmp
 TimeStamp = /5485C043;
 Reference = U9;
 ValeurCmp = 74LS574;
@@ -194,6 +208,62 @@ TimeStamp = /54868529;
 Reference = U13;
 ValeurCmp = HY57V561620;
 IdModule  = TSOP54;
+EndCmp
+
+BeginCmp
+TimeStamp = /5489C0F0;
+Reference = U15;
+ValeurCmp = 74HC4002;
+IdModule  = SO14E;
+EndCmp
+
+BeginCmp
+TimeStamp = /5489E5F3;
+Reference = U16;
+ValeurCmp = ADA4851-4;
+IdModule  = tssop-14;
+EndCmp
+
+BeginCmp
+TimeStamp = /548A4BB1;
+Reference = U17;
+ValeurCmp = DAC0800;
+IdModule  = SO16E;
+EndCmp
+
+BeginCmp
+TimeStamp = /548A4BC8;
+Reference = U18;
+ValeurCmp = DAC0800;
+IdModule  = SO16E;
+EndCmp
+
+BeginCmp
+TimeStamp = /548B1BA3;
+Reference = U19;
+ValeurCmp = 74HC139;
+IdModule  = SO16E;
+EndCmp
+
+BeginCmp
+TimeStamp = /548B343F;
+Reference = U20;
+ValeurCmp = 74HC10;
+IdModule  = SO14E;
+EndCmp
+
+BeginCmp
+TimeStamp = /548BE76F;
+Reference = Y1;
+ValeurCmp = 50 MHz;
+IdModule  = OSC-VCC1-B3B;
+EndCmp
+
+BeginCmp
+TimeStamp = /548BE77C;
+Reference = Y2;
+ValeurCmp = 12.288 MHz;
+IdModule  = OSC-ASFLMB;
 EndCmp
 
 EndListe
