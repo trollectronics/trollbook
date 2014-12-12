@@ -1,8 +1,6 @@
-update=fre 12 dec 2014 14:20:45
+update=fre 12 dec 2014 22:15:57
 version=1
-last_client=pcbnew
-[general]
-version=1
+last_client=kicad
 [eeschema]
 version=1
 LibDir=
@@ -87,3 +85,5 @@ LibName15=pga_sockets
 LibName16=valves
 LibName17=RPACK8_SMD
 LibName18=trollbook
+[general]
+version=1

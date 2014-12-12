@@ -1,11 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = tor 11 dec 2014 22:29:25
-
-BeginCmp
-TimeStamp = /548A9199;
-Reference = K1;
-ValeurCmp = CONN_3;
-IdModule  = PIN_ARRAY_3X1;
-EndCmp
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = fre 12 dec 2014 22:15:59
 
 BeginCmp
 TimeStamp = /548A2ADD;
@@ -29,6 +22,34 @@ IdModule  = pin_array_8x1;
 EndCmp
 
 BeginCmp
+TimeStamp = /548B9D74;
+Reference = P4;
+ValeurCmp = CONN_12;
+IdModule  = SIL-12;
+EndCmp
+
+BeginCmp
+TimeStamp = /548BD54E;
+Reference = P5;
+ValeurCmp = CONN_2;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /548BDC9F;
+Reference = P6;
+ValeurCmp = CONN_2;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /548BC9F4;
+Reference = P7;
+ValeurCmp = CONN_2;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
 TimeStamp = /5485D3C9;
 Reference = R1;
 ValeurCmp = 10k;
@@ -46,6 +67,48 @@ BeginCmp
 TimeStamp = /5485D3C3;
 Reference = R3;
 ValeurCmp = 10k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /548C5626;
+Reference = R4;
+ValeurCmp = 560k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /548C561A;
+Reference = R5;
+ValeurCmp = 560k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /548C560E;
+Reference = R6;
+ValeurCmp = 560k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /548C5620;
+Reference = R7;
+ValeurCmp = 150k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /548C5601;
+Reference = R8;
+ValeurCmp = 150k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /548C5614;
+Reference = R9;
+ValeurCmp = 150k;
 IdModule  = SM0805;
 EndCmp
 
@@ -152,13 +215,6 @@ TimeStamp = /54850705;
 Reference = U4;
 ValeurCmp = IDT71V416;
 IdModule  = TSSOP-48;
-EndCmp
-
-BeginCmp
-TimeStamp = /54834FA6;
-Reference = U5;
-ValeurCmp = 74LS244;
-IdModule  = ;
 EndCmp
 
 BeginCmp
