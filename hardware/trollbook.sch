@@ -37,7 +37,7 @@ $Descr A1 33110 23386
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "11 dec 2014"
+Date "12 dec 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -996,9 +996,9 @@ Text Label 4300 17800 0    60   ~ 0
 LLD4
 Text Label 4300 17700 0    60   ~ 0
 LLD5
-Text Label 4300 17600 0    60   ~ 0
-LLD6
 Text Label 4300 17500 0    60   ~ 0
+LLD6
+Text Label 4300 17600 0    60   ~ 0
 LLD7
 Text Label 4300 15700 0    60   ~ 0
 LLD8
