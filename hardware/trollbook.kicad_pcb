@@ -3,7 +3,7 @@
   (general
     (links 648)
     (no_connects 213)
-    (area 89.924999 139.924999 190.075001 240.075001)
+    (area 76.137769 102.362 232.534333 245.452901)
     (thickness 1.6)
     (drawings 8)
     (tracks 2781)
@@ -32,7 +32,7 @@
   )
 
   (setup
-    (last_trace_width 0.2032)
+    (last_trace_width 0.1524)
     (user_trace_width 0.1524)
     (user_trace_width 0.2032)
     (trace_clearance 0.2032)
@@ -61,8 +61,8 @@
     (aux_axis_origin 0 0)
     (visible_elements FFFFFFCF)
     (pcbplotparams
-      (layerselection 3178497)
-      (usegerberextensions true)
+      (layerselection 32769)
+      (usegerberextensions false)
       (excludeedgelayer true)
       (linewidth 0.150000)
       (plotframeref false)
@@ -81,11 +81,11 @@
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
-      (outputformat 1)
+      (outputformat 2)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory /tmp/orvar/))
   )
 
   (net 0 "")
@@ -2002,6 +2002,11 @@
       (layers F.Cu F.Paste F.Mask)
       (net 86 /IPL1)
     )
+    (model 3d/pqfp132.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 90))
+    )
   )
 
   (module PLCC68MS (layer F.Cu) (tedit 3D86F9B6) (tstamp 54511991)
@@ -2295,6 +2300,11 @@
     (pad 43 smd rect (at 12.065 -10.16 90) (size 2.032 0.762)
       (layers F.Cu F.Paste F.Mask)
       (net 3 +5V)
+    )
+    (model 3d/plcc68.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
 
@@ -2661,6 +2671,11 @@
     (pad 32 smd rect (at 1.27 -6.985 90) (size 0.762 2.032)
       (layers F.Cu F.Paste F.Mask)
       (net 3 +5V)
+    )
+    (model 3d/plcc32.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 90))
     )
   )
 
@@ -5228,7 +5243,7 @@
   )
 
   (module PIN_ARRAY_2X1 (layer F.Cu) (tedit 4565C520) (tstamp 548B4C4C)
-    (at 107.442 129.667 180)
+    (at 107.823 134.874 180)
     (descr "Connecteurs 2 pins")
     (tags "CONN DEV")
     (path /548BDC9F)
@@ -5258,7 +5273,7 @@
   )
 
   (module SM0805 (layer F.Cu) (tedit 5091495C) (tstamp 548B5A5B)
-    (at 54.0385 166.9415)
+    (at 79.4385 173.6725)
     (path /548C5601)
     (attr smd)
     (fp_text reference R8 (at 0 -0.3175) (layer F.SilkS)
@@ -5290,7 +5305,7 @@
   )
 
   (module SM0805 (layer F.Cu) (tedit 5091495C) (tstamp 548B5A68)
-    (at 52.7685 158.1785)
+    (at 78.1685 164.9095)
     (path /548C560E)
     (attr smd)
     (fp_text reference R6 (at 0 -0.3175) (layer F.SilkS)
@@ -5322,7 +5337,7 @@
   )
 
   (module SM0805 (layer F.Cu) (tedit 5091495C) (tstamp 548B5A75)
-    (at 52.7685 161.417)
+    (at 78.1685 168.148)
     (path /548C5614)
     (attr smd)
     (fp_text reference R9 (at 0 -0.3175) (layer F.SilkS)
@@ -5354,7 +5369,7 @@
   )
 
   (module SM0805 (layer F.Cu) (tedit 5091495C) (tstamp 548B5A82)
-    (at 53.0225 163.7665)
+    (at 78.4225 170.4975)
     (path /548C561A)
     (attr smd)
     (fp_text reference R5 (at 0 -0.3175) (layer F.SilkS)
@@ -5386,7 +5401,7 @@
   )
 
   (module SM0805 (layer F.Cu) (tedit 5091495C) (tstamp 548B5A8F)
-    (at 53.7845 153.7335)
+    (at 79.1845 160.4645)
     (path /548C5620)
     (attr smd)
     (fp_text reference R7 (at 0 -0.3175) (layer F.SilkS)
@@ -5418,7 +5433,7 @@
   )
 
   (module SM0805 (layer F.Cu) (tedit 5091495C) (tstamp 548B5A9C)
-    (at 53.086 150.6855)
+    (at 78.486 157.4165)
     (path /548C5626)
     (attr smd)
     (fp_text reference R4 (at 0 -0.3175) (layer F.SilkS)
