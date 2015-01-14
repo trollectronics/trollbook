@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = fre 12 dec 2014 22:15:59
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = fre  2 jan 2015 12:49:39
 
 BeginCmp
 TimeStamp = /548A2ADD;
@@ -47,6 +47,13 @@ TimeStamp = /548BC9F4;
 Reference = P7;
 ValeurCmp = CONN_2;
 IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /54A5A241;
+Reference = P8;
+ValeurCmp = CONN_4;
+IdModule  = ;
 EndCmp
 
 BeginCmp
@@ -218,6 +225,13 @@ IdModule  = TSSOP-48;
 EndCmp
 
 BeginCmp
+TimeStamp = /54A687E4;
+Reference = U5;
+ValeurCmp = TLC7524;
+IdModule  = SO16E;
+EndCmp
+
+BeginCmp
 TimeStamp = /54834FB5;
 Reference = U6;
 ValeurCmp = 74LS574;
@@ -229,6 +243,13 @@ TimeStamp = /5484E4D3;
 Reference = U7;
 ValeurCmp = 39F040;
 IdModule  = PLCC32MS;
+EndCmp
+
+BeginCmp
+TimeStamp = /54A687F1;
+Reference = U8;
+ValeurCmp = TLC7524;
+IdModule  = SO16E;
 EndCmp
 
 BeginCmp
@@ -278,20 +299,6 @@ TimeStamp = /5489E5F3;
 Reference = U16;
 ValeurCmp = ADA4851-4;
 IdModule  = tssop-14;
-EndCmp
-
-BeginCmp
-TimeStamp = /548A4BB1;
-Reference = U17;
-ValeurCmp = DAC0800;
-IdModule  = SO16E;
-EndCmp
-
-BeginCmp
-TimeStamp = /548A4BC8;
-Reference = U18;
-ValeurCmp = DAC0800;
-IdModule  = SO16E;
 EndCmp
 
 BeginCmp

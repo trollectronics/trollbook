@@ -61,8 +61,8 @@
     (aux_axis_origin 0 0)
     (visible_elements FFFFFFCF)
     (pcbplotparams
-      (layerselection 3178497)
-      (usegerberextensions true)
+      (layerselection 32769)
+      (usegerberextensions false)
       (excludeedgelayer true)
       (linewidth 0.150000)
       (plotframeref false)
@@ -81,11 +81,11 @@
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
-      (outputformat 1)
+      (outputformat 2)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory /tmp/orvar/))
   )
 
   (net 0 "")
@@ -2002,6 +2002,11 @@
       (layers F.Cu F.Paste F.Mask)
       (net 86 /IPL1)
     )
+    (model 3d/pqfp132.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 90))
+    )
   )
 
   (module PLCC68MS (layer F.Cu) (tedit 3D86F9B6) (tstamp 54511991)
@@ -2670,7 +2675,7 @@
     (model 3d/plcc32.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz 0 0 90))
     )
   )
 
