@@ -1,4 +1,4 @@
-EESchema-LIBRARY Version 2.3  Date: fre  9 jan 2015 17:11:40
+EESchema-LIBRARY Version 2.3  Date: tor 15 jan 2015 02:09:01
 #encoding utf-8
 #
 # +10V
@@ -268,6 +268,20 @@ X IN+ 10 -650 -150 300 R 50 50 3 1 I
 X IN+ 12 -650 -150 300 R 50 50 4 1 I
 X IN- 13 -650 150 300 R 50 50 4 1 I
 X OUT 14 900 0 300 L 50 50 4 1 O
+ENDDRAW
+ENDDEF
+#
+# CONN_1
+#
+DEF ~CONN_1 P 0 30 N N 1 F N
+F0 "P" 80 0 40 H V L CNN
+F1 "CONN_1" 0 55 30 H I C CNN
+F2 "~" 0 0 60 H V C CNN
+F3 "~" 0 0 60 H V C CNN
+DRAW
+C 0 0 31 0 1 0 N
+P 2 0 1 0  -30 0  -50 0 N
+X 1 1 -150 0 100 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
