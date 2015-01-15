@@ -1,6 +1,6 @@
-update=fre 12 dec 2014 22:15:57
+update=tor 15 jan 2015 21:55:33
 version=1
-last_client=kicad
+last_client=pcbnew
 [eeschema]
 version=1
 LibDir=
@@ -46,6 +46,8 @@ version=1
 NetIExt=net
 [cvpcb/libraries]
 EquName1=devcms
+[general]
+version=1
 [pcbnew]
 version=1
 LastNetListRead=
@@ -85,5 +87,3 @@ LibName15=pga_sockets
 LibName16=valves
 LibName17=RPACK8_SMD
 LibName18=trollbook
-[general]
-version=1
