@@ -10661,7 +10661,7 @@
   (segment (start 145.56486 163.703) (end 145.56486 162.306) (width 0.2032) (layer B.Cu) (net 202) (tstamp 548B4B75))
   (segment (start 129.4765 145.034) (end 91.694 145.034) (width 0.2032) (layer F.Cu) (net 202) (tstamp 548B4A40))
   (segment (start 144.2085 159.766) (end 129.4765 145.034) (width 0.2032) (layer F.Cu) (net 202) (tstamp 548B4A5D))
-  (segment (start 142.875 167.1955) (end 142.875 163.1315) (width 0.3) (layer B.Cu) (net 203) (status 400000))
+  (segment (start 142.875 167.1955) (end 142.875 163.1315) (width 0.3) (layer B.Cu) (net 203))
   (segment (start 142.875 163.1315) (end 143.8275 162.179) (width 0.3) (layer B.Cu) (net 203) (tstamp 54D66DC1))
   (segment (start 141.6685 160.02) (end 140.97 160.02) (width 0.3) (layer F.Cu) (net 203) (tstamp 54D66C72))
   (via (at 143.8275 162.179) (size 0.7) (layers F.Cu B.Cu) (net 203))

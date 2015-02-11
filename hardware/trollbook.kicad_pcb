@@ -2936,7 +2936,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 197 /VGAR0)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2984,7 +2984,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 201 /VGAR4)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3032,7 +3032,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 191 /VGAG3)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3080,7 +3080,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 184 /VGAB1)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3446,7 +3446,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 206 N-0000010)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3494,7 +3494,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 240 N-000005)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3542,7 +3542,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 216 N-000002)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3590,7 +3590,7 @@
       (layers F.Cu F.Paste F.Mask)
       (net 207 N-0000011)
     )
-    (model rpack/rpack.wrl
+    (model 3d/rpack.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
