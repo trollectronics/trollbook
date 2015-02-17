@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = lör 17 jan 2015 18:25:02
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = tis 17 feb 2015 11:05:00
 
 BeginCmp
 TimeStamp = /54B80EB4;
@@ -571,7 +571,7 @@ BeginCmp
 TimeStamp = /54850705;
 Reference = U4;
 ValeurCmp = IDT71V416;
-IdModule  = TSSOP-48;
+IdModule  = TSOP44;
 EndCmp
 
 BeginCmp
@@ -584,7 +584,7 @@ EndCmp
 BeginCmp
 TimeStamp = /54834FB5;
 Reference = U6;
-ValeurCmp = 74LS574;
+ValeurCmp = 74LVC574;
 IdModule  = SO20L;
 EndCmp
 
@@ -605,21 +605,21 @@ EndCmp
 BeginCmp
 TimeStamp = /5485C043;
 Reference = U9;
-ValeurCmp = 74LS574;
+ValeurCmp = 74LVC574;
 IdModule  = SO20L;
 EndCmp
 
 BeginCmp
 TimeStamp = /5485C051;
 Reference = U10;
-ValeurCmp = 74LS574;
+ValeurCmp = 74LVC574;
 IdModule  = SO20L;
 EndCmp
 
 BeginCmp
 TimeStamp = /5485BBF2;
 Reference = U11;
-ValeurCmp = 74LS574;
+ValeurCmp = 74LVC574;
 IdModule  = SO20L;
 EndCmp
 
@@ -661,7 +661,7 @@ EndCmp
 BeginCmp
 TimeStamp = /548B343F;
 Reference = U20;
-ValeurCmp = 74HC10;
+ValeurCmp = 74LVC10;
 IdModule  = SO14E;
 EndCmp
 
