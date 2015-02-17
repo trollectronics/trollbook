@@ -3,9 +3,9 @@
   (general
     (links 783)
     (no_connects 0)
-    (area 61.123286 102.362 232.534333 241.075001)
+    (area 81.541667 135.2595 189.769988 241.075001)
     (thickness 1.6)
-    (drawings 17)
+    (drawings 16)
     (tracks 4792)
     (zones 0)
     (modules 97)
@@ -3662,6 +3662,11 @@
       (layers F.Cu F.Paste F.Mask)
       (net 204 GND)
     )
+    (model 3d/tsop54.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
+    )
   )
 
   (module TSOP54 (layer F.Cu) (tedit 54B7EBAB) (tstamp 5485AF48)
@@ -3940,6 +3945,11 @@
     (pad 54 smd rect (at -10.4 -5.2) (size 0.3 2)
       (layers F.Cu F.Paste F.Mask)
       (net 204 GND)
+    )
+    (model 3d/tsop54.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
     )
   )
 
@@ -4700,6 +4710,11 @@
       (layers B.Cu B.Paste B.Mask)
       (net 204 GND)
     )
+    (model 3d/fh12-50s.wrl
+      (at (xyz 0.482 -0.124 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
+    )
   )
 
   (module OSC-VCC1-B3B (layer F.Cu) (tedit 54B7EB62) (tstamp 548A127C)
@@ -4731,6 +4746,11 @@
       (layers F.Cu F.Paste F.Mask)
       (net 203 3V3)
     )
+    (model 3d/vcc1-osc.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 90))
+    )
   )
 
   (module OSC-ASFLMB (layer F.Cu) (tedit 54B7EB5A) (tstamp 548A1289)
@@ -4761,6 +4781,11 @@
     (pad 3 smd rect (at 1.27 -1.0205 270) (size 1.1 1.2)
       (layers F.Cu F.Paste F.Mask)
       (net 42 /CLK12)
+    )
+    (model 3d/abra-osc.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 90))
     )
   )
 
@@ -7152,6 +7177,11 @@
       (layers F.Cu F.Paste F.Mask)
       (net 98 /LLA18)
     )
+    (model 3d/tsop44.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
+    )
   )
 
   (gr_text DAC (at 100.1776 214.9856 90) (layer F.SilkS)
@@ -7207,18 +7237,6 @@
   )
   (gr_text Batteri (at 116.0145 136.3345) (layer Eco2.User)
     (effects (font (size 1 1) (thickness 0.25)))
-  )
-  (dimension 45.72 (width 0.25) (layer Eco2.User)
-    (gr_text "45,720 mm" (at 228.075999 125.222 270) (layer Eco2.User)
-      (effects (font (size 1 1) (thickness 0.25)))
-    )
-    (feature1 (pts (xy 221.996 148.082) (xy 229.075999 148.082)))
-    (feature2 (pts (xy 221.996 102.362) (xy 229.075999 102.362)))
-    (crossbar (pts (xy 227.075999 102.362) (xy 227.075999 148.082)))
-    (arrow1a (pts (xy 227.075999 148.082) (xy 226.489579 146.955497)))
-    (arrow1b (pts (xy 227.075999 148.082) (xy 227.662419 146.955497)))
-    (arrow2a (pts (xy 227.075999 102.362) (xy 226.489579 103.488503)))
-    (arrow2b (pts (xy 227.075999 102.362) (xy 227.662419 103.488503)))
   )
   (gr_line (start 189.5 241) (end 189.5 141) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 89.5 241) (end 189.5 241) (angle 90) (layer Edge.Cuts) (width 0.15))
