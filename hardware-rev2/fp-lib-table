@@ -1,3 +1,4 @@
 (fp_lib_table
   (lib (name mod)(type KiCad)(uri "$(KIPRJMOD)/mod")(options "")(descr ""))
+  (lib (name trollbook)(type Legacy)(uri "$(KIPRJMOD)/mod/trollbook.mod")(options "")(descr ""))
 )

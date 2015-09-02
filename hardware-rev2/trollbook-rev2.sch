@@ -30,10 +30,14 @@ LIBS:contrib
 LIBS:valves
 LIBS:MC68040FC33V
 LIBS:EPF10K50VRC240
+LIBS:39f040
+LIBS:hy57v561620
+LIBS:idt71v416
+LIBS:tlc7524
 LIBS:trollbook-rev2-cache
 EELAYER 25 0
 EELAYER END
-$Descr A1 33110 23386
+$Descr A0 46811 33110
 encoding utf-8
 Sheet 1 1
 Title ""
@@ -67,4 +71,613 @@ F 3 "DOCUMENTATION" H 10000 11000 50  0001 C CNN
 	1    10000 11600
 	1    0    0    -1  
 $EndComp
+$Comp
+L 39F040 U3
+U 1 1 55E4A8CD
+P 35100 5400
+F 0 "U3" H 35100 5050 60  0000 C CNN
+F 1 "39F040" H 35100 5700 60  0000 C CNN
+F 2 "" H 35100 5300 60  0001 C CNN
+F 3 "" H 35100 5300 60  0000 C CNN
+	1    35100 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L HY57V561620 U4
+U 1 1 55E4A91C
+P 33500 11750
+F 0 "U4" H 33550 11650 60  0000 C CNN
+F 1 "HY57V561620" H 33500 12250 60  0000 C CNN
+F 2 "mod:TSOP54" H 33550 11750 60  0001 C CNN
+F 3 "" H 33550 11750 60  0000 C CNN
+	1    33500 11750
+	1    0    0    -1  
+$EndComp
+$Comp
+L HY57V561620 U5
+U 1 1 55E4A9E5
+P 35650 11750
+F 0 "U5" H 35700 11650 60  0000 C CNN
+F 1 "HY57V561620" H 35650 12250 60  0000 C CNN
+F 2 "mod:TSOP54" H 35700 11750 60  0001 C CNN
+F 3 "" H 35700 11750 60  0000 C CNN
+	1    35650 11750
+	1    0    0    -1  
+$EndComp
+$Comp
+L IDT71V416 U6
+U 1 1 55E4AA6C
+P 31600 18050
+F 0 "U6" H 31600 18100 60  0000 C CNN
+F 1 "IDT71V416" H 31600 18000 60  0000 C CNN
+F 2 "mod:TSOP44" H 31600 18100 60  0001 C CNN
+F 3 "" H 31600 18100 60  0000 C CNN
+	1    31600 18050
+	1    0    0    -1  
+$EndComp
+$Comp
+L TLC7524 U7
+U 1 1 55E4AB0F
+P 28550 28600
+F 0 "U7" H 28550 28550 60  0000 C CNN
+F 1 "TLC7524" H 28550 28650 60  0000 C CNN
+F 2 "Housings_SOIC:SOIC-16_3.9x9.9mm_Pitch1.27mm" H 28550 28600 60  0001 C CNN
+F 3 "" H 28550 28600 60  0000 C CNN
+	1    28550 28600
+	1    0    0    -1  
+$EndComp
+$Comp
+L TLC7524 U8
+U 1 1 55E4ABC7
+P 28550 30650
+F 0 "U8" H 28550 30600 60  0000 C CNN
+F 1 "TLC7524" H 28550 30700 60  0000 C CNN
+F 2 "Housings_SOIC:SOIC-16_3.9x9.9mm_Pitch1.27mm" H 28550 30650 60  0001 C CNN
+F 3 "" H 28550 30650 60  0000 C CNN
+	1    28550 30650
+	1    0    0    -1  
+$EndComp
+Text Label 18300 8600 0    60   ~ 0
+A0
+Text Label 18300 8700 0    60   ~ 0
+A1
+Text Label 18300 8800 0    60   ~ 0
+A2
+Text Label 18300 8900 0    60   ~ 0
+A3
+Text Label 18300 9000 0    60   ~ 0
+A4
+Text Label 18300 9100 0    60   ~ 0
+A5
+Text Label 18300 9200 0    60   ~ 0
+A6
+Text Label 18300 9300 0    60   ~ 0
+A7
+Text Label 18300 9400 0    60   ~ 0
+A8
+Text Label 18300 9500 0    60   ~ 0
+A9
+Text Label 18300 9600 0    60   ~ 0
+A10
+Text Label 18300 9700 0    60   ~ 0
+A11
+Text Label 18300 9800 0    60   ~ 0
+A12
+Text Label 18300 9900 0    60   ~ 0
+A13
+Text Label 18300 10000 0    60   ~ 0
+A14
+Text Label 18300 10100 0    60   ~ 0
+A15
+Text Label 18300 10200 0    60   ~ 0
+A16
+Text Label 18300 10300 0    60   ~ 0
+A17
+Text Label 18300 10400 0    60   ~ 0
+A18
+Text Label 18300 10500 0    60   ~ 0
+A19
+Text Label 18300 10600 0    60   ~ 0
+A20
+Text Label 18300 10700 0    60   ~ 0
+A21
+Text Label 18300 10800 0    60   ~ 0
+A22
+Text Label 18300 10900 0    60   ~ 0
+A23
+Text Label 18300 11000 0    60   ~ 0
+A24
+Text Label 18300 11100 0    60   ~ 0
+A25
+Text Label 18300 11200 0    60   ~ 0
+A26
+Text Label 18300 11300 0    60   ~ 0
+A27
+Text Label 18300 11400 0    60   ~ 0
+A28
+Text Label 18300 11500 0    60   ~ 0
+A29
+Text Label 18300 11600 0    60   ~ 0
+A30
+Text Label 18300 11700 0    60   ~ 0
+A31
+Text Label 18300 11900 0    60   ~ 0
+D0
+Text Label 18300 12000 0    60   ~ 0
+D1
+Text Label 18300 12100 0    60   ~ 0
+D2
+Text Label 18300 12200 0    60   ~ 0
+D3
+Text Label 18300 12300 0    60   ~ 0
+D4
+Text Label 18300 12400 0    60   ~ 0
+D5
+Text Label 18300 12500 0    60   ~ 0
+D6
+Text Label 18300 12600 0    60   ~ 0
+D7
+Text Label 18300 12700 0    60   ~ 0
+D8
+Text Label 18300 12800 0    60   ~ 0
+D9
+Text Label 18300 12900 0    60   ~ 0
+D10
+Text Label 18300 13000 0    60   ~ 0
+D11
+Text Label 18300 13100 0    60   ~ 0
+D12
+Text Label 18300 13200 0    60   ~ 0
+D13
+Text Label 18300 13300 0    60   ~ 0
+D14
+Text Label 18300 13400 0    60   ~ 0
+D15
+Text Label 18300 13500 0    60   ~ 0
+D16
+Text Label 18300 13600 0    60   ~ 0
+D17
+Text Label 18300 13700 0    60   ~ 0
+D18
+Text Label 18300 13800 0    60   ~ 0
+D19
+Text Label 18300 13900 0    60   ~ 0
+D20
+Text Label 18300 14000 0    60   ~ 0
+D21
+Text Label 18300 14100 0    60   ~ 0
+D22
+Text Label 18300 14200 0    60   ~ 0
+D23
+Text Label 18300 14300 0    60   ~ 0
+D24
+Text Label 18300 14400 0    60   ~ 0
+D25
+Text Label 18300 14500 0    60   ~ 0
+D26
+Text Label 18300 14600 0    60   ~ 0
+D27
+Text Label 18300 14700 0    60   ~ 0
+D28
+Text Label 18300 14800 0    60   ~ 0
+D29
+Text Label 18300 14900 0    60   ~ 0
+D30
+Text Label 18300 15000 0    60   ~ 0
+D31
+$Comp
+L GND #PWR01
+U 1 1 55E7002D
+P 21500 15650
+F 0 "#PWR01" H 21500 15400 50  0001 C CNN
+F 1 "GND" H 21500 15500 50  0000 C CNN
+F 2 "" H 21500 15650 60  0000 C CNN
+F 3 "" H 21500 15650 60  0000 C CNN
+	1    21500 15650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	18800 8600 18200 8600
+Wire Wire Line
+	18800 8700 18200 8700
+Wire Wire Line
+	18800 8800 18200 8800
+Wire Wire Line
+	18800 8900 18200 8900
+Wire Wire Line
+	18800 9000 18200 9000
+Wire Wire Line
+	18800 9100 18200 9100
+Wire Wire Line
+	18800 9200 18200 9200
+Wire Wire Line
+	18800 9300 18200 9300
+Wire Wire Line
+	18800 9400 18200 9400
+Wire Wire Line
+	18800 9500 18200 9500
+Wire Wire Line
+	18800 9600 18200 9600
+Wire Wire Line
+	18800 9700 18200 9700
+Wire Wire Line
+	18800 9800 18200 9800
+Wire Wire Line
+	18800 9900 18200 9900
+Wire Wire Line
+	18800 10000 18200 10000
+Wire Wire Line
+	18800 10100 18200 10100
+Wire Wire Line
+	18800 10200 18200 10200
+Wire Wire Line
+	18800 10300 18200 10300
+Wire Wire Line
+	18800 10400 18200 10400
+Wire Wire Line
+	18800 10500 18200 10500
+Wire Wire Line
+	18800 10600 18200 10600
+Wire Wire Line
+	18800 10700 18200 10700
+Wire Wire Line
+	18800 10800 18200 10800
+Wire Wire Line
+	18800 10900 18200 10900
+Wire Wire Line
+	18800 11000 18200 11000
+Wire Wire Line
+	18800 11100 18200 11100
+Wire Wire Line
+	18800 11200 18200 11200
+Wire Wire Line
+	18800 11300 18200 11300
+Wire Wire Line
+	18800 11400 18200 11400
+Wire Wire Line
+	18800 11500 18200 11500
+Wire Wire Line
+	18800 11600 18200 11600
+Wire Wire Line
+	18800 11700 18200 11700
+Wire Wire Line
+	18800 11900 18200 11900
+Wire Wire Line
+	18800 12000 18200 12000
+Wire Wire Line
+	18800 12100 18200 12100
+Wire Wire Line
+	18800 12200 18200 12200
+Wire Wire Line
+	18800 12300 18200 12300
+Wire Wire Line
+	18800 12400 18200 12400
+Wire Wire Line
+	18800 12500 18200 12500
+Wire Wire Line
+	18800 12600 18200 12600
+Wire Wire Line
+	18800 12700 18200 12700
+Wire Wire Line
+	18800 12800 18200 12800
+Wire Wire Line
+	18800 12900 18200 12900
+Wire Wire Line
+	18800 13000 18200 13000
+Wire Wire Line
+	18800 13100 18200 13100
+Wire Wire Line
+	18800 13200 18200 13200
+Wire Wire Line
+	18800 13300 18200 13300
+Wire Wire Line
+	18800 13400 18200 13400
+Wire Wire Line
+	18800 13500 18200 13500
+Wire Wire Line
+	18800 13600 18200 13600
+Wire Wire Line
+	18800 13700 18200 13700
+Wire Wire Line
+	18800 13800 18200 13800
+Wire Wire Line
+	18800 13900 18200 13900
+Wire Wire Line
+	18800 14000 18200 14000
+Wire Wire Line
+	18800 14100 18200 14100
+Wire Wire Line
+	18800 14200 18200 14200
+Wire Wire Line
+	18800 14300 18200 14300
+Wire Wire Line
+	18800 14400 18200 14400
+Wire Wire Line
+	18800 14500 18200 14500
+Wire Wire Line
+	18800 14600 18200 14600
+Wire Wire Line
+	18800 14700 18200 14700
+Wire Wire Line
+	18800 14800 18200 14800
+Wire Wire Line
+	18800 14900 18200 14900
+Wire Wire Line
+	18800 15000 18200 15000
+Wire Wire Line
+	19600 15500 23500 15500
+Connection ~ 19700 15500
+Connection ~ 19800 15500
+Connection ~ 19900 15500
+Connection ~ 20000 15500
+Connection ~ 20100 15500
+Connection ~ 20200 15500
+Connection ~ 20300 15500
+Connection ~ 20400 15500
+Connection ~ 20500 15500
+Connection ~ 20600 15500
+Connection ~ 20700 15500
+Connection ~ 20800 15500
+Connection ~ 20900 15500
+Connection ~ 21000 15500
+Connection ~ 21100 15500
+Connection ~ 21200 15500
+Connection ~ 21300 15500
+Connection ~ 21400 15500
+Connection ~ 21500 15500
+Connection ~ 21600 15500
+Connection ~ 21700 15500
+Connection ~ 21800 15500
+Connection ~ 21900 15500
+Connection ~ 22000 15500
+Connection ~ 22100 15500
+Connection ~ 22200 15500
+Connection ~ 22300 15500
+Connection ~ 22400 15500
+Connection ~ 22500 15500
+Connection ~ 22600 15500
+Connection ~ 22700 15500
+Connection ~ 22800 15500
+Connection ~ 22900 15500
+Connection ~ 23000 15500
+Connection ~ 23100 15500
+Connection ~ 23200 15500
+Connection ~ 23300 15500
+Connection ~ 23400 15500
+Wire Wire Line
+	21500 15650 21500 15500
+Wire Wire Line
+	20600 8100 23500 8100
+Connection ~ 20700 8100
+Connection ~ 20800 8100
+Connection ~ 20900 8100
+Connection ~ 21000 8100
+Connection ~ 21100 8100
+Connection ~ 21200 8100
+Connection ~ 21300 8100
+Connection ~ 21400 8100
+Connection ~ 21500 8100
+Connection ~ 21600 8100
+Connection ~ 21700 8100
+Connection ~ 21800 8100
+Connection ~ 21900 8100
+Connection ~ 22000 8100
+Connection ~ 22100 8100
+Connection ~ 22200 8100
+Connection ~ 22300 8100
+Connection ~ 22400 8100
+Connection ~ 22500 8100
+Connection ~ 22600 8100
+Connection ~ 22700 8100
+Connection ~ 22800 8100
+Connection ~ 22900 8100
+Connection ~ 23000 8100
+Connection ~ 23100 8100
+Connection ~ 23200 8100
+Connection ~ 23300 8100
+Connection ~ 23400 8100
+$Comp
+L +3V3 #PWR02
+U 1 1 55E7108D
+P 22100 7900
+F 0 "#PWR02" H 22100 7750 50  0001 C CNN
+F 1 "+3V3" H 22100 8040 50  0000 C CNN
+F 2 "" H 22100 7900 60  0000 C CNN
+F 3 "" H 22100 7900 60  0000 C CNN
+	1    22100 7900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	22100 7900 22100 8100
+Wire Wire Line
+	9100 5800 10900 5800
+Connection ~ 9200 5800
+Connection ~ 9300 5800
+Connection ~ 9400 5800
+Connection ~ 9500 5800
+Connection ~ 9600 5800
+Connection ~ 9700 5800
+Connection ~ 9800 5800
+Connection ~ 9900 5800
+Connection ~ 10000 5800
+Connection ~ 10100 5800
+Connection ~ 10200 5800
+Connection ~ 10300 5800
+Connection ~ 10400 5800
+Connection ~ 10500 5800
+Connection ~ 10600 5800
+Connection ~ 10700 5800
+Connection ~ 10800 5800
+$Comp
+L +3V3 #PWR03
+U 1 1 55E71F70
+P 10000 5600
+F 0 "#PWR03" H 10000 5450 50  0001 C CNN
+F 1 "+3V3" H 10000 5740 50  0000 C CNN
+F 2 "" H 10000 5600 60  0000 C CNN
+F 3 "" H 10000 5600 60  0000 C CNN
+	1    10000 5600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10000 5600 10000 5800
+Wire Wire Line
+	9100 17500 10800 17500
+Connection ~ 9200 17500
+Connection ~ 9300 17500
+Connection ~ 9400 17500
+Connection ~ 9500 17500
+Connection ~ 9600 17500
+Connection ~ 9700 17500
+Connection ~ 9800 17500
+Connection ~ 9900 17500
+Connection ~ 10000 17500
+Connection ~ 10100 17500
+Connection ~ 10200 17500
+Connection ~ 10300 17500
+Connection ~ 10400 17500
+Connection ~ 10500 17500
+Connection ~ 10600 17500
+Connection ~ 10700 17500
+$Comp
+L GND #PWR04
+U 1 1 55E72C7A
+P 9900 17700
+F 0 "#PWR04" H 9900 17450 50  0001 C CNN
+F 1 "GND" H 9900 17550 50  0000 C CNN
+F 2 "" H 9900 17700 60  0000 C CNN
+F 3 "" H 9900 17700 60  0000 C CNN
+	1    9900 17700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9900 17700 9900 17500
+Text Label 7800 12000 0    60   ~ 0
+A0
+Text Label 7800 12100 0    60   ~ 0
+A1
+Text Label 7800 12200 0    60   ~ 0
+A2
+Text Label 7800 12300 0    60   ~ 0
+A3
+Text Label 7800 12400 0    60   ~ 0
+A4
+Text Label 7800 12500 0    60   ~ 0
+A5
+Text Label 7800 12600 0    60   ~ 0
+A6
+Text Label 7800 12700 0    60   ~ 0
+A7
+Text Label 7800 12800 0    60   ~ 0
+A8
+Text Label 7800 12900 0    60   ~ 0
+A9
+Text Label 7800 13000 0    60   ~ 0
+A10
+Text Label 7800 13100 0    60   ~ 0
+A11
+Text Label 7800 13200 0    60   ~ 0
+A12
+Text Label 7800 13300 0    60   ~ 0
+A13
+Text Label 7800 13400 0    60   ~ 0
+A14
+Text Label 7800 13500 0    60   ~ 0
+A15
+Text Label 7800 13600 0    60   ~ 0
+A16
+Text Label 7800 13700 0    60   ~ 0
+A17
+Text Label 7800 13800 0    60   ~ 0
+A18
+Text Label 7800 13900 0    60   ~ 0
+A19
+Text Label 7800 14000 0    60   ~ 0
+A20
+Text Label 7800 14100 0    60   ~ 0
+A21
+Text Label 7800 14200 0    60   ~ 0
+A22
+Text Label 7800 14300 0    60   ~ 0
+A23
+Text Label 7800 14400 0    60   ~ 0
+A24
+Text Label 7800 14500 0    60   ~ 0
+A25
+Text Label 7800 14600 0    60   ~ 0
+A26
+Text Label 7800 14700 0    60   ~ 0
+A27
+Text Label 7800 14800 0    60   ~ 0
+A28
+Text Label 7800 14900 0    60   ~ 0
+A29
+Text Label 7800 15000 0    60   ~ 0
+A30
+Text Label 7800 15100 0    60   ~ 0
+A31
+Wire Wire Line
+	8300 12000 7700 12000
+Wire Wire Line
+	8300 12100 7700 12100
+Wire Wire Line
+	8300 12200 7700 12200
+Wire Wire Line
+	8300 12300 7700 12300
+Wire Wire Line
+	8300 12400 7700 12400
+Wire Wire Line
+	8300 12500 7700 12500
+Wire Wire Line
+	8300 12600 7700 12600
+Wire Wire Line
+	8300 12700 7700 12700
+Wire Wire Line
+	8300 12800 7700 12800
+Wire Wire Line
+	8300 12900 7700 12900
+Wire Wire Line
+	8300 13000 7700 13000
+Wire Wire Line
+	8300 13100 7700 13100
+Wire Wire Line
+	8300 13200 7700 13200
+Wire Wire Line
+	8300 13300 7700 13300
+Wire Wire Line
+	8300 13400 7700 13400
+Wire Wire Line
+	8300 13500 7700 13500
+Wire Wire Line
+	8300 13600 7700 13600
+Wire Wire Line
+	8300 13700 7700 13700
+Wire Wire Line
+	8300 13800 7700 13800
+Wire Wire Line
+	8300 13900 7700 13900
+Wire Wire Line
+	8300 14000 7700 14000
+Wire Wire Line
+	8300 14100 7700 14100
+Wire Wire Line
+	8300 14200 7700 14200
+Wire Wire Line
+	8300 14300 7700 14300
+Wire Wire Line
+	8300 14400 7700 14400
+Wire Wire Line
+	8300 14500 7700 14500
+Wire Wire Line
+	8300 14600 7700 14600
+Wire Wire Line
+	8300 14700 7700 14700
+Wire Wire Line
+	8300 14800 7700 14800
+Wire Wire Line
+	8300 14900 7700 14900
+Wire Wire Line
+	8300 15000 7700 15000
+Wire Wire Line
+	8300 15100 7700 15100
 $EndSCHEMATC

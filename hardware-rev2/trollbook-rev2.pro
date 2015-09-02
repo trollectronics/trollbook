@@ -1,4 +1,4 @@
-update=tor 27 aug 2015 00:29:57
+update=ons  2 sep 2015 13:35:00
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,8 +23,6 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
-[general]
-version=1
 [eeschema]
 version=1
 LibDir=lib
@@ -60,3 +58,9 @@ LibName28=contrib
 LibName29=valves
 LibName30=lib/MC68040FC33V
 LibName31=lib/EPF10K50VRC240
+LibName32=lib/39f040
+LibName33=lib/hy57v561620
+LibName34=lib/idt71v416
+LibName35=lib/tlc7524
+[general]
+version=1
