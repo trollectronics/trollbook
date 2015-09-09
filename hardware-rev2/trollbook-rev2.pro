@@ -1,4 +1,4 @@
-update=tis  8 sep 2015 16:01:47
+update=ons  9 sep 2015 14:14:13
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,8 +23,6 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
-[general]
-version=1
 [eeschema]
 version=1
 LibDir=lib
@@ -65,3 +63,5 @@ LibName33=lib/hy57v561620
 LibName34=lib/idt71v416
 LibName35=lib/tlc7524
 LibName36=lib/as7c34098
+[general]
+version=1
