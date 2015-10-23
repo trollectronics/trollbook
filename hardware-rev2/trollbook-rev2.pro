@@ -1,4 +1,4 @@
-update=tis 22 sep 2015 09:42:10
+update=fre 23 okt 2015 22:02:50
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,8 +23,6 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
-[general]
-version=1
 [eeschema]
 version=1
 LibDir=lib
@@ -67,3 +65,7 @@ LibName35=lib/tlc7524
 LibName36=lib/as7c34098
 LibName37=lib/s25fl204k0tmfi010
 LibName38=lib/epc2
+LibName39=lib/er-con40ht-1
+LibName40=lib/ada4851-4
+[general]
+version=1
