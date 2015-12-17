@@ -1,4 +1,4 @@
-update=fre 23 okt 2015 22:02:50
+update=tor 17 dec 2015 20:47:48
 version=1
 last_client=kicad
 [pcbnew]
@@ -67,5 +67,6 @@ LibName37=lib/s25fl204k0tmfi010
 LibName38=lib/epc2
 LibName39=lib/er-con40ht-1
 LibName40=lib/ada4851-4
+LibName41=lib/osc
 [general]
 version=1
