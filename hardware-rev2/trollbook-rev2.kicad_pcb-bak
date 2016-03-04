@@ -3,7 +3,7 @@
   (general
     (links 816)
     (no_connects 0)
-    (area 52.000001 38.468802 224.934721 153.800001)
+    (area 84.924999 49.924999 185.075001 150.075001)
     (thickness 1.6)
     (drawings 10)
     (tracks 3818)
@@ -67,7 +67,7 @@
     (pad_size 5 5)
     (pad_drill 3.048)
     (pad_to_mask_clearance 0.0508)
-    (solder_mask_min_width 0.1016)
+    (solder_mask_min_width 0.0762)
     (aux_axis_origin 0 0)
     (visible_elements FFFFEF7F)
     (pcbplotparams
@@ -995,7 +995,7 @@
     (fp_text reference U1 (at -19.25 -14.85) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value MC68040FC33V (at -9.05 -21.15) (layer F.SilkS)
+    (fp_text value MC68040FE33V (at -9.05 -21.15) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_circle (center -14 14) (end -14 13) (layer F.SilkS) (width 0.15))
