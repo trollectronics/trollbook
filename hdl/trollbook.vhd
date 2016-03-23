@@ -6,21 +6,21 @@ entity trollbook is
 		a : in std_logic_vector(31 downto 0);
 		d : inout std_logic_vector(31 downto 0);
 		
-		cpu_tt : std_logic_vector(1 downto 0);
-		cpu_tm : std_logic_vector(2 downto 0);
-		cpu_siz : std_logic_vector(1 downto 0);
-		cpu_rw : std_logic;
-		cpu_ts : std_logic;
-		cpu_tip : std_logic;
-		cpu_ta : std_logic;
-		cpu_tea : std_logic;
-		cpu_tbi : std_logic;
-		cpu_ipl : std_logic_vector(2 downto 0);
-		cpu_clk : std_logic;
-		cpu_lfo : std_logic;
-		cpu_scd : std_logic;
-		cpu_rsti : std_logic;
-		cpu_rsto : std_logic;
+		cpu_tt : in std_logic_vector(1 downto 0);
+		cpu_tm : in std_logic_vector(2 downto 0);
+		cpu_siz : in std_logic_vector(1 downto 0);
+		cpu_rw : in std_logic;
+		cpu_ts : in std_logic;
+		cpu_tip : in std_logic;
+		cpu_ta : out std_logic;
+		cpu_tea : out std_logic;
+		cpu_tbi :  out std_logic;
+		cpu_ipl : out std_logic_vector(2 downto 0);
+		cpu_clk : out std_logic;
+		cpu_lfo : out std_logic;
+		cpu_scd : in std_logic;
+		cpu_rsti : out std_logic;
+		cpu_rsto : in std_logic;
 		
 		ram_a : out std_logic_vector(12 downto 0);
 		ram_b : out std_logic_vector(1 downto 0);
