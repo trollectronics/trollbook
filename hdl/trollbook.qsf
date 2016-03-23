@@ -50,15 +50,14 @@ set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 1
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
-set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name FLEX10K_DEVICE_IO_STANDARD LVTTL/LVCMOS
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_global_assignment -name VHDL_FILE trollbook.vhd
 set_global_assignment -name VHDL_FILE vga.vhd
-set_global_assignment -name MISC_FILE "trollbook.dpf"
-set_location_assignment PIN_91 -to clk
+set_global_assignment -name MISC_FILE trollbook.dpf
+set_location_assignment PIN_91 -to clk33
 set_location_assignment PIN_158 -to vga_vsync
 set_location_assignment PIN_159 -to vga_hsync
 set_location_assignment PIN_161 -to vga_b[4]
@@ -79,4 +78,6 @@ set_location_assignment PIN_187 -to vga_r[1]
 set_location_assignment PIN_184 -to vga_r[0]
 set_location_assignment PIN_127 -to vga_den
 set_location_assignment PIN_181 -to vga_pwm
-set_location_assignment PIN_23 -to vga_off
+set_location_assignment PIN_23 -to vga_pwr
+
+set_global_assignment -name MISC_FILE "G:/TROLLBOOK/HDL/trollbook.dpf"
