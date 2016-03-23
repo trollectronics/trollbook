@@ -57,3 +57,26 @@ set_global_assignment -name FLEX10K_DEVICE_IO_STANDARD LVTTL/LVCMOS
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_global_assignment -name VHDL_FILE trollbook.vhd
 set_global_assignment -name VHDL_FILE vga.vhd
+set_global_assignment -name MISC_FILE "trollbook.dpf"
+set_location_assignment PIN_91 -to clk
+set_location_assignment PIN_158 -to vga_vsync
+set_location_assignment PIN_159 -to vga_hsync
+set_location_assignment PIN_161 -to vga_b[4]
+set_location_assignment PIN_162 -to vga_b[3]
+set_location_assignment PIN_163 -to vga_b[2]
+set_location_assignment PIN_164 -to vga_b[1]
+set_location_assignment PIN_166 -to vga_b[0]
+set_location_assignment PIN_167 -to vga_g[5]
+set_location_assignment PIN_168 -to vga_g[4]
+set_location_assignment PIN_169 -to vga_g[3]
+set_location_assignment PIN_171 -to vga_g[2]
+set_location_assignment PIN_172 -to vga_g[1]
+set_location_assignment PIN_173 -to vga_g[0]
+set_location_assignment PIN_174 -to vga_r[4]
+set_location_assignment PIN_175 -to vga_r[3]
+set_location_assignment PIN_191 -to vga_r[2]
+set_location_assignment PIN_187 -to vga_r[1]
+set_location_assignment PIN_184 -to vga_r[0]
+set_location_assignment PIN_127 -to vga_den
+set_location_assignment PIN_181 -to vga_pwm
+set_location_assignment PIN_23 -to vga_off

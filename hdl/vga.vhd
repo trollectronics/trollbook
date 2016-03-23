@@ -146,7 +146,7 @@ begin
 	end generate;
 	
 	g <=  std_logic_vector(to_unsigned(pixel_counter, g'length));
-	b <=  std_logic_vector(to_unsigned(line_counter, g'length));
+	b <=  std_logic_vector(to_unsigned(line_counter, b'length));
 	
 	den_internal <= hvisible and vvisible;
 	den <= den_internal;
