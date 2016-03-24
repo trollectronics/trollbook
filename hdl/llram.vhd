@@ -1,4 +1,5 @@
 library ieee;
+use ieee.std_logic_1164.all;
 
 entity llram is
 	port(
@@ -19,9 +20,10 @@ architecture arch of llram is
 begin
 	a <= (others => '0');
 	
-	oe <= '1':
+	oe <= '1';
 	ce <= '1';
 	
 	we <= '1';
-	ub, lb <= "11";
+	ub <= '1';
+	lb <= '1';
 end arch;

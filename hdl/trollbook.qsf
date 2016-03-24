@@ -54,8 +54,6 @@ set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name FLEX10K_DEVICE_IO_STANDARD LVTTL/LVCMOS
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
-set_global_assignment -name VHDL_FILE trollbook.vhd
-set_global_assignment -name VHDL_FILE vga.vhd
 set_global_assignment -name MISC_FILE trollbook.dpf
 set_location_assignment PIN_91 -to clk33
 set_location_assignment PIN_158 -to vga_vsync
@@ -248,3 +246,9 @@ set_location_assignment PIN_194 -to cpu_tm[0]
 set_location_assignment PIN_199 -to cpu_ts
 set_location_assignment PIN_38 -to cpu_tt[1]
 set_location_assignment PIN_36 -to cpu_tt[0]
+set_global_assignment -name VHDL_FILE cpu.vhd
+set_global_assignment -name VHDL_FILE llram.vhd
+set_global_assignment -name VHDL_FILE sdram.vhd
+set_global_assignment -name VHDL_FILE sound.vhd
+set_global_assignment -name VHDL_FILE trollbook.vhd
+set_global_assignment -name VHDL_FILE vga.vhd

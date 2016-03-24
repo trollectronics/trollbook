@@ -1,4 +1,5 @@
 library ieee;
+use ieee.std_logic_1164.all;
 
 entity sound is
 	port(
@@ -15,5 +16,7 @@ end sound;
 architecture arch of sound is
 begin
 	ss <= '1';
-	mosi, sck, sync <= "000";
+	mosi <= '1';
+	sck <= '0';
+	sync <= '0';
 end arch;

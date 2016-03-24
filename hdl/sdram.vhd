@@ -1,4 +1,5 @@
 library ieee;
+use ieee.std_logic_1164.all;
 
 entity sdram is
 	port(
@@ -26,8 +27,9 @@ begin
 	udqm <= "00";
 	
 	we <= '1';
-	cs <= '1';
+	cs <= "11";
 	cke <= '0';
 	
-	ras <= cas <= '1';
+	ras <= '1';
+	cas <= '1';
 end arch;
