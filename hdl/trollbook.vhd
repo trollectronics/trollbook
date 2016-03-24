@@ -214,7 +214,7 @@ begin
 		a => ll_a, d => ll_d, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe);
 	
 	u6: spi port map(reset => '0', clk => clk33,
-		miso => spi_miso, mosi => spi_mosi, sck => spi_sck, ss => spi_ss);
+		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss);
 	
 	u7: uart port map(reset => '0', clk => clk33,
 		rx => uart_rx, tx => uart_tx);
@@ -222,4 +222,5 @@ begin
 	vga_pwr <= '0';
 	vga_pwm <= '1';
 	
+	d <= (others => 'Z');
 end arch;

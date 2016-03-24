@@ -17,5 +17,5 @@ architecture arch of spi is
 begin
 	mosi <= '1';
 	sck <= '0';
-	ss <= "00";
+	ss <= "000";
 end arch;

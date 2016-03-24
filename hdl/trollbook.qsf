@@ -246,6 +246,8 @@ set_location_assignment PIN_194 -to cpu_tm[0]
 set_location_assignment PIN_199 -to cpu_ts
 set_location_assignment PIN_38 -to cpu_tt[1]
 set_location_assignment PIN_36 -to cpu_tt[0]
+set_global_assignment -name VHDL_FILE spi.vhd
+set_global_assignment -name VHDL_FILE uart.vhd
 set_global_assignment -name VHDL_FILE cpu.vhd
 set_global_assignment -name VHDL_FILE llram.vhd
 set_global_assignment -name VHDL_FILE sdram.vhd

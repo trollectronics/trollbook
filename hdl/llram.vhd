@@ -26,4 +26,6 @@ begin
 	we <= '1';
 	ub <= '1';
 	lb <= '1';
+	
+	d <= (others => 'Z');
 end arch;
