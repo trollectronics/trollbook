@@ -65,9 +65,9 @@ entity trollbook is
 		ext_int : in std_logic_vector(3 downto 0);
 		
 		clk33 : in std_logic;
-		clk12 : in std_logic
+		clk12 : in std_logic;
 		
-		pwron_reset : in std_logic;
+		pwron_reset : in std_logic
 	);
 end entity;
 
