@@ -105,11 +105,91 @@ architecture arch of trollbook is
 			den : out std_logic := '1'
 		);
 	end component;
+	
+	component sound is
+		port(
+			reset : in std_logic;
+			clk : in std_logic;
+			
+			mosi : out std_logic;
+			sck : out std_logic;
+			ss : out std_logic;
+			sync : out std_logic
+		);
+	end sound;
+	
+	entity sdram is
+		port(
+			reset : in std_logic;
+			clk : in std_logic;
+			
+			a : out std_logic_vector(12 downto 0);
+			b : out std_logic_vector(1 downto 0);
+			cas : out std_logic;
+			ras : out std_logic;
+			we : out std_logic;
+			ldqm : out std_logic_vector(1 downto 0);
+			udqm : out std_logic_vector(1 downto 0);
+			cs : out std_logic_vector(1 downto 0);
+			cke : out std_logic
+		);
+	end sdram;
+	
+	component cpu is
+		port(
+			reset : in std_logic;
+			clk : in std_logic;
+			
+			tt : in std_logic_vector(1 downto 0);
+			tm : in std_logic_vector(2 downto 0);
+			siz : in std_logic_vector(1 downto 0);
+			rw : in std_logic;
+			ts : in std_logic;
+			tip : in std_logic;
+			ta : out std_logic;
+			tea : out std_logic;
+			tbi :  out std_logic;
+			ipl : out std_logic_vector(2 downto 0);
+			bclk : out std_logic;
+			lfo : out std_logic;
+			scd : in std_logic;
+			rsti : out std_logic;
+			rsto : in std_logic
+		);
+	end cpu;
+	
+	component llram is
+		port(
+			reset : in std_logic;
+			clk : in std_logic;
+			
+			a : out std_logic_vector(18 downto 1);
+			d : inout std_logic_vector(15 downto 0);
+			ce : out std_logic;
+			we : out std_logic;
+			lb : out std_logic;
+			ub : out std_logic;
+			oe : out std_logic
+		);
+	end llram;
 begin
 	u1: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
 		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525)
 		port map(reset => '0', clk => clk33, r => vga_r, g => vga_g, b => vga_b, hsync => vga_hsync, vsync => vga_vsync, den => vga_den);
+	
+	u2: sound port map(reset => '0', clk => clk12, mosi => snd_mosi, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+	
+	u3: sdram port map(reset => '0', clk => clk33,
+		a => ram_a, b => ram_b, cas => ram_cas, ras => ram_ras, we => ram_we, ldqm => ram_ldqm, udqm => ram_udqm,
+		cs => ram_cs, cke => ram_cke);
+	
+	u4: cpu port map(reset => '0', clk => clk33,
+		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
+		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto);
+	
+	u5: llram port map(reset => '0', clk => clk33,
+		a => ll_a, d => ll_d, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe);
 	
 	vga_pwr <= '0';
 	vga_pwm <= '1';
