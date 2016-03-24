@@ -7,7 +7,7 @@ entity uart is
 		clk : in std_logic;
 		
 		rx : in std_logic;
-		tx : out std_logic;
+		tx : out std_logic
 	);
 end uart;
 

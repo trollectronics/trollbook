@@ -181,7 +181,7 @@ architecture arch of trollbook is
 			miso : in std_logic;
 			mosi : out std_logic;
 			sck : out std_logic;
-			ss : out std_logic_vector(2 downto 0);
+			ss : out std_logic_vector(2 downto 0)
 		);
 	end component;
 	
@@ -191,7 +191,7 @@ architecture arch of trollbook is
 			clk : in std_logic;
 			
 			rx : in std_logic;
-			tx : out std_logic;
+			tx : out std_logic
 		);
 	end component;
 begin

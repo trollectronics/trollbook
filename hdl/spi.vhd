@@ -9,7 +9,7 @@ entity spi is
 		miso : in std_logic;
 		mosi : out std_logic;
 		sck : out std_logic;
-		ss : out std_logic_vector(2 downto 0);
+		ss : out std_logic_vector(2 downto 0)
 	);
 end spi;
 
