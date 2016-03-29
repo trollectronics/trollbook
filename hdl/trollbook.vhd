@@ -140,6 +140,9 @@ architecture arch of trollbook is
 			reset : in std_logic;
 			clk : in std_logic;
 			
+			a : in std_logic_vector(31 downto 0);
+			d : inout std_logic_vector(31 downto 0);
+		
 			tt : in std_logic_vector(1 downto 0);
 			tm : in std_logic_vector(2 downto 0);
 			siz : in std_logic_vector(1 downto 0);
@@ -207,6 +210,7 @@ begin
 		cs => ram_cs, cke => ram_cke);
 	
 	u4: cpu port map(reset => '0', clk => clk33,
+		a => a, d => d,
 		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
 		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto);
 	
@@ -222,5 +226,5 @@ begin
 	vga_pwr <= '0';
 	vga_pwm <= '1';
 	
-	d <= (others => 'Z');
+	--d <= (others => 'Z');
 end arch;

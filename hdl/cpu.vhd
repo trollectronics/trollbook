@@ -6,6 +6,9 @@ entity cpu is
 		reset : in std_logic;
 		clk : in std_logic;
 		
+		a : in std_logic_vector(31 downto 0);
+		d : inout std_logic_vector(31 downto 0);
+		
 		tt : in std_logic_vector(1 downto 0);
 		tm : in std_logic_vector(2 downto 0);
 		siz : in std_logic_vector(1 downto 0);
@@ -25,12 +28,96 @@ entity cpu is
 end cpu;
 
 architecture arch of cpu is
+	type state_type is (idle, read_normal, write_normal,
+		read_burst0, read_burst1, read_burst2, read_burst3,
+		write_burst0, write_burst1, write_burst2, write_burst3);
+	
+	signal state, state_next : state_type;
+	
+	signal ta_next : std_logic;
+	signal d_next : std_logic_vector(d'range);
 begin
-	ta <= '1';
+	--ta <= '1';
 	tea <= '1';
 	tbi <= '1';
 	ipl <= "111";
-	bclk <= '0';
 	lfo <= '0';
 	rsti <= '0';
+	
+	process(state, ts, tt, rw)
+		variable check : std_logic_vector(3 downto 0);
+	begin
+		state_next <= state;
+		d_next <= (others => 'Z');
+		ta_next <= '1';
+		check := ts & tt & rw;
+		
+		case state is
+			when idle =>
+				case check is
+					when "0001" =>
+						state_next <= read_normal;
+					when "0011" =>
+						state_next <= read_burst0;
+					when "0000" =>
+						state_next <= write_normal;
+					when "0010" =>
+						state_next <= write_burst0;
+					when others =>
+				end case;
+			
+			when read_normal =>
+				d_next <= "01001110011100010100111001110001";
+				ta_next <= '0';
+				state_next <= idle;
+			
+			when read_burst0 =>
+				d_next <= "01001110011100010100111001110001";
+				ta_next <= '0';
+				state_next <= read_burst1;
+			when read_burst1 =>
+				d_next <= "01001110011100010100111001110001";
+				ta_next <= '0';
+				state_next <= read_burst2;
+			when read_burst2 =>
+				d_next <= "01001110011100010100111001110001";
+				ta_next <= '0';
+				state_next <= read_burst3;
+			when read_burst3 =>
+				d_next <= "01001110011100010100111001110001";
+				ta_next <= '0';
+				state_next <= idle;
+			
+			when write_normal =>
+				ta_next <= '0';
+				state_next <= idle;
+			
+			when write_burst0 =>
+				ta_next <= '0';
+				state_next <= write_burst1;
+			when write_burst1 =>
+				ta_next <= '0';
+				state_next <= write_burst2;
+			when write_burst2 =>
+				ta_next <= '0';
+				state_next <= write_burst3;
+			when write_burst3 =>
+				ta_next <= '0';
+				state_next <= idle;
+			
+		end case;
+	end process;
+	
+	process(reset, clk) begin
+		if reset = '1' then
+		
+		elsif rising_edge(clk) then
+			state <= state_next;
+		elsif falling_edge(clk) then
+			d <= d_next;
+			ta <= ta_next;
+		end if;
+	end process;
+	
+	bclk <= clk;
 end arch;
