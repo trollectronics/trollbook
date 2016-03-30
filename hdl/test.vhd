@@ -1,6 +1,9 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
 entity test is end entity;
 
-architecture tb_trollbook is
+architecture tb_trollbook of test is
 	component trollbook is
 		port(
 			a : in std_logic_vector(31 downto 0);
@@ -71,7 +74,7 @@ architecture tb_trollbook is
 		);
 	end component;
 	
-	signal clk33, clk12, pwron_reset;
+	signal clk33, clk12, pwron_reset : std_logic;
 begin
 	clk33 <= not clk33 after 30ns;
 	clk12 <= not clk12 after 768ns;
@@ -79,13 +82,13 @@ begin
 	pwron_reset <= '0', '1' after 100ns;
 	
 	u1: trollbook port map(
-		a => (others => '0), d => (others => 'z'),
+		a => (others => '0'), d => (others => 'Z'),
 		cpu_tt => "00", cpu_tm => "000", cpu_siz => "00", cpu_rw => '0',
 		cpu_ts => '1', cpu_tip => '1', cpu_ta => open, cpu_tea => open, 
 		cpu_tbi => open, cpu_ipl => open, cpu_clk => clk33, cpu_lfo => open,
 		cpu_scd => '1', cpu_rsti => open, cpu_rsto => '1',
 		
-		ram_a => open, ramb => open, ram_cas => open, ram_ras => open,
+		ram_a => open, ram_b => open, ram_cas => open, ram_ras => open,
 		ram_we => open, ram_ldqm => open, ram_udqm => open, ram_cs => open, ram_cke =>open,
 		
 		ll_a => open, ll_d => (others => 'Z'), ll_ce => open, ll_we => open,
@@ -94,13 +97,13 @@ begin
 		vga_r => open, vga_g => open, vga_b => open, vga_hsync => open, vga_vsync => open,
 		vga_den => open, vga_pwr => open, vga_pwm => open,
 		
-		snd_mosi => open, snd_clk => open, snd_ss => open, snd_ss => open,
+		snd_mosi => open, snd_clk => open, snd_ss => open, snd_sync => open,
 		
 		spi_miso => '1', spi_mosi => open, spi_clk => open, spi_ss => open,
 		
 		uart_rx => '1', uart_tx => open,
 		
-		ext_int => "111",
+		ext_int => "1111",
 		
 		clk33 => clk33, clk12 => clk12,
 		

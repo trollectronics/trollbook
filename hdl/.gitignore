@@ -1,6 +1,7 @@
 /db
 /incremental_db
 /simulation
+/work
 *.rpt
 *.summary
 *.done
