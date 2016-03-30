@@ -152,4 +152,5 @@ begin
 	den <= den_internal;
 	--g <= (others => '1') when (pixel_counter mod 2) = 0 and den_internal = '1' else (others => '0');
 	--b <= (others => '1') when (line_counter mod 2) = 0 and den_internal = '1' else (others => '0');
+	
 end arch;

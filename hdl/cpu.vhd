@@ -7,7 +7,9 @@ entity cpu is
 		clk : in std_logic;
 		
 		a : in std_logic_vector(31 downto 0);
-		d : inout std_logic_vector(31 downto 0);
+		d_in : in std_logic_vector(31 downto 0);
+		d_out : out std_logic_vector(31 downto 0);
+		oe : out std_logic;
 		
 		tt : in std_logic_vector(1 downto 0);
 		tm : in std_logic_vector(2 downto 0);
@@ -35,20 +37,21 @@ architecture arch of cpu is
 	signal state, state_next : state_type;
 	
 	signal ta_next : std_logic;
-	signal d_next : std_logic_vector(d'range);
+	signal d_next : std_logic_vector(d_out'range);
+	signal oe_next : std_logic;
 begin
 	--ta <= '1';
 	tea <= '1';
 	tbi <= '1';
 	ipl <= "111";
 	lfo <= '0';
-	rsti <= '0';
 	
 	process(state, ts, tt, rw)
 		variable check : std_logic_vector(3 downto 0);
 	begin
 		state_next <= state;
-		d_next <= (others => 'Z');
+		d_next <= (others => '0');
+		oe_next <= '0';
 		ta_next <= '1';
 		check := ts & tt & rw;
 		
@@ -69,23 +72,28 @@ begin
 			when read_normal =>
 				d_next <= "01001110011100010100111001110001";
 				ta_next <= '0';
+				oe_next <= '1';
 				state_next <= idle;
 			
 			when read_burst0 =>
 				d_next <= "01001110011100010100111001110001";
 				ta_next <= '0';
+				oe_next <= '1';
 				state_next <= read_burst1;
 			when read_burst1 =>
 				d_next <= "01001110011100010100111001110001";
 				ta_next <= '0';
+				oe_next <= '1';
 				state_next <= read_burst2;
 			when read_burst2 =>
 				d_next <= "01001110011100010100111001110001";
 				ta_next <= '0';
+				oe_next <= '1';
 				state_next <= read_burst3;
 			when read_burst3 =>
 				d_next <= "01001110011100010100111001110001";
 				ta_next <= '0';
+				oe_next <= '1';
 				state_next <= idle;
 			
 			when write_normal =>
@@ -109,13 +117,16 @@ begin
 	end process;
 	
 	process(reset, clk) begin
+		rsti <= '1';
 		if reset = '1' then
-		
+			state <= idle;
+			rsti <= '0';
 		elsif rising_edge(clk) then
 			state <= state_next;
 		elsif falling_edge(clk) then
-			d <= d_next;
+			d_out <= d_next;
 			ta <= ta_next;
+			oe <= oe_next;
 		end if;
 	end process;
 	

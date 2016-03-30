@@ -141,7 +141,9 @@ architecture arch of trollbook is
 			clk : in std_logic;
 			
 			a : in std_logic_vector(31 downto 0);
-			d : inout std_logic_vector(31 downto 0);
+			d_in : in std_logic_vector(31 downto 0);
+			d_out : out std_logic_vector(31 downto 0);
+			oe : out std_logic;
 		
 			tt : in std_logic_vector(1 downto 0);
 			tm : in std_logic_vector(2 downto 0);
@@ -197,34 +199,56 @@ architecture arch of trollbook is
 			tx : out std_logic
 		);
 	end component;
+	
+	component reset is
+		port(
+			clk : in std_logic;
+			pwron_reset : in std_logic;
+			reset : out std_logic
+		);
+	end component;
+	
+	signal cpu_d_out : std_logic_vector(31 downto 0);
+	signal cpu_oe : std_logic;
+	signal internal_reset : std_logic;
 begin
 	u1: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
 		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525)
-		port map(reset => '0', clk => clk33, r => vga_r, g => vga_g, b => vga_b, hsync => vga_hsync, vsync => vga_vsync, den => vga_den);
+		port map(reset => internal_reset, clk => clk33, r => open, g => vga_g, b => vga_b, hsync => vga_hsync, vsync => vga_vsync, den => vga_den);
 	
-	u2: sound port map(reset => '0', clk => clk12, mosi => snd_mosi, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+	u2: sound port map(reset => internal_reset, clk => clk12, mosi => snd_mosi, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
-	u3: sdram port map(reset => '0', clk => clk33,
+	u3: sdram port map(reset => internal_reset, clk => clk33,
 		a => ram_a, b => ram_b, cas => ram_cas, ras => ram_ras, we => ram_we, ldqm => ram_ldqm, udqm => ram_udqm,
 		cs => ram_cs, cke => ram_cke);
 	
-	u4: cpu port map(reset => '0', clk => clk33,
-		a => a, d => d,
+	u4: cpu port map(reset => internal_reset, clk => clk33,
+		a => a, d_in => d, d_out => cpu_d_out, oe => cpu_oe,
 		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
 		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto);
 	
-	u5: llram port map(reset => '0', clk => clk33,
+	u5: llram port map(reset => internal_reset, clk => clk33,
 		a => ll_a, d => ll_d, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe);
 	
-	u6: spi port map(reset => '0', clk => clk33,
+	u6: spi port map(reset => internal_reset, clk => clk33,
 		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss);
 	
-	u7: uart port map(reset => '0', clk => clk33,
+	u7: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx);
+	
+	u8: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	
 	vga_pwr <= '0';
 	vga_pwm <= '1';
 	
-	--d <= (others => 'Z');
+	process(cpu_oe, cpu_d_out) begin
+		d <= (others => 'Z');
+		
+		if cpu_oe = '1' then
+			d <= cpu_d_out;
+		end if;
+	end process;
+	
+	vga_r <= a(4 downto 0);
 end arch;
