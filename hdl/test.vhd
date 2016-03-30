@@ -74,24 +74,32 @@ architecture tb_trollbook of test is
 		);
 	end component;
 	
-	signal clk33, clk12, pwron_reset : std_logic;
-begin
-	clk33 <= not clk33 after 30ns;
-	clk12 <= not clk12 after 768ns;
+	signal clk33 : std_logic := '0';
+	signal clk12 : std_logic := '0';
+	signal pwron_reset : std_logic;
 	
-	pwron_reset <= '0', '1' after 100ns;
+	signal d : std_logic_vector(31 downto 0);
+	signal ll_d : std_logic_vector(15 downto 0);
+begin
+	clk33 <= not clk33 after 15 ns;
+	clk12 <= not clk12 after 384 ns;
+	
+	pwron_reset <= '0', '1' after 100 ns;
+	
+	ll_d <= (others => 'Z');
+	d <= (others => 'Z');
 	
 	u1: trollbook port map(
-		a => (others => '0'), d => (others => 'Z'),
+		a => (others => '0'), d => d,
 		cpu_tt => "00", cpu_tm => "000", cpu_siz => "00", cpu_rw => '0',
 		cpu_ts => '1', cpu_tip => '1', cpu_ta => open, cpu_tea => open, 
-		cpu_tbi => open, cpu_ipl => open, cpu_clk => clk33, cpu_lfo => open,
+		cpu_tbi => open, cpu_ipl => open, cpu_clk => open, cpu_lfo => open,
 		cpu_scd => '1', cpu_rsti => open, cpu_rsto => '1',
 		
 		ram_a => open, ram_b => open, ram_cas => open, ram_ras => open,
 		ram_we => open, ram_ldqm => open, ram_udqm => open, ram_cs => open, ram_cke =>open,
 		
-		ll_a => open, ll_d => (others => 'Z'), ll_ce => open, ll_we => open,
+		ll_a => open, ll_d => ll_d, ll_ce => open, ll_we => open,
 		ll_lb => open, ll_ub => open, ll_oe => open,
 		
 		vga_r => open, vga_g => open, vga_b => open, vga_hsync => open, vga_vsync => open,
