@@ -79,7 +79,17 @@ architecture tb_trollbook of test is
 	signal pwron_reset : std_logic;
 	
 	signal d : std_logic_vector(31 downto 0);
+	signal a : std_logic_vector(31 downto 0);
 	signal ll_d : std_logic_vector(15 downto 0);
+	signal t : integer := 0;
+	
+	signal cpu_tt : std_logic_vector(1 downto 0);
+	signal cpu_tm : std_logic_vector(2 downto 0);
+	signal cpu_siz : std_logic_vector(1 downto 0);
+	signal cpu_rw : std_logic;
+	signal cpu_ts : std_logic;
+	signal cpu_tip : std_logic;
+	signal cpu_ta : std_logic;
 begin
 	clk33 <= not clk33 after 15 ns;
 	clk12 <= not clk12 after 384 ns;
@@ -87,12 +97,11 @@ begin
 	pwron_reset <= '0', '1' after 100 ns;
 	
 	ll_d <= (others => 'Z');
-	d <= (others => 'Z');
 	
 	u1: trollbook port map(
-		a => (others => '0'), d => d,
-		cpu_tt => "00", cpu_tm => "000", cpu_siz => "00", cpu_rw => '0',
-		cpu_ts => '1', cpu_tip => '1', cpu_ta => open, cpu_tea => open, 
+		a => a, d => d,
+		cpu_tt => cpu_tt, cpu_tm => cpu_tm, cpu_siz => cpu_siz, cpu_rw => cpu_rw,
+		cpu_ts => cpu_ts, cpu_tip => cpu_tip, cpu_ta => cpu_ta, cpu_tea => open, 
 		cpu_tbi => open, cpu_ipl => open, cpu_clk => open, cpu_lfo => open,
 		cpu_scd => '1', cpu_rsti => open, cpu_rsto => '1',
 		
@@ -117,5 +126,57 @@ begin
 		
 		pwron_reset => pwron_reset
 	);
+	
+	
+	process(clk33) begin
+		if rising_edge(clk33) then
+			t <= t + 1;
+		elsif falling_edge(clk33) then
+			t <= t + 1;
+		end if;
+	end process;
+	
+	process(t) begin
+		d <= (others => 'Z');
+		case t is
+			when 0 =>
+				a <= (others => '1');
+				cpu_siz <= "11";
+				cpu_tt <= "11";
+				cpu_rw <= '1';
+				cpu_ts <= '1';
+				cpu_tip <= '1';
+				cpu_tm <= "111";
+			when 240 =>
+				a <= x"deadbeef";
+				cpu_siz <= "01";
+				cpu_tt <= "00";
+				cpu_rw <= '1';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 242 =>
+				cpu_ts <= '1';
+			when 244 =>
+				a <= x"deadbef0";
+				cpu_siz <= "10";
+				cpu_ts <= '0';
+			when 246 =>
+				cpu_ts <= '1';
+			when 248 =>
+				a <= x"deadbef2";
+				cpu_siz <= "01";
+				cpu_ts <= '0';
+			when 250 =>
+				cpu_ts <= '1';
+			when 252 =>
+				a <= (others => '1');
+				cpu_siz <= "11";
+				cpu_tip <= '1';
+				cpu_tt <= "11";
+				cpu_tm <= "111";
+			when others =>
+		end case;
+	end process;
 	
 end tb_trollbook;
