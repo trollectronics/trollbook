@@ -70,28 +70,28 @@ begin
 				end case;
 			
 			when read_normal =>
-				d_next <= "01001110011100010100111001110001";
+				d_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;
 			
 			when read_burst0 =>
-				d_next <= "01001110011100010100111001110001";
+				d_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst1;
 			when read_burst1 =>
-				d_next <= "01001110011100010100111001110001";
+				d_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst2;
 			when read_burst2 =>
-				d_next <= "01001110011100010100111001110001";
+				d_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst3;
 			when read_burst3 =>
-				d_next <= "01001110011100010100111001110001";
+				d_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;

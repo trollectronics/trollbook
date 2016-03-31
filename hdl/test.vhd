@@ -98,7 +98,7 @@ begin
 	
 	ll_d <= (others => 'Z');
 	
-	u1: trollbook port map(
+	u_dut: trollbook port map(
 		a => a, d => d,
 		cpu_tt => cpu_tt, cpu_tm => cpu_tm, cpu_siz => cpu_siz, cpu_rw => cpu_rw,
 		cpu_ts => cpu_ts, cpu_tip => cpu_tip, cpu_ta => cpu_ta, cpu_tea => open, 

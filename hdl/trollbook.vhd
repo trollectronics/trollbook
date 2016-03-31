@@ -212,32 +212,32 @@ architecture arch of trollbook is
 	signal cpu_oe : std_logic;
 	signal internal_reset : std_logic;
 begin
-	u1: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
+	u_vga: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
 		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525)
 		port map(reset => internal_reset, clk => clk33, r => open, g => vga_g, b => vga_b, hsync => vga_hsync, vsync => vga_vsync, den => vga_den);
 	
-	u2: sound port map(reset => internal_reset, clk => clk12, mosi => snd_mosi, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+	u_sound: sound port map(reset => internal_reset, clk => clk12, mosi => snd_mosi, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
-	u3: sdram port map(reset => internal_reset, clk => clk33,
+	u_sdram: sdram port map(reset => internal_reset, clk => clk33,
 		a => ram_a, b => ram_b, cas => ram_cas, ras => ram_ras, we => ram_we, ldqm => ram_ldqm, udqm => ram_udqm,
 		cs => ram_cs, cke => ram_cke);
 	
-	u4: cpu port map(reset => internal_reset, clk => clk33,
+	u_cpu: cpu port map(reset => internal_reset, clk => clk33,
 		a => a, d_in => d, d_out => cpu_d_out, oe => cpu_oe,
 		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
 		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto);
 	
-	u5: llram port map(reset => internal_reset, clk => clk33,
+	u_llram: llram port map(reset => internal_reset, clk => clk33,
 		a => ll_a, d => ll_d, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe);
 	
-	u6: spi port map(reset => internal_reset, clk => clk33,
+	u_spi: spi port map(reset => internal_reset, clk => clk33,
 		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss);
 	
-	u7: uart port map(reset => internal_reset, clk => clk33,
+	u_uart: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx);
 	
-	u8: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
+	u_reset: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	
 	vga_pwr <= '0';
 	vga_pwm <= '1';
