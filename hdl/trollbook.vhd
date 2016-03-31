@@ -239,8 +239,8 @@ begin
 	
 	u_reset: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	
-	vga_pwr <= '0';
-	vga_pwm <= '1';
+	vga_pwr <= internal_reset;
+	vga_pwm <= not internal_reset;
 	
 	process(cpu_oe, cpu_d_out) begin
 		d <= (others => 'Z');
