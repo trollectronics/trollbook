@@ -180,26 +180,27 @@ architecture arch of trollbook is
 			reset : in std_logic;
 			clk : in std_logic;
 			
-			a : out std_logic_vector(18 downto 1);
-			d : inout std_logic_vector(15 downto 0);
+			a : out std_logic_vector(addr_width - 1 downto 0);
+			d : inout std_logic_vector(data_width - 1 downto 0);
+			q : out std_logic_vector(data_width - 1 downto 0);
 			ce : out std_logic;
 			we : out std_logic;
 			lb : out std_logic;
 			ub : out std_logic;
 			oe : out std_logic;
 			
-			vga_a : in std_logic_vector(addr_width - 1 downto 1);
+			vga_a : in std_logic_vector(addr_width - 1 downto 0);
 			vga_q : out std_logic_vector(data_width - 1 downto 0);
 			vga_ce : in std_logic;
 			
-			cpu_a : in std_logic_vector(addr_width - 1 downto 1);
+			cpu_a : in std_logic_vector(addr_width - 1 downto 0);
 			cpu_d : in std_logic_vector(data_width - 1 downto 0);
 			cpu_q : out std_logic_vector(data_width - 1 downto 0);
 			cpu_rw : in std_logic;
 			cpu_siz : in std_logic_vector(1 downto 0);
 			cpu_ce : in std_logic;
 			
-			snd_a : in std_logic_vector(addr_width - 1 downto 1);
+			snd_a : in std_logic_vector(addr_width - 1 downto 0);
 			snd_q : out std_logic_vector(data_width - 1 downto 0);
 			snd_ce : in std_logic
 		);
@@ -239,14 +240,16 @@ architecture arch of trollbook is
 	signal cpu_oe : std_logic;
 	signal internal_reset : std_logic;
 	
-	signal ll_vga_a : std_logic_vector(18 downto 0);
+	signal ll_q: std_logic_vector(15 downto 0);
+	
+	signal ll_vga_a : std_logic_vector(17 downto 0);
 	signal ll_vga_q : std_logic_vector(15 downto 0);
 	signal ll_vga_ce : std_logic;
 begin
 	u_vga: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
 		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525,
-		ll_a_start => 0, ll_a_end => 800*480, ll_a_length => ll_a'length)
+		ll_a_start => 0, ll_a_end => 800*480, ll_a_length => 18)
 		port map(reset => internal_reset, clk => clk33, r => open, g => vga_g, b => vga_b,
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce);
@@ -262,9 +265,9 @@ begin
 		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
 		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto);
 	
-	u_llram: llram generic map(data_width => 16, addr_width => 19)
+	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,
-		a => ll_a, d => ll_d, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe,
+		a => ll_a, d => ll_d, q => ll_q, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe,
 		vga_a => ll_vga_a, vga_q => ll_vga_q, vga_ce => ll_vga_ce,
 		cpu_a => (others => '1'), cpu_d => (others => '1'), cpu_q => open, cpu_rw => '0', cpu_siz => "00", cpu_ce => '0',
 		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
@@ -282,6 +285,7 @@ begin
 	
 	process(cpu_oe, cpu_d_out) begin
 		d <= (others => 'Z');
+		ll_d <= (others => 'Z');
 		
 		if cpu_oe = '1' then
 			d <= cpu_d_out;

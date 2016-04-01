@@ -57,15 +57,20 @@ architecture arch of vga is
 	
 	signal den_internal : std_logic := '1';
 	
-	signal rgb : std_logic_vector((depth_r + depth_g + depth_b) downto 0);
+	signal rgb : std_logic_vector((depth_r + depth_g + depth_b) - 1 downto 0);
 	signal palette_a : std_logic_vector(7 downto 0);
 	
 	signal second_pixel : std_logic_vector(7 downto 0);
+	signal second_pixel_next : std_logic_vector(7 downto 0);
 	
-	signal visible_counter : integer range 0 to (ll_a_end - ll_a_start + 1);
-	signal visible_counter_next : integer range 0 to (ll_a_end - ll_a_start + 1);
+	signal visible_counter : integer range 0 to ll_a_end - ll_a_start;
+	signal visible_counter_next : integer range 0 to ll_a_end - ll_a_start;
 	
 	signal palette_clk : std_logic;
+	
+	signal ll_a_next : std_logic_vector(ll_a_length - 1 downto 0);
+	signal ll_ce_internal : std_logic;
+	signal ll_ce_next : std_logic;
 begin
 	u_palette: entity work.palette port map(
 		address => palette_a,
@@ -151,21 +156,18 @@ begin
 			hvisible <= '0';
 			vvisible <= '0';
 			pixel_counter <= 0;
+			visible_counter <= 0;
+			ll_a <= (others => '0');
+			ll_ce_internal <= '0';
+			second_pixel <= (others => '0');
 		else
 			if rising_edge(clk) then
 				--set up llram adress
 				visible_counter <= visible_counter_next;
-				
-				if visible_counter mod 2 = 1 then --or inverted?
-					--ll_a <= ll_a_start + visible_counter;
-					ll_a <= std_logic_vector(to_unsigned(ll_a_start + visible_counter, ll_a_length));
-					ll_ce <= '1';
-				else
-					ll_a <= (others => '1');
-					ll_ce <= '0';
-				end if;
+				ll_a <= ll_a_next;
+				ll_ce_internal <= ll_ce_next;
 			elsif falling_edge(clk) then
-				second_pixel <= ll_d(15 downto 8);
+				second_pixel <= second_pixel_next;
 				
 				hstate <= hstate_next;
 				pixel_counter <= pixel_counter_next;
@@ -173,7 +175,7 @@ begin
 				hsync <= hsync_next;
 			end if;
 			
-			if falling_edge(hvisible) then
+			if rising_edge(hvisible) then
 				vstate <= vstate_next;
 				line_counter <= line_counter_next;
 				vvisible <= vvisible_next;
@@ -182,9 +184,15 @@ begin
 		end if;
 	end process;
 	
-	process(visible_counter, den_internal, vstate) begin
-		if den_internal = '1' then
+	process(visible_counter, den_internal, vstate, pixel_counter, second_pixel) begin
+		ll_a_next <= (others => '1');
+		ll_ce_next <= '0';
+		
+		if hstate = visible and vstate = visible and pixel_counter mod 2 = 0 then
 			visible_counter_next <= visible_counter + 1;
+			ll_a_next <= std_logic_vector(to_unsigned(ll_a_start + visible_counter, ll_a_length));
+			ll_ce_next <= '1';
+			
 		elsif vstate = sync then
 			visible_counter_next <= 0;
 		else
@@ -198,11 +206,14 @@ begin
 	den_internal <= hvisible and vvisible;
 	den <= den_internal;
 	
-	palette_a <= ll_d(7 downto 0) when visible_counter mod 2 = 0 else second_pixel;
+	ll_ce <= ll_ce_internal;
+	
+	palette_a <= ll_d(7 downto 0) when ll_ce_internal = '1' else second_pixel;
+	second_pixel_next <= ll_d(15 downto 8);
 	
 	r <= rgb(depth_r - 1 downto 0);
 	g <= rgb(depth_r + depth_g - 1 downto depth_r);
-	b <= rgb(rgb'length downto depth_r + depth_g);
+	b <= rgb(rgb'length - 1 downto depth_r + depth_g);
 	
 	palette_clk <= not clk;
 	

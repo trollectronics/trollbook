@@ -81,6 +81,9 @@ architecture tb_trollbook of test is
 	signal d : std_logic_vector(31 downto 0);
 	signal a : std_logic_vector(31 downto 0);
 	signal ll_d : std_logic_vector(15 downto 0);
+	signal ll_a : std_logic_vector(17 downto 0);
+	signal ll_ce : std_logic;
+	signal ll_oe : std_logic;
 	signal t : integer := 0;
 	
 	signal cpu_tt : std_logic_vector(1 downto 0);
@@ -96,7 +99,7 @@ begin
 	
 	pwron_reset <= '0', '1' after 100 ns;
 	
-	ll_d <= (others => 'Z');
+	ll_d <= ll_a(15 downto 0) when ll_ce = '0' and ll_oe = '0' else (others => 'Z');
 	
 	u_dut: trollbook port map(
 		a => a, d => d,
@@ -108,8 +111,8 @@ begin
 		ram_a => open, ram_b => open, ram_cas => open, ram_ras => open,
 		ram_we => open, ram_ldqm => open, ram_udqm => open, ram_cs => open, ram_cke =>open,
 		
-		ll_a => open, ll_d => ll_d, ll_ce => open, ll_we => open,
-		ll_lb => open, ll_ub => open, ll_oe => open,
+		ll_a => ll_a, ll_d => ll_d, ll_ce => ll_ce, ll_we => open,
+		ll_lb => open, ll_ub => open, ll_oe => ll_oe,
 		
 		vga_r => open, vga_g => open, vga_b => open, vga_hsync => open, vga_vsync => open,
 		vga_den => open, vga_pwr => open, vga_pwm => open,
