@@ -60,6 +60,7 @@ begin
 		
 		if vga_ce = '1' then
 			a <= vga_a;
+			--vga_q <= vga_a(15 downto 0);
 			vga_q <= d;
 		elsif snd_ce = '1' then
 			a <= snd_a;

@@ -62,6 +62,7 @@ ARCHITECTURE SYN OF palette IS
 	GENERIC (
 		intended_device_family		: STRING;
 		lpm_address_control		: STRING;
+		lpm_file		: STRING;
 		lpm_indata		: STRING;
 		lpm_outdata		: STRING;
 		lpm_type		: STRING;
@@ -85,6 +86,7 @@ BEGIN
 	GENERIC MAP (
 		intended_device_family => "FLEX10KA",
 		lpm_address_control => "REGISTERED",
+		lpm_file => "pal565.hex",
 		lpm_indata => "REGISTERED",
 		lpm_outdata => "REGISTERED",
 		lpm_type => "LPM_RAM_DQ",
@@ -114,7 +116,7 @@ END SYN;
 -- Retrieval info: PRIVATE: AclrOutput NUMERIC "0"
 -- Retrieval info: PRIVATE: BYTE_ENABLE NUMERIC "0"
 -- Retrieval info: PRIVATE: BYTE_SIZE NUMERIC "8"
--- Retrieval info: PRIVATE: BlankMemory NUMERIC "1"
+-- Retrieval info: PRIVATE: BlankMemory NUMERIC "0"
 -- Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_A NUMERIC "0"
 -- Retrieval info: PRIVATE: CLOCK_ENABLE_OUTPUT_A NUMERIC "0"
 -- Retrieval info: PRIVATE: Clken NUMERIC "0"
@@ -126,7 +128,7 @@ END SYN;
 -- Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 -- Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 -- Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
--- Retrieval info: PRIVATE: MIFfilename STRING ""
+-- Retrieval info: PRIVATE: MIFfilename STRING "pal565.hex"
 -- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "256"
 -- Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 -- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
@@ -144,6 +146,7 @@ END SYN;
 -- Retrieval info: PRIVATE: rden NUMERIC "0"
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KA"
 -- Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "REGISTERED"
+-- Retrieval info: CONSTANT: LPM_FILE STRING "pal565.hex"
 -- Retrieval info: CONSTANT: LPM_INDATA STRING "REGISTERED"
 -- Retrieval info: CONSTANT: LPM_OUTDATA STRING "REGISTERED"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_RAM_DQ"

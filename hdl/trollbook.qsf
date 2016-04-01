@@ -259,3 +259,4 @@ set_global_assignment -name VHDL_FILE sound.vhd
 set_global_assignment -name VHDL_FILE trollbook.vhd
 set_global_assignment -name VHDL_FILE vga.vhd
 set_global_assignment -name FMAX_REQUIREMENT "34 MHz"
+set_global_assignment -name HEX_FILE pal565.hex
