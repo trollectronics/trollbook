@@ -149,13 +149,13 @@ begin
 	
 	hregs: process(clk, reset, hvisible) begin
 		if reset = '1' then
-			hstate <= visible;
+			hstate <= back;
 			vstate <= visible;
 			vsync <= '1';
 			hsync <= '1';
 			hvisible <= '0';
 			vvisible <= '0';
-			pixel_counter <= 0;
+			pixel_counter <= line_end - 10;
 			visible_counter <= 0;
 			ll_a <= (others => '0');
 			ll_ce_internal <= '0';
