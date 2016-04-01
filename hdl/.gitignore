@@ -2,6 +2,7 @@
 /incremental_db
 /simulation
 /work
+/transcript
 *.rpt
 *.summary
 *.done
