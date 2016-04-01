@@ -99,7 +99,7 @@ begin
 	
 	pwron_reset <= '0', '1' after 100 ns;
 	
-	ll_d <= ll_a(15 downto 0) when ll_ce = '0' and ll_oe = '0' else (others => 'Z');
+	ll_d <= ll_a(6 downto 0) & '0' & ll_a(6 downto 0) & '1' when ll_ce = '0' and ll_oe = '0' else (others => 'Z');
 	
 	u_dut: trollbook port map(
 		a => a, d => d,

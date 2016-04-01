@@ -240,7 +240,8 @@ architecture arch of trollbook is
 	signal cpu_oe : std_logic;
 	signal internal_reset : std_logic;
 	
-	signal ll_q: std_logic_vector(15 downto 0);
+	signal ll_q : std_logic_vector(15 downto 0);
+	signal ll_w : std_logic;
 	
 	signal ll_vga_a : std_logic_vector(17 downto 0);
 	signal ll_vga_q : std_logic_vector(15 downto 0);
@@ -267,7 +268,7 @@ begin
 	
 	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,
-		a => ll_a, d => ll_d, q => ll_q, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe,
+		a => ll_a, d => ll_d, q => ll_q, ce => ll_ce, we => ll_w, lb => ll_lb, ub => ll_ub, oe => ll_oe,
 		vga_a => ll_vga_a, vga_q => ll_vga_q, vga_ce => ll_vga_ce,
 		cpu_a => (others => '1'), cpu_d => (others => '1'), cpu_q => open, cpu_rw => '0', cpu_siz => "00", cpu_ce => '0',
 		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
@@ -283,12 +284,18 @@ begin
 	vga_pwr <= internal_reset;
 	vga_pwm <= not internal_reset;
 	
-	process(cpu_oe, cpu_d_out) begin
+	process(cpu_oe, cpu_d_out, ll_w, ll_q) begin
 		d <= (others => 'Z');
 		ll_d <= (others => 'Z');
+		
+		if ll_w <= '0' then
+			ll_d <= ll_q;
+		end if;
 		
 		if cpu_oe = '1' then
 			d <= cpu_d_out;
 		end if;
 	end process;
+	
+	ll_we <= ll_w;
 end arch;

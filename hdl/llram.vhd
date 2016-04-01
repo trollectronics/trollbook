@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity llram is
 	generic(
@@ -37,39 +38,54 @@ entity llram is
 end llram;
 
 architecture arch of llram is
+	signal count : integer range 0 to 320001;
 begin
-	oe <= '0';
 	ce <= '0';
-	
-	we <= '1';
 	ub <= '0';
 	lb <= '0';
 	
-	q <= (others => '1');
-	
-	process(clk) begin
-		if falling_edge(clk) then
+	process(reset, clk) begin
+		if reset = '1' then
+			count <= 0;
+		elsif falling_edge(clk) then
 			--ce <= '1';
+			if(count /= 320000) then
+				count <= count + 1;
+			end if;
 		end if;
 	end process;
 	
-	process(vga_ce, snd_ce, cpu_ce, vga_a, snd_a, cpu_a, d) begin
+	process(vga_ce, snd_ce, cpu_ce, vga_a, snd_a, cpu_a, d, count, clk) begin
 		vga_q <= (others => '1');
 		cpu_q <= (others => '1');
 		snd_q <= (others => '1');
+		q <= (others => '1');
+		we <= '1';
 		
 		if vga_ce = '1' then
+			oe <= '0';
 			a <= vga_a;
-			--vga_q <= vga_a(15 downto 0);
+			--vga_q <= vga_a(6 downto 0) & '0' & vga_a(6 downto 0) & '1';
 			vga_q <= d;
 		elsif snd_ce = '1' then
+			oe <= '0';
 			a <= snd_a;
 			snd_q <= d;
 		elsif cpu_ce = '1' then
+			oe <= '0';
 			a <= cpu_a;
 			cpu_q <= d;
 		else
-			a <= (others => '1');
+			oe <= '1';
+			if count = 320000 then
+				a <= (others => '1');
+				we <= '1';
+			else
+				--we <= clk;
+				--we <= '0';
+				a <= std_logic_vector(to_unsigned(count, a'length));
+				q <= std_logic_vector(to_unsigned(count, d'length));
+			end if;
 		end if;
 	end process;
 	
