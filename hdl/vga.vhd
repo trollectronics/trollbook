@@ -184,7 +184,7 @@ begin
 		end if;
 	end process;
 	
-	process(visible_counter, den_internal, vstate, pixel_counter, second_pixel) begin
+	process(visible_counter, den_internal, vstate, pixel_counter, second_pixel, hstate) begin
 		ll_a_next <= (others => '1');
 		ll_ce_next <= '0';
 		

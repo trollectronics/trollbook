@@ -45,6 +45,8 @@ begin
 	ub <= '0';
 	lb <= '0';
 	
+	q <= (others => '1');
+	
 	process(clk) begin
 		if falling_edge(clk) then
 			--ce <= '1';

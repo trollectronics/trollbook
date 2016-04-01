@@ -250,7 +250,7 @@ begin
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
 		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525,
 		ll_a_start => 0, ll_a_end => 800*480, ll_a_length => 18)
-		port map(reset => internal_reset, clk => clk33, r => open, g => vga_g, b => vga_b,
+		port map(reset => internal_reset, clk => clk33, r => vga_r, g => vga_g, b => vga_b,
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce);
 	
@@ -291,6 +291,4 @@ begin
 			d <= cpu_d_out;
 		end if;
 	end process;
-	
-	vga_r <= a(4 downto 0);
 end arch;
