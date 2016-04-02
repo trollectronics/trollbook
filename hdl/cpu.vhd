@@ -122,6 +122,8 @@ begin
 			state <= idle;
 			rsti <= '0';
 			ta <= '1';
+			q <= (others => '1');
+			oe <= '0';
 		elsif rising_edge(clk) then
 			state <= state_next;
 		elsif falling_edge(clk) then
