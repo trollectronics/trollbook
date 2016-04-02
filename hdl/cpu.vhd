@@ -121,6 +121,7 @@ begin
 		if reset = '1' then
 			state <= idle;
 			rsti <= '0';
+			ta <= '1';
 		elsif rising_edge(clk) then
 			state <= state_next;
 		elsif falling_edge(clk) then
