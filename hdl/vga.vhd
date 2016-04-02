@@ -85,7 +85,7 @@ begin
 		q => rgb
 	);
 	
-	hlogic: process(hstate, pixel_counter) begin
+	hlogic: process(hstate, pixel_counter, hsync_internal, hvisible) begin
 		hstate_next <= hstate;
 		pixel_counter_next <= pixel_counter + 1;
 		new_line <= '0';
@@ -118,7 +118,7 @@ begin
 		end case;
 	end process;
 
-	vlogic: process(vstate, line_counter) begin
+	vlogic: process(vstate, line_counter, vsync_internal, vvisible) begin
 		vstate_next <= vstate;
 		line_counter_next <= line_counter + 1;
 		vsync_next <= vsync_internal;
@@ -164,6 +164,8 @@ begin
 			ll_a <= (others => '0');
 			ll_ce_internal <= '0';
 			second_pixel <= (others => '0');
+			den_internal <= '0';
+			den <= '0';
 		else
 			if rising_edge(clk) then
 				--set up llram adress
@@ -177,6 +179,9 @@ begin
 				pixel_counter <= pixel_counter_next;
 				hvisible <= hvisible_next;
 				hsync_internal <= hsync_next;
+				
+				den_internal <= hvisible and vvisible;
+				den <= den_internal;
 				
 				if new_line = '1' then
 					vstate <= vstate_next;
@@ -206,12 +211,6 @@ begin
 	
 	--g <=  std_logic_vector(to_unsigned(pixel_counter, g'length));
 	--b <=  std_logic_vector(to_unsigned(line_counter, b'length));
-	process(clk) begin
-		if falling_edge(clk) then
-			den_internal <= hvisible and vvisible;
-			den <= den_internal;
-		end if;
-	end process;
 	
 	ll_ce <= ll_ce_internal;
 	

@@ -3,6 +3,8 @@
 /simulation
 /work
 /transcript
+/vish_stacktrace.vstf
+/greybox_tmp
 *.rpt
 *.summary
 *.done
