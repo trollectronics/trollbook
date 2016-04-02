@@ -42,7 +42,7 @@ architecture arch of cpu is
 begin
 	--ta <= '1';
 	tea <= '1';
-	tbi <= '1';
+	tbi <= '0';
 	ipl <= "111";
 	lfo <= '0';
 	

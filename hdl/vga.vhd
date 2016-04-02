@@ -94,22 +94,22 @@ begin
 		
 		case hstate is
 			when visible =>
-				if pixel_counter = line_front_porch then
+				if pixel_counter = line_front_porch - 1 then
 					hstate_next <= front;
 					hvisible_next <= '0';
 				end if;
 			when front =>
-				if pixel_counter = line_hsync then
+				if pixel_counter = line_hsync - 1 then
 					hstate_next <= sync;
 					hsync_next <= '0';
 				end if;
 			when sync =>
-				if pixel_counter = line_back_porch then
+				if pixel_counter = line_back_porch - 1 then
 					hstate_next <= back;
 					hsync_next <= '1';
 				end if;
 			when back =>
-				if pixel_counter = line_end then
+				if pixel_counter = line_end - 1 then
 					hstate_next <= visible;
 					pixel_counter_next <= 0;
 					new_line <= '1';
@@ -126,23 +126,23 @@ begin
 		
 		case vstate is
 			when visible =>
-				if line_counter = frame_front_porch then
+				if line_counter = frame_front_porch - 1 then
 					vstate_next <= front;
 					vvisible_next <= '0';
 				end if;
 			when front =>
 				vvisible_next <= '0';
-				if line_counter = frame_vsync then
+				if line_counter = frame_vsync - 1 then
 					vstate_next <= sync;
 					vsync_next <= '0';
 				end if;
 			when sync =>
-				if line_counter = frame_back_porch then
+				if line_counter = frame_back_porch - 1 then
 					vstate_next <= back;
 					vsync_next <= '1';
 				end if;
 			when back =>
-				if line_counter = frame_end then
+				if line_counter = frame_end - 1 then
 					vstate_next <= visible;
 					line_counter_next <= 0;
 					vvisible_next <= '1';
@@ -159,7 +159,7 @@ begin
 			hvisible <= '0';
 			vvisible <= '0';
 			pixel_counter <= line_end - 10;
-			line_counter <= frame_end;
+			line_counter <= frame_end - 1;
 			visible_counter <= 0;
 			ll_a <= (others => '0');
 			ll_ce_internal <= '0';
