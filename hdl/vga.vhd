@@ -59,7 +59,7 @@ architecture arch of vga is
 	
 	signal hsync_internal : std_logic;
 	signal vsync_internal : std_logic;
-	signal den_internal : std_logic;
+	signal den_internal : std_logic_vector(1 downto 0);
 	
 	signal rgb : std_logic_vector((depth_r + depth_g + depth_b) - 1 downto 0);
 	signal palette_a : std_logic_vector(7 downto 0);
@@ -67,8 +67,8 @@ architecture arch of vga is
 	signal second_pixel : std_logic_vector(7 downto 0);
 	signal second_pixel_next : std_logic_vector(7 downto 0);
 	
-	signal visible_counter : integer range 0 to ll_a_end - ll_a_start;
-	signal visible_counter_next : integer range 0 to ll_a_end - ll_a_start;
+	signal visible_counter : integer ;--range 0 to ll_a_end - ll_a_start;
+	signal visible_counter_next : integer;-- range 0 to ll_a_end - ll_a_start;
 	
 	signal palette_clk : std_logic;
 	
@@ -79,7 +79,7 @@ begin
 	u_palette: entity work.palette port map(
 		address => palette_a,
 		data => (others => '1'),
-		inclock => clk,
+		inclock => palette_clk,
 		outclock => palette_clk,
 		we => '0',
 		q => rgb
@@ -164,12 +164,13 @@ begin
 			ll_a <= (others => '0');
 			ll_ce_internal <= '0';
 			second_pixel <= (others => '0');
-			den_internal <= '0';
+			den_internal <= "00";
 			den <= '0';
 		else
 			if rising_edge(clk) then
-				second_pixel <= second_pixel_next;
+				
 			elsif falling_edge(clk) then
+				second_pixel <= second_pixel_next;
 				--set up llram adress
 				visible_counter <= visible_counter_next;
 				ll_a <= ll_a_next;
@@ -181,8 +182,9 @@ begin
 				hvisible <= hvisible_next;
 				hsync_internal <= hsync_next;
 				
-				den_internal <= hvisible and vvisible;
-				den <= den_internal;
+				den_internal(0) <= hvisible and vvisible;
+				den_internal(1) <= den_internal(0);
+				den <= den_internal(1);
 				
 				if new_line = '1' then
 					vstate <= vstate_next;
@@ -194,7 +196,7 @@ begin
 		end if;
 	end process;
 	
-	process(visible_counter, den_internal, vstate, second_pixel, hstate, pixel_counter) begin
+	process(visible_counter, vstate, second_pixel, hstate, pixel_counter) begin
 		ll_a_next <= (others => '1');
 		ll_ce_next <= '0';
 		
@@ -216,6 +218,7 @@ begin
 	ll_ce <= ll_ce_internal;
 	
 	palette_a <= ll_d(7 downto 0) when ll_ce_internal = '1' else second_pixel;
+	--palette_a <= x"FE" when ll_ce_internal = '1' else x"FF";
 	second_pixel_next <= ll_d(15 downto 8) when ll_ce_internal = '1' else second_pixel;
 	
 	r <= rgb(depth_r - 1 downto 0);

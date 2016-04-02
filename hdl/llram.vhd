@@ -38,7 +38,9 @@ entity llram is
 end llram;
 
 architecture arch of llram is
-	signal count : integer range 0 to 320001;
+	constant count_to : integer := 192000*2;
+	signal count : integer range 0 to count_to + 1;
+	signal count_next : integer range 0 to count_to + 1;
 begin
 	ce <= '0';
 	ub <= '0';
@@ -49,9 +51,7 @@ begin
 			count <= 0;
 		elsif falling_edge(clk) then
 			--ce <= '1';
-			if(count /= 320000) then
-				count <= count + 1;
-			end if;
+			count <= count_next;
 		end if;
 	end process;
 	
@@ -61,31 +61,41 @@ begin
 		snd_q <= (others => '1');
 		q <= (others => '1');
 		we <= '1';
+		oe <= '1';
+		count_next <= count;
 		
-		if vga_ce = '1' then
-			oe <= '0';
-			a <= vga_a;
-			--vga_q <= vga_a(6 downto 0) & '0' & vga_a(6 downto 0) & '1';
-			vga_q <= d;
-		elsif snd_ce = '1' then
-			oe <= '0';
-			a <= snd_a;
-			snd_q <= d;
-		elsif cpu_ce = '1' then
-			oe <= '0';
-			a <= cpu_a;
-			cpu_q <= d;
-		else
-			oe <= '1';
-			if count = 320000 then
-				a <= (others => '1');
-				we <= '1';
-			else
-				--we <= clk;
-				--we <= '0';
-				a <= (others => '1'); --std_logic_vector(to_unsigned(count, a'length));
-				q <= (others => '1'); --std_logic_vector(to_unsigned(count, d'length));
+		if count = count_to then
+			a <= (others => '1');
+			we <= '1';
+			
+			if vga_ce = '1' then
+				oe <= '0';
+				a <= vga_a;
+				vga_q <= vga_a(6 downto 0) & '0' & vga_a(6 downto 0) & '1';
+				vga_q <= d;
+				--vga_q <= x"FEFF";
+			elsif snd_ce = '1' then
+				oe <= '0';
+				a <= snd_a;
+				snd_q <= d;
+			elsif cpu_ce = '1' then
+				oe <= '0';
+				a <= cpu_a;
+				cpu_q <= d;
 			end if;
+				
+		else
+			count_next <= count + 1;
+			oe <= '1';
+			if count mod 2 = 0 then
+				we <= '0';
+			else
+				we <= '1';
+			end if;
+			--we <= '0';
+			a <= std_logic_vector(to_unsigned(count/2, a'length));
+			--q <= x"FFFE";
+			q <= std_logic_vector(to_unsigned(count, q'length));
 		end if;
 	end process;
 	

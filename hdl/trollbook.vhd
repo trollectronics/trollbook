@@ -32,7 +32,7 @@ entity trollbook is
 		ram_cs : out std_logic_vector(1 downto 0);
 		ram_cke : out std_logic;
 		
-		ll_a : out std_logic_vector(18 downto 1);
+		ll_a : out std_logic_vector(17 downto 0);
 		ll_d : inout std_logic_vector(15 downto 0);
 		ll_ce : out std_logic;
 		ll_we : out std_logic;
@@ -181,7 +181,7 @@ architecture arch of trollbook is
 			clk : in std_logic;
 			
 			a : out std_logic_vector(addr_width - 1 downto 0);
-			d : inout std_logic_vector(data_width - 1 downto 0);
+			d : in std_logic_vector(data_width - 1 downto 0);
 			q : out std_logic_vector(data_width - 1 downto 0);
 			ce : out std_logic;
 			we : out std_logic;

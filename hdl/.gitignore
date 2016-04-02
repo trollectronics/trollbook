@@ -5,6 +5,7 @@
 /transcript
 /vish_stacktrace.vstf
 /greybox_tmp
+/serv_req_info.txt
 *.rpt
 *.summary
 *.done
