@@ -83,8 +83,8 @@ begin
 			else
 				--we <= clk;
 				--we <= '0';
-				a <= std_logic_vector(to_unsigned(count, a'length));
-				q <= std_logic_vector(to_unsigned(count, d'length));
+				a <= (others => '1'); --std_logic_vector(to_unsigned(count, a'length));
+				q <= (others => '1'); --std_logic_vector(to_unsigned(count, d'length));
 			end if;
 		end if;
 	end process;
