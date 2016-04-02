@@ -79,7 +79,7 @@ begin
 	u_palette: entity work.palette port map(
 		address => palette_a,
 		data => (others => '1'),
-		inclock => palette_clk,
+		inclock => clk,
 		outclock => palette_clk,
 		we => '0',
 		q => rgb
@@ -168,12 +168,13 @@ begin
 			den <= '0';
 		else
 			if rising_edge(clk) then
+				second_pixel <= second_pixel_next;
+			elsif falling_edge(clk) then
 				--set up llram adress
 				visible_counter <= visible_counter_next;
 				ll_a <= ll_a_next;
 				ll_ce_internal <= ll_ce_next;
-			elsif falling_edge(clk) then
-				second_pixel <= second_pixel_next;
+				
 				
 				hstate <= hstate_next;
 				pixel_counter <= pixel_counter_next;
@@ -215,7 +216,7 @@ begin
 	ll_ce <= ll_ce_internal;
 	
 	palette_a <= ll_d(7 downto 0) when ll_ce_internal = '1' else second_pixel;
-	second_pixel_next <= ll_d(15 downto 8);
+	second_pixel_next <= ll_d(15 downto 8) when ll_ce_internal = '1' else second_pixel;
 	
 	r <= rgb(depth_r - 1 downto 0);
 	g <= rgb(depth_r + depth_g - 1 downto depth_r);

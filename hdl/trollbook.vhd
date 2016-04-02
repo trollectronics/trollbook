@@ -149,8 +149,8 @@ architecture arch of trollbook is
 			clk : in std_logic;
 			
 			a : in std_logic_vector(31 downto 0);
-			d_in : in std_logic_vector(31 downto 0);
-			d_out : out std_logic_vector(31 downto 0);
+			d : in std_logic_vector(31 downto 0);
+			q : out std_logic_vector(31 downto 0);
 			oe : out std_logic;
 		
 			tt : in std_logic_vector(1 downto 0);
@@ -236,7 +236,7 @@ architecture arch of trollbook is
 		);
 	end component;
 	
-	signal cpu_d_out : std_logic_vector(31 downto 0);
+	signal cpu_q : std_logic_vector(31 downto 0);
 	signal cpu_oe : std_logic;
 	signal internal_reset : std_logic;
 	
@@ -262,7 +262,7 @@ begin
 		cs => ram_cs, cke => ram_cke);
 	
 	u_cpu: cpu port map(reset => internal_reset, clk => clk33,
-		a => a, d_in => d, d_out => cpu_d_out, oe => cpu_oe,
+		a => a, d => d, q => cpu_q, oe => cpu_oe,
 		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
 		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto);
 	
@@ -284,7 +284,7 @@ begin
 	vga_pwr <= internal_reset;
 	vga_pwm <= not internal_reset;
 	
-	process(cpu_oe, cpu_d_out, ll_w, ll_q) begin
+	process(cpu_oe, cpu_q, ll_w, ll_q) begin
 		d <= (others => 'Z');
 		ll_d <= (others => 'Z');
 		
@@ -293,7 +293,7 @@ begin
 		end if;
 		
 		if cpu_oe = '1' then
-			d <= cpu_d_out;
+			d <= cpu_q;
 		end if;
 	end process;
 	

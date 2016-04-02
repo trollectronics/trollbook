@@ -7,8 +7,8 @@ entity cpu is
 		clk : in std_logic;
 		
 		a : in std_logic_vector(31 downto 0);
-		d_in : in std_logic_vector(31 downto 0);
-		d_out : out std_logic_vector(31 downto 0);
+		d : in std_logic_vector(31 downto 0);
+		q : out std_logic_vector(31 downto 0);
 		oe : out std_logic;
 		
 		tt : in std_logic_vector(1 downto 0);
@@ -37,7 +37,7 @@ architecture arch of cpu is
 	signal state, state_next : state_type;
 	
 	signal ta_next : std_logic;
-	signal d_next : std_logic_vector(d_out'range);
+	signal q_next : std_logic_vector(q'range);
 	signal oe_next : std_logic;
 begin
 	--ta <= '1';
@@ -50,7 +50,7 @@ begin
 		variable check : std_logic_vector(3 downto 0);
 	begin
 		state_next <= state;
-		d_next <= (others => '0');
+		q_next <= (others => '0');
 		oe_next <= '0';
 		ta_next <= '1';
 		check := ts & tt & rw;
@@ -70,28 +70,28 @@ begin
 				end case;
 			
 			when read_normal =>
-				d_next <= x"60046004";
+				q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;
 			
 			when read_burst0 =>
-				d_next <= x"60046004";
+				q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst1;
 			when read_burst1 =>
-				d_next <= x"60046004";
+				q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst2;
 			when read_burst2 =>
-				d_next <= x"60046004";
+				q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst3;
 			when read_burst3 =>
-				d_next <= x"60046004";
+				q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;
@@ -125,7 +125,7 @@ begin
 		elsif rising_edge(clk) then
 			state <= state_next;
 		elsif falling_edge(clk) then
-			d_out <= d_next;
+			q <= q_next;
 			ta <= ta_next;
 			oe <= oe_next;
 		end if;
