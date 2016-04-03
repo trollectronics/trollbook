@@ -30,6 +30,7 @@ entity llram is
 		cpu_rw : in std_logic;
 		cpu_siz : in std_logic_vector(1 downto 0);
 		cpu_ce : in std_logic;
+		cpu_ack : out std_logic;
 		
 		snd_a : in std_logic_vector(addr_width - 1 downto 0);
 		snd_q : out std_logic_vector(data_width - 1 downto 0);
@@ -48,14 +49,14 @@ begin
 	
 	process(reset, clk) begin
 		if reset = '1' then
-			count <= 0;
+			count <= count_to;
 		elsif falling_edge(clk) then
 			--ce <= '1';
 			count <= count_next;
 		end if;
 	end process;
 	
-	process(vga_ce, snd_ce, cpu_ce, vga_a, snd_a, cpu_a, d, count, clk) begin
+	process(vga_ce, snd_ce, cpu_ce, vga_a, snd_a, cpu_a, d, count, clk, cpu_rw, cpu_d) begin
 		vga_q <= (others => '1');
 		cpu_q <= (others => '1');
 		snd_q <= (others => '1');
@@ -63,6 +64,8 @@ begin
 		we <= '1';
 		oe <= '1';
 		count_next <= count;
+		
+		cpu_ack <= '0';
 		
 		if count = count_to then
 			a <= (others => '1');
@@ -79,9 +82,12 @@ begin
 				a <= snd_a;
 				snd_q <= d;
 			elsif cpu_ce = '1' then
-				oe <= '0';
+				oe <= cpu_rw;
+				we <= not cpu_rw;
 				a <= cpu_a;
 				cpu_q <= d;
+				q <= cpu_d;
+				cpu_ack <= '1';
 			end if;
 				
 		else

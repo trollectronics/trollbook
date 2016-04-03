@@ -6,6 +6,7 @@
 /vish_stacktrace.vstf
 /greybox_tmp
 /serv_req_info.txt
+/vsim_stacktrace.vstf
 *.rpt
 *.summary
 *.done

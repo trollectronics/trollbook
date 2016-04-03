@@ -25,12 +25,21 @@ entity cpu is
 		lfo : out std_logic;
 		scd : in std_logic;
 		rsti : out std_logic;
-		rsto : in std_logic
+		rsto : in std_logic;
+		
+		ll_a : out std_logic_vector(17 downto 0);
+		ll_d : in std_logic_vector(15 downto 0);
+		ll_q : out std_logic_vector(15 downto 0);
+		ll_rw : out std_logic;
+		ll_siz : out std_logic_vector(1 downto 0);
+		ll_ce : out std_logic;
+		ll_ack : in std_logic
 	);
 end cpu;
 
 architecture arch of cpu is
-	type state_type is (idle, read_normal, write_normal,
+	type state_type is (idle, read_normal, 
+		write_normal, write_ack,
 		read_burst0, read_burst1, read_burst2, read_burst3,
 		write_burst0, write_burst1, write_burst2, write_burst3);
 	
@@ -39,14 +48,27 @@ architecture arch of cpu is
 	signal ta_next : std_logic;
 	signal q_next : std_logic_vector(q'range);
 	signal oe_next : std_logic;
+	
+	signal bootrom_q : std_logic_vector(31 downto 0);
+	
+	signal ll_ce_next : std_logic;
 begin
+	u_bootrom: entity work.bootrom port map(
+		address => a(7 downto 2),
+		q => bootrom_q
+	);
+	
 	--ta <= '1';
 	tea <= '1';
 	tbi <= '0';
 	ipl <= "111";
 	lfo <= '0';
 	
-	process(state, ts, tt, rw)
+	ll_a <= a(18 downto 1);
+	ll_siz <= not siz;
+	ll_q <= d(15 downto 0);
+	
+	process(state, ts, tt, rw, a, bootrom_q, ll_ack)
 		variable check : std_logic_vector(3 downto 0);
 	begin
 		state_next <= state;
@@ -54,6 +76,9 @@ begin
 		oe_next <= '0';
 		ta_next <= '1';
 		check := ts & tt & rw;
+		
+		ll_ce_next <= '0';
+		ll_rw <= '0';
 		
 		case state is
 			when idle =>
@@ -64,13 +89,14 @@ begin
 						state_next <= read_burst0;
 					when "0000" =>
 						state_next <= write_normal;
+						ll_ce_next <= '1';
 					when "0010" =>
 						state_next <= write_burst0;
 					when others =>
 				end case;
 			
 			when read_normal =>
-				q_next <= x"60046004";
+				q_next <= bootrom_q;
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;
@@ -97,6 +123,14 @@ begin
 				state_next <= idle;
 			
 			when write_normal =>
+				ll_ce_next <= '1';
+				ll_rw <= ll_ack;
+				
+				if ll_ack = '1' then
+					state_next <= write_ack;
+				end if;
+			
+			when write_ack =>
 				ta_next <= '0';
 				state_next <= idle;
 			
@@ -124,12 +158,15 @@ begin
 			ta <= '1';
 			q <= (others => '1');
 			oe <= '0';
+			
+			ll_ce <= '0';
 		elsif rising_edge(clk) then
 			state <= state_next;
 		elsif falling_edge(clk) then
 			q <= q_next;
 			ta <= ta_next;
 			oe <= oe_next;
+			ll_ce <= ll_ce_next;
 		end if;
 	end process;
 	

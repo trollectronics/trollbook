@@ -139,9 +139,9 @@ begin
 		end if;
 	end process;
 	
-	process(t) begin
-		d <= (others => 'Z');
+	process(t, cpu_ta) begin
 		case t is
+			-- reset
 			when 0 =>
 				a <= (others => '1');
 				cpu_siz <= "11";
@@ -150,8 +150,11 @@ begin
 				cpu_ts <= '1';
 				cpu_tip <= '1';
 				cpu_tm <= "111";
+			
+			-- read cycle
 			when 240 =>
 				a <= x"deadbeef";
+				d <= (others => 'Z');
 				cpu_siz <= "01";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
@@ -178,6 +181,30 @@ begin
 				cpu_tip <= '1';
 				cpu_tt <= "11";
 				cpu_tm <= "111";
+			
+			-- write cycle
+			when 262 =>
+				a <= x"abcd1234";
+				cpu_siz <= "10";
+				cpu_tt <= "00";
+				cpu_rw <= '0';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 264 =>
+				cpu_ts <= '1';
+				d <= x"0000cafe";
+			when 266 | 268 =>
+				if cpu_ta = '0' then
+					a <= (others => '1');
+					cpu_siz <= "11";
+					cpu_tip <= '1';
+					cpu_tt <= "11";
+					cpu_tm <= "111";
+					cpu_rw <= '1';
+					d <= (others => 'Z');
+				end if;
+			
 			when others =>
 		end case;
 	end process;
