@@ -2,6 +2,7 @@
 *.swp
 *.o
 *.elf
+*.bin
 *.hex
 *.orig
 *.a

@@ -93,6 +93,8 @@ architecture tb_trollbook of test is
 	signal cpu_ts : std_logic;
 	signal cpu_tip : std_logic;
 	signal cpu_ta : std_logic;
+	
+	signal write_done : boolean := false;
 begin
 	clk33 <= not clk33 after 15 ns;
 	clk12 <= not clk12 after 384 ns;
@@ -139,11 +141,12 @@ begin
 		end if;
 	end process;
 	
-	process(t, cpu_ta) begin
+	process(t, cpu_ta, clk33) begin
 		case t is
 			-- reset
 			when 0 =>
 				a <= (others => '1');
+				d <= (others => 'Z');
 				cpu_siz <= "11";
 				cpu_tt <= "11";
 				cpu_rw <= '1';
@@ -182,8 +185,28 @@ begin
 				cpu_tt <= "11";
 				cpu_tm <= "111";
 			
-			-- write cycle
+			when 260 =>
+				a <= x"00000008";
+				d <= (others => 'Z');
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '1';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
 			when 262 =>
+				cpu_ts <= '1';
+			when 264 =>
+				a <= (others => '1');
+				cpu_siz <= "11";
+				cpu_tip <= '1';
+				cpu_tt <= "11";
+				cpu_tm <= "111";
+			
+			
+			-- write cycle
+			when 272 =>
+				write_done <= false;
 				a <= x"abcd1234";
 				cpu_siz <= "10";
 				cpu_tt <= "00";
@@ -191,11 +214,16 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 264 =>
+			when 274 =>
 				cpu_ts <= '1';
 				d <= x"0000cafe";
-			when 266 | 268 =>
+			when 276 | 278 =>
 				if cpu_ta = '0' then
+					write_done <= true;
+				end if;
+			
+			when others =>
+				if write_done = true then
 					a <= (others => '1');
 					cpu_siz <= "11";
 					cpu_tip <= '1';
@@ -203,9 +231,8 @@ begin
 					cpu_tm <= "111";
 					cpu_rw <= '1';
 					d <= (others => 'Z');
+					write_done <= false;
 				end if;
-			
-			when others =>
 		end case;
 	end process;
 	

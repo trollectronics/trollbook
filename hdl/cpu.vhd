@@ -66,7 +66,7 @@ begin
 	
 	ll_a <= a(18 downto 1);
 	ll_siz <= not siz;
-	ll_q <= d(15 downto 0);
+	ll_q <= d(15 downto 0) when a(0) = '0' else d(31 downto 16);
 	
 	process(state, ts, tt, rw, a, bootrom_q, ll_ack)
 		variable check : std_logic_vector(3 downto 0);
@@ -102,10 +102,11 @@ begin
 				state_next <= idle;
 			
 			when read_burst0 =>
-				q_next <= x"60046004";
+				q_next <= bootrom_q;
 				ta_next <= '0';
 				oe_next <= '1';
-				state_next <= read_burst1;
+				state_next <= idle;
+				--bursting disabled
 			when read_burst1 =>
 				q_next <= x"60046004";
 				ta_next <= '0';
