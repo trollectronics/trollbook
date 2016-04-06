@@ -217,7 +217,7 @@ begin
 			when 274 =>
 				cpu_ts <= '1';
 				d <= x"0000cafe";
-			when 276 | 278 =>
+			when 276 | 278 | 280 | 282 =>
 				if cpu_ta = '0' then
 					write_done <= true;
 				end if;

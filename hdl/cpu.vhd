@@ -52,6 +52,7 @@ architecture arch of cpu is
 	signal bootrom_q : std_logic_vector(31 downto 0);
 	
 	signal ll_ce_next : std_logic;
+	signal ll_rw_next : std_logic;
 begin
 	u_bootrom: entity work.bootrom port map(
 		address => a(7 downto 2),
@@ -78,7 +79,7 @@ begin
 		check := ts & tt & rw;
 		
 		ll_ce_next <= '0';
-		ll_rw <= '0';
+		ll_rw_next <= '0';
 		
 		case state is
 			when idle =>
@@ -90,6 +91,7 @@ begin
 					when "0000" =>
 						state_next <= write_normal;
 						ll_ce_next <= '1';
+						ll_rw_next <= '1';
 					when "0010" =>
 						state_next <= write_burst0;
 					when others =>
@@ -124,8 +126,8 @@ begin
 				state_next <= idle;
 			
 			when write_normal =>
+				ll_rw_next <= '1';
 				ll_ce_next <= '1';
-				ll_rw <= ll_ack;
 				
 				if ll_ack = '1' then
 					state_next <= write_ack;
@@ -161,6 +163,7 @@ begin
 			oe <= '0';
 			
 			ll_ce <= '0';
+			ll_rw <= '0';
 		elsif rising_edge(clk) then
 			state <= state_next;
 		elsif falling_edge(clk) then
@@ -168,6 +171,7 @@ begin
 			ta <= ta_next;
 			oe <= oe_next;
 			ll_ce <= ll_ce_next;
+			ll_rw <= ll_rw_next;
 		end if;
 	end process;
 	
