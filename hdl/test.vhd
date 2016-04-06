@@ -156,7 +156,7 @@ begin
 			
 			-- read cycle
 			when 240 =>
-				a <= x"deadbeef";
+				a <= x"00000007";
 				d <= (others => 'Z');
 				cpu_siz <= "01";
 				cpu_tt <= "00";
@@ -167,13 +167,13 @@ begin
 			when 242 =>
 				cpu_ts <= '1';
 			when 244 =>
-				a <= x"deadbef0";
+				a <= x"00000008";
 				cpu_siz <= "10";
 				cpu_ts <= '0';
 			when 246 =>
 				cpu_ts <= '1';
 			when 248 =>
-				a <= x"deadbef2";
+				a <= x"0000000A";
 				cpu_siz <= "01";
 				cpu_ts <= '0';
 			when 250 =>
@@ -205,7 +205,7 @@ begin
 			
 			
 			-- write cycle
-			when 272 =>
+			when 270 =>
 				write_done <= false;
 				a <= x"abcd1234";
 				cpu_siz <= "10";
@@ -214,10 +214,10 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 274 =>
+			when 272 =>
 				cpu_ts <= '1';
 				d <= x"0000cafe";
-			when 276 | 278 | 280 | 282 =>
+			when 274 | 276 | 278 | 280 =>
 				if cpu_ta = '0' then
 					write_done <= true;
 				end if;

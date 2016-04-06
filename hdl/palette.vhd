@@ -44,6 +44,7 @@ ENTITY palette IS
 	(
 		address		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
 		data		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		inclock		: IN STD_LOGIC ;
 		we		: IN STD_LOGIC  := '1';
 		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
@@ -69,6 +70,7 @@ ARCHITECTURE SYN OF palette IS
 	);
 	PORT (
 			address	: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+			inclock	: IN STD_LOGIC ;
 			q	: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
 			data	: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
 			we	: IN STD_LOGIC 
@@ -81,9 +83,9 @@ BEGIN
 	lpm_ram_dq_component : lpm_ram_dq
 	GENERIC MAP (
 		intended_device_family => "FLEX10KA",
-		lpm_address_control => "UNREGISTERED",
+		lpm_address_control => "REGISTERED",
 		lpm_file => "pal565.hex",
-		lpm_indata => "UNREGISTERED",
+		lpm_indata => "REGISTERED",
 		lpm_outdata => "UNREGISTERED",
 		lpm_type => "LPM_RAM_DQ",
 		lpm_width => 16,
@@ -91,6 +93,7 @@ BEGIN
 	)
 	PORT MAP (
 		address => address,
+		inclock => inclock,
 		data => data,
 		we => we,
 		q => sub_wire0
@@ -127,9 +130,9 @@ END SYN;
 -- Retrieval info: PRIVATE: OutputRegistered NUMERIC "0"
 -- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
 -- Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_PORT_A NUMERIC "3"
--- Retrieval info: PRIVATE: RegAdd NUMERIC "0"
--- Retrieval info: PRIVATE: RegAddr NUMERIC "0"
--- Retrieval info: PRIVATE: RegData NUMERIC "0"
+-- Retrieval info: PRIVATE: RegAdd NUMERIC "1"
+-- Retrieval info: PRIVATE: RegAddr NUMERIC "1"
+-- Retrieval info: PRIVATE: RegData NUMERIC "1"
 -- Retrieval info: PRIVATE: RegOutput NUMERIC "0"
 -- Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "0"
 -- Retrieval info: PRIVATE: SingleClock NUMERIC "1"
@@ -139,20 +142,22 @@ END SYN;
 -- Retrieval info: PRIVATE: WidthData NUMERIC "16"
 -- Retrieval info: PRIVATE: rden NUMERIC "0"
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KA"
--- Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "UNREGISTERED"
+-- Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "REGISTERED"
 -- Retrieval info: CONSTANT: LPM_FILE STRING "pal565.hex"
--- Retrieval info: CONSTANT: LPM_INDATA STRING "UNREGISTERED"
+-- Retrieval info: CONSTANT: LPM_INDATA STRING "REGISTERED"
 -- Retrieval info: CONSTANT: LPM_OUTDATA STRING "UNREGISTERED"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_RAM_DQ"
 -- Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "16"
 -- Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "8"
 -- Retrieval info: USED_PORT: address 0 0 8 0 INPUT NODEFVAL address[7..0]
 -- Retrieval info: USED_PORT: data 0 0 16 0 INPUT NODEFVAL data[15..0]
+-- Retrieval info: USED_PORT: inclock 0 0 0 0 INPUT NODEFVAL inclock
 -- Retrieval info: USED_PORT: q 0 0 16 0 OUTPUT NODEFVAL q[15..0]
 -- Retrieval info: USED_PORT: we 0 0 0 0 INPUT VCC we
 -- Retrieval info: CONNECT: @address 0 0 8 0 address 0 0 8 0
 -- Retrieval info: CONNECT: @we 0 0 0 0 we 0 0 0 0
 -- Retrieval info: CONNECT: q 0 0 16 0 @q 0 0 16 0
+-- Retrieval info: CONNECT: @inclock 0 0 0 0 inclock 0 0 0 0
 -- Retrieval info: CONNECT: @data 0 0 16 0 data 0 0 16 0
 -- Retrieval info: LIBRARY: lpm lpm.lpm_components.all
 -- Retrieval info: GEN_FILE: TYPE_NORMAL palette.vhd TRUE

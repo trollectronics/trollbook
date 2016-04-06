@@ -59,7 +59,7 @@ architecture arch of vga is
 	
 	signal hsync_internal : std_logic;
 	signal vsync_internal : std_logic;
-	signal den_internal : std_logic;
+	signal den_internal : std_logic_vector(1 downto 0);
 	
 	signal rgb : std_logic_vector((depth_r + depth_g + depth_b) - 1 downto 0);
 	signal palette_a : std_logic_vector(7 downto 0);
@@ -73,13 +73,18 @@ architecture arch of vga is
 	signal ll_a_next : std_logic_vector(ll_a_length - 1 downto 0);
 	signal ll_ce_internal : std_logic;
 	signal ll_ce_next : std_logic;
+	
+	signal palette_clk : std_logic;
 begin
 	u_palette: entity work.palette port map(
 		data => (others => '0'),
 		address => palette_a,
+		inclock => palette_clk,
 		we => '0',
 		q => rgb
 	);
+	
+	palette_clk <= not clk;
 	
 	hlogic: process(hstate, pixel_counter, hsync_internal, hvisible) begin
 		hstate_next <= hstate;
@@ -160,7 +165,7 @@ begin
 			ll_a <= (others => '0');
 			ll_ce_internal <= '0';
 			second_pixel <= (others => '0');
-			den_internal <= '0';
+			den_internal <= "00";
 			den <= '0';
 		else
 			if rising_edge(clk) then
@@ -168,6 +173,7 @@ begin
 			elsif falling_edge(clk) then
 				second_pixel <= second_pixel_next;
 				--set up llram adress
+				
 				visible_counter <= visible_counter_next;
 				ll_a <= ll_a_next;
 				ll_ce_internal <= ll_ce_next;
@@ -178,8 +184,9 @@ begin
 				hvisible <= hvisible_next;
 				hsync_internal <= hsync_next;
 				
-				den_internal <= hvisible and vvisible;
-				den <= den_internal;
+				den_internal(1) <= hvisible and vvisible;
+				den_internal(0) <= den_internal(1);
+				den <= den_internal(0);
 				
 				if new_line = '1' then
 					vstate <= vstate_next;
@@ -212,9 +219,9 @@ begin
 	
 	ll_ce <= ll_ce_internal;
 	
-	palette_a <= ll_d(7 downto 0) when ll_ce_internal = '0' else second_pixel;
+	palette_a <= ll_d(15 downto 8) when ll_ce_internal = '0' else second_pixel;
 	--palette_a <= x"FE" when ll_ce_internal = '1' else x"FF";
-	second_pixel_next <= ll_d(15 downto 8) when ll_ce_internal = '0' else second_pixel;
+	second_pixel_next <= ll_d(7 downto 0) when ll_ce_internal = '0' else second_pixel;
 	
 	r <= rgb(depth_r - 1 downto 0);
 	g <= rgb(depth_r + depth_g - 1 downto depth_r);
