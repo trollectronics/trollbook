@@ -67,7 +67,7 @@ begin
 	
 	ll_a <= a(18 downto 1);
 	ll_siz <= not siz;
-	ll_q <= d(15 downto 0) when a(0) = '0' else d(31 downto 16);
+	ll_q <= d(15 downto 0) when a(1) = '1' else d(31 downto 16);
 	
 	process(state, ts, tt, rw, a, bootrom_q, ll_ack)
 		variable check : std_logic_vector(3 downto 0);
