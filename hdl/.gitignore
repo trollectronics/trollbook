@@ -17,5 +17,5 @@
 *.pin
 *.mti
 *.wlf
--palette565.hex
--bootrom.hex
+!palette565.hex
+!bootrom.hex
