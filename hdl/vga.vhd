@@ -219,9 +219,9 @@ begin
 	
 	ll_ce <= ll_ce_internal;
 	
-	palette_a <= ll_d(15 downto 8) when ll_ce_internal = '0' else second_pixel;
+	palette_a <= ll_d(15 downto 8) when pixel_counter mod 2 = 0 else second_pixel;
 	--palette_a <= x"FE" when ll_ce_internal = '1' else x"FF";
-	second_pixel_next <= ll_d(7 downto 0) when ll_ce_internal = '0' else second_pixel;
+	second_pixel_next <= ll_d(7 downto 0) when pixel_counter mod 2 = 0 else second_pixel;
 	
 	r <= rgb(depth_r - 1 downto 0);
 	g <= rgb(depth_r + depth_g - 1 downto depth_r);

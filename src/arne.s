@@ -37,6 +37,6 @@ main:
 	cmp.l #480,%d1
 	jne .L2
 
-2:      stop #0x3000
+2:      lpstop #0x3000
         bra 2b
 

@@ -20,5 +20,5 @@
 
 
 
-2:	stop #0x3000
+2:	lpstop #0x3000
 	bra 2b
