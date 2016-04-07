@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity test is end entity;
 
@@ -95,6 +96,8 @@ architecture tb_trollbook of test is
 	signal cpu_ta : std_logic;
 	
 	signal write_done : boolean := false;
+	
+	signal write_a : integer := 0;
 begin
 	clk33 <= not clk33 after 15 ns;
 	clk12 <= not clk12 after 384 ns;
@@ -135,9 +138,19 @@ begin
 	
 	process(clk33) begin
 		if rising_edge(clk33) then
-			t <= t + 1;
+			if write_done = true then
+				t <= 266;
+				write_a <= write_a + 2;
+			else
+				t <= t + 1;
+			end if;
 		elsif falling_edge(clk33) then
-			t <= t + 1;
+			if write_done = true then
+				t <= 266;
+				write_a <= write_a + 2;
+			else
+				t <= t + 1;
+			end if;
 		end if;
 	end process;
 	
@@ -207,7 +220,7 @@ begin
 			-- write cycle
 			when 270 =>
 				write_done <= false;
-				a <= x"abcd1234";
+				a <= std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "10";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
@@ -216,7 +229,7 @@ begin
 				cpu_tm <= "001";
 			when 272 =>
 				cpu_ts <= '1';
-				d <= x"0000cafe";
+				d <= x"deadcafe";
 			when 274 | 276 | 278 | 280 =>
 				if cpu_ta = '0' then
 					write_done <= true;
