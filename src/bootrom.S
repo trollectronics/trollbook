@@ -3,7 +3,11 @@
 .int 0x00000008
 	
 	nop
-	
+
+	move.l #0xAAAAAAAA, %d0
+	move.l #0x55555555, %a0
+	move.l %d0, (%a0)
+
 	move.l #0x00000000, %d0
 	move.l #0, %a0
 
