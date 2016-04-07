@@ -220,7 +220,7 @@ begin
 			-- write cycle
 			when 270 =>
 				write_done <= false;
-				a <= std_logic_vector(to_unsigned(write_a, 32));
+				a <= x"AAAAAAA0"; --std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "10";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
@@ -229,7 +229,7 @@ begin
 				cpu_tm <= "001";
 			when 272 =>
 				cpu_ts <= '1';
-				d <= x"deadcafe";
+				d <= x"55555555"; --x"deadcafe";
 			when 274 | 276 | 278 | 280 =>
 				if cpu_ta = '0' then
 					write_done <= true;

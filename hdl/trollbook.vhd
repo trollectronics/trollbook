@@ -175,7 +175,9 @@ architecture arch of trollbook is
 			ll_rw : out std_logic;
 			ll_siz : out std_logic_vector(1 downto 0);
 			ll_ce : out std_logic;
-			ll_ack : in std_logic
+			ll_ack : in std_logic;
+			
+			arne : out std_logic
 		);
 	end component;
 	
