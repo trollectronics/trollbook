@@ -176,7 +176,16 @@ architecture arch of trollbook is
 			ll_rw : out std_logic;
 			ll_siz : out std_logic_vector(1 downto 0);
 			ll_ce : out std_logic;
-			ll_ack : in std_logic
+			ll_ack : in std_logic;
+			
+			bus_a : out std_logic_vector(31 downto 0);
+			bus_d : in std_logic_vector(31 downto 0);
+			bus_q : out std_logic_vector(31 downto 0);
+			bus_rw : out std_logic;
+			bus_siz : out std_logic_vector(1 downto 0);
+			
+			bus_ce_uart : out std_logic;
+			bus_ack_uart : in std_logic
 		);
 	end component;
 	
@@ -236,7 +245,7 @@ architecture arch of trollbook is
 			rx : in std_logic;
 			tx : out std_logic;
 			
-			bus_a : in std_logic;
+			bus_a : in std_logic_vector(31 downto 0);
 			bus_d : in std_logic_vector(31 downto 0);
 			bus_q : out std_logic_vector(31 downto 0);
 			bus_rw : in std_logic;
@@ -272,6 +281,15 @@ architecture arch of trollbook is
 	signal ll_cpu_siz : std_logic_vector(1 downto 0);
 	signal ll_cpu_ce : std_logic;
 	signal ll_cpu_ack : std_logic;
+	
+	signal bus_a : std_logic_vector(31 downto 0);
+	signal bus_d : std_logic_vector(31 downto 0);
+	signal bus_q : std_logic_vector(31 downto 0);
+	signal bus_siz : std_logic_vector(1 downto 0);
+	signal bus_rw : std_logic;
+	
+	signal bus_ce_uart : std_logic;
+	signal bus_ack_uart : std_logic;
 begin
 	u_vga: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
@@ -291,7 +309,12 @@ begin
 		a => a, d => d, q => cpu_q, oe => cpu_oe,
 		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
 		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto,
-		ll_a => ll_cpu_a, ll_d => ll_cpu_d, ll_q => ll_cpu_q, ll_rw => ll_cpu_rw, ll_siz => ll_cpu_siz, ll_ce => ll_cpu_ce, ll_ack => ll_cpu_ack);
+		
+		ll_a => ll_cpu_a, ll_d => ll_cpu_d, ll_q => ll_cpu_q, ll_rw => ll_cpu_rw, ll_siz => ll_cpu_siz, ll_ce => ll_cpu_ce, ll_ack => ll_cpu_ack,
+		
+		bus_a => bus_a, bus_d => bus_q, bus_q => bus_d, bus_rw => bus_rw, bus_siz => bus_siz,
+		
+		bus_ce_uart => bus_ce_uart, bus_ack_uart => bus_ack_uart);
 	
 	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,
@@ -305,8 +328,8 @@ begin
 	
 	u_uart: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
-		bus_a => '1', bus_d => (others => '1'), bus_q => open,
-		bus_rw => '0', bus_siz => "00", bus_ce => '0', bus_ack => open);
+		bus_a => bus_a, bus_d => bus_d, bus_q => bus_q,
+		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_uart, bus_ack => bus_ack_uart);
 	
 	u_reset: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	

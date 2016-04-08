@@ -10,7 +10,7 @@ entity uart is
 		rx : in std_logic;
 		tx : out std_logic;
 		
-		bus_a : in std_logic;
+		bus_a : in std_logic_vector(31 downto 0);
 		bus_d : in std_logic_vector(31 downto 0);
 		bus_q : out std_logic_vector(31 downto 0);
 		bus_rw : in std_logic;
@@ -159,10 +159,10 @@ begin
 			end if;
 			
 			if bus_ce = '1' then
-				if bus_rw = '0' and bus_a = '0' then
+				if bus_rw = '0' and bus_a(2) = '0' then
 					rx_full <= '0';
 				elsif bus_rw = '1' then
-					case bus_a is
+					case bus_a(2) is
 						when '0' =>
 							tx_buffer_internal <= bus_d(31 downto 24);
 							tx_empty <= '0';
@@ -184,7 +184,7 @@ begin
 	
 	process(bus_ce, rx_buffer, bus_a, baud_div, rx_active, rx_full, tx_empty) begin
 		if bus_ce = '1' then
-			if bus_a = '0' then
+			if bus_a(2) = '0' then
 				bus_q <= rx_buffer & x"000000";
 			else
 				bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;

@@ -33,7 +33,16 @@ entity cpu is
 		ll_rw : out std_logic;
 		ll_siz : out std_logic_vector(1 downto 0);
 		ll_ce : out std_logic;
-		ll_ack : in std_logic
+		ll_ack : in std_logic;
+		
+		bus_a : out std_logic_vector(31 downto 0);
+		bus_d : in std_logic_vector(31 downto 0);
+		bus_q : out std_logic_vector(31 downto 0);
+		bus_rw : out std_logic;
+		bus_siz : out std_logic_vector(1 downto 0);
+		
+		bus_ce_uart : out std_logic;
+		bus_ack_uart : in std_logic
 	);
 end cpu;
 
@@ -53,6 +62,9 @@ architecture arch of cpu is
 	
 	signal ll_ce_next : std_logic;
 	signal ll_rw_next : std_logic;
+	
+	signal ce, ce_next : std_logic_vector(7 downto 0);
+	signal ack : std_logic;
 begin
 	u_bootrom: entity work.bootrom port map(
 		address => a(7 downto 2),
@@ -68,6 +80,30 @@ begin
 	ll_a <= a(18 downto 1);
 	ll_siz <= not siz;
 	ll_q <= d(15 downto 0) when a(1) = '1' else d(31 downto 16);
+	
+	bus_a <= a;
+	bus_q <= d;
+	bus_siz <= not siz;
+	bus_rw <= not rw;
+	
+	bus_ce_uart <= ce(2);
+	
+	process(a, bus_ack_uart, ll_ack) begin
+		case a(23 downto 19) is
+			when "00000" => --bootrom
+				ce_next <= "00000001";
+				ack <= '1';
+			when "00001" => --llram
+				ce_next <= "00000010";
+				ack <= ll_ack;
+			when "00010" => --chipset
+				ce_next <= "00000100";
+				ack <= bus_ack_uart;
+			when others =>
+				ce_next <= (others => '0');
+				ack <= '0';
+		end case;
+	end process;
 	
 	process(state, ts, tt, rw, a, bootrom_q, ll_ack)
 		variable check : std_logic_vector(3 downto 0);
@@ -172,6 +208,8 @@ begin
 			oe <= oe_next;
 			ll_ce <= ll_ce_next;
 			ll_rw <= ll_rw_next;
+			
+			ce <= ce_next;
 		end if;
 	end process;
 	
