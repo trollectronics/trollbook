@@ -108,8 +108,8 @@ begin
 	
 	ll_d <= ll_a(6 downto 0) & '0' & ll_a(6 downto 0) & '1' when ll_ce = '0' and ll_oe = '0' else (others => 'Z');
 	
-	uart <= '1', '0' after 100 us, '1' after (100 us + 104 us), '0' after (100 us + 104*3 us),'1' after (100 us + 104*5 us),
-		'0' after (100 us + 104*6 us), '1' after (100 us + 104*7 us), '0' after (100 us + 104*8 us), '1' after (100 us + 104*9 us);
+	uart <= '1', '0' after 235 us, '1' after (235 us + 104 us), '0' after (235 us + 104*3 us),'1' after (235 us + 104*5 us),
+		'0' after (235 us + 104*6 us), '1' after (235 us + 104*7 us), '0' after (235 us + 104*8 us), '1' after (235 us + 104*9 us);
 	
 	u_dut: trollbook port map(
 		a => a, d => d,
