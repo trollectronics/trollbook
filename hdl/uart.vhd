@@ -14,7 +14,9 @@ entity uart is
 		bus_d : in std_logic_vector(31 downto 0);
 		bus_q : out std_logic_vector(31 downto 0);
 		bus_rw : in std_logic;
-		bus_ce : in std_logic
+		bus_siz : in std_logic_vector(1 downto 0);
+		bus_ce : in std_logic;
+		bus_ack : out std_logic
 	);
 end uart;
 
@@ -31,12 +33,12 @@ architecture arch of uart is
 	
 	signal baud_count : integer range 0 to (2 ** 16 - 1);
 	signal baud_count_next : integer range 0 to (2 ** 16 - 1);
-	signal baud_div : std_logic_vector(15 downto 0) := x"0363"; --9600 baud
+	signal baud_div : std_logic_vector(15 downto 0);
 	signal rx_full, rx_full_next : std_logic;
 	signal tx_empty, tx_empty_next : std_logic;
 	signal rx_active : std_logic;
 	
-	signal tx_buffer_internal, tx_buffer_next : std_logic_vector(7 downto 0) := x"A5";
+	signal tx_buffer_internal, tx_buffer_next : std_logic_vector(7 downto 0);
 	signal rx_buffer_internal, rx_buffer, rx_buffer_next : std_logic_vector(7 downto 0);
 	
 	signal tx_internal, tx_next : std_logic;
@@ -113,7 +115,7 @@ begin
 			txstate <= idle;
 			
 			tx_buffer_internal <= x"FF";
-			baud_div <=  x"0363";
+			baud_div <=  x"0363"; --9600 baud
 			
 			tx_internal <= '1';
 			
@@ -162,7 +164,7 @@ begin
 				elsif bus_rw = '1' then
 					case bus_a is
 						when '0' =>
-							tx_buffer_internal <= bus_d(7 downto 0);
+							tx_buffer_internal <= bus_d(31 downto 24);
 							tx_empty <= '0';
 							txstate <= start;
 							txcount <= 3;
@@ -180,6 +182,18 @@ begin
 		end if;
 	end process;
 	
-	bus_q <= x"000000" & rx_buffer when bus_a = '0' else baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
+	process(bus_ce, rx_buffer, bus_a, baud_div, rx_active, rx_full, tx_empty) begin
+		if bus_ce = '1' then
+			if bus_a = '0' then
+				bus_q <= rx_buffer & x"000000";
+			else
+				bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
+			end if;
+		else
+			bus_q <= (others => 'Z');
+		end if;
+	end process;
+	
 	tx <= tx_internal;
+	bus_ack <= '1';
 end arch;
