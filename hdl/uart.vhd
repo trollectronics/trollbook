@@ -28,22 +28,34 @@ architecture arch of uart is
 	signal baud_div : std_logic_vector(15 downto 0) := x"0363"; --9600 baud
 	signal rx_full : std_logic;
 	signal tx_empty : std_logic;
+	signal rx_active : std_logic;
 	
 	signal tx_buffer : std_logic_vector(7 downto 0) := x"A5";
 	signal rx_buffer : std_logic_vector(7 downto 0);
 	
 	signal tx_internal, tx_next : std_logic;
+	signal rx_prev : std_logic;
 begin
-	process(rxstate, rxcount) begin
+	process(rxstate, rxcount, rx, rx_prev) begin
 		rxcount_next <= (rxcount - 1) mod 4;
 		rxstate_next <= rxstate;
+		rx_active <= '0';
 		
 		case rxstate is
 			when idle =>
 				rxcount_next <= 0;
+				
+				if rx_prev = '0' and rx = '0' then
+					rxstate_next <= start;
+					rxcount_next <= 3;
+				end if;
+				
 			when start =>
+				rxstate_next <= bit0;
+				rx_active <= '1';
 			when bit0 | bit1 | bit2 | bit3 | bit4 | bit5 | bit6 =>
 				rxstate_next <= state_type'succ(rxstate);
+				rx_active <= '1';
 			when bit7 =>
 				rxstate_next <= stop;
 			when parity =>
@@ -89,6 +101,9 @@ begin
 			tx_buffer <= x"A5";
 			baud_div <=  x"0363";
 			
+			rx_prev <= '1';
+			rx_buffer <= x"FF";
+			
 			rxcount <= 3;
 			txcount <= 3;
 			tx_internal <= '1';
@@ -102,8 +117,12 @@ begin
 				txcount <= txcount_next;
 				baud_count <= to_integer(unsigned(baud_div));
 				
+				rx_prev <= rx;
+				
 				if rxcount = 0 then
-					rx_buffer <= rx_buffer(6 downto 0) & rx;
+					if rx_active = '1' then
+						rx_buffer <= rx_buffer(6 downto 0) & rx;
+					end if;
 					rxstate <= rxstate_next;
 				end if;
 				

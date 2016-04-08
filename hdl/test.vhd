@@ -98,6 +98,8 @@ architecture tb_trollbook of test is
 	signal write_done : boolean := false;
 	
 	signal write_a : integer := 0;
+	
+	signal uart : std_logic;
 begin
 	clk33 <= not clk33 after 15 ns;
 	clk12 <= not clk12 after 384 ns;
@@ -105,6 +107,9 @@ begin
 	pwron_reset <= '0', '1' after 100 ns;
 	
 	ll_d <= ll_a(6 downto 0) & '0' & ll_a(6 downto 0) & '1' when ll_ce = '0' and ll_oe = '0' else (others => 'Z');
+	
+	uart <= '1', '0' after 100 us, '1' after (100 us + 104 us), '0' after (100 us + 104*3 us),'1' after (100 us + 104*5 us),
+		'0' after (100 us + 104*6 us), '1' after (100 us + 104*7 us), '0' after (100 us + 104*8 us), '1' after (100 us + 104*9 us);
 	
 	u_dut: trollbook port map(
 		a => a, d => d,
@@ -126,7 +131,7 @@ begin
 		
 		spi_miso => '1', spi_mosi => open, spi_clk => open, spi_ss => open,
 		
-		uart_rx => '1', uart_tx => open,
+		uart_rx => uart, uart_tx => open,
 		
 		ext_int => "1111",
 		
