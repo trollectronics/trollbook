@@ -144,14 +144,14 @@ begin
 	process(clk33) begin
 		if rising_edge(clk33) then
 			if write_done = true then
-				t <= 266;
+				t <= 366;
 				write_a <= write_a + 2;
 			else
 				t <= t + 1;
 			end if;
 		elsif falling_edge(clk33) then
 			if write_done = true then
-				t <= 266;
+				t <= 366;
 				write_a <= write_a + 2;
 			else
 				t <= t + 1;
@@ -222,8 +222,32 @@ begin
 				cpu_tm <= "111";
 			
 			
-			-- write cycle
+			--write to uart
 			when 270 =>
+				write_done <= false;
+				a <= x"00100000"; --std_logic_vector(to_unsigned(write_a, 32));
+				cpu_siz <= "01";
+				cpu_tt <= "00";
+				cpu_rw <= '0';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 272 =>
+				cpu_ts <= '1';
+				d <= x"A5000000"; --x"deadcafe";
+			when 274 | 276 | 278 | 280 =>
+				if cpu_ta = '0' then
+					a <= (others => '1');
+					cpu_siz <= "11";
+					cpu_tip <= '1';
+					cpu_tt <= "11";
+					cpu_tm <= "111";
+					cpu_rw <= '1';
+					d <= (others => 'Z');
+				end if;
+			
+			-- write cycle
+			when 370 =>
 				write_done <= false;
 				a <= x"AAAAAAA0"; --std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "10";
@@ -232,10 +256,10 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 272 =>
+			when 372 =>
 				cpu_ts <= '1';
 				d <= x"55555555"; --x"deadcafe";
-			when 274 | 276 | 278 | 280 =>
+			when 374 | 376 | 378 | 380 =>
 				if cpu_ta = '0' then
 					write_done <= true;
 				end if;

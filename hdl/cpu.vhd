@@ -89,27 +89,35 @@ begin
 	bus_ce_uart <= ce(2);
 	
 	process(a, bus_ack_uart, ll_ack) begin
-		case a(23 downto 19) is
-			when "00000" => --bootrom
-				ce_next <= "00000001";
-				ack <= '1';
-			when "00001" => --llram
-				ce_next <= "00000010";
-				ack <= ll_ack;
-			when "00010" => --chipset
-				ce_next <= "00000100";
-				ack <= bus_ack_uart;
-			when others =>
-				ce_next <= (others => '0');
-				ack <= '0';
-		end case;
+		q_next <= (others => '0');
+		if tip = '0' then
+			case a(23 downto 19) is
+				when "00000" => --bootrom
+					q_next <= bootrom_q;
+					ce_next <= "00000001";
+					ack <= '1';
+				when "00001" => --llram
+					ce_next <= "00000010";
+					ack <= ll_ack;
+				when "00010" => --chipset
+					q_next <= bus_d;
+					ce_next <= "00000100";
+					ack <= bus_ack_uart;
+				when others =>
+					ce_next <= (others => '0');
+					ack <= '0';
+			end case;
+		else
+			ce_next <= (others => '0');
+			ack <= '0';
+		end if;
 	end process;
 	
 	process(state, ts, tt, rw, a, bootrom_q, ll_ack)
 		variable check : std_logic_vector(3 downto 0);
 	begin
 		state_next <= state;
-		q_next <= (others => '0');
+		--q_next <= (others => '0');
 		oe_next <= '0';
 		ta_next <= '1';
 		check := ts & tt & rw;
@@ -134,29 +142,29 @@ begin
 				end case;
 			
 			when read_normal =>
-				q_next <= bootrom_q;
+				--q_next <= bootrom_q;
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;
 			
 			when read_burst0 =>
-				q_next <= bootrom_q;
+				--q_next <= bootrom_q;
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;
 				--bursting disabled
 			when read_burst1 =>
-				q_next <= x"60046004";
+				--q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst2;
 			when read_burst2 =>
-				q_next <= x"60046004";
+				--q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= read_burst3;
 			when read_burst3 =>
-				q_next <= x"60046004";
+				--q_next <= x"60046004";
 				ta_next <= '0';
 				oe_next <= '1';
 				state_next <= idle;
@@ -200,6 +208,8 @@ begin
 			
 			ll_ce <= '0';
 			ll_rw <= '0';
+			
+			ce <= (others => '0');
 		elsif rising_edge(clk) then
 			state <= state_next;
 		elsif falling_edge(clk) then
