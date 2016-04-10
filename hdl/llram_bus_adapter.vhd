@@ -27,7 +27,8 @@ entity llram_bus_adapter is
 end llram_bus_adapter;
 
 architecture arch of llram_bus_adapter is
-	type state_type is (idle, word_read, long_read_first, long_read_second,
+	type state_type is (idle, done,
+		word_read, long_read_first, long_read_second,
 		word_write, long_write_first, long_write_second);
 	
 	signal state, state_next : state_type;
@@ -48,7 +49,8 @@ begin
 	
 	ll_q <= bus_d(15 downto 0) when ll_a0_internal = '1' else bus_d(31 downto 16);
 	
-	process(state) is
+	process(state, bus_rw, bus_siz, bus_q_internal, ll_lb_internal, ll_ub_internal, ll_a0_internal, ll_ce_internal,
+		bus_a, bus_ce, ll_d, ll_ack) is
 		variable check : std_logic_vector(2 downto 0);
 	begin
 		check := bus_rw & bus_siz;
@@ -119,9 +121,19 @@ begin
 					end case;
 				end if;
 			
+			when done =>
+				ll_lb_next <= '0';
+				ll_ub_next <= '0';
+				ll_a0_next <= '0';
+				ll_ce_next <= '0';
+				
+				if bus_ce = '0' then
+					state_next <= idle;
+				end if;
+			
 			when word_read =>
 				if ll_ack = '1' then
-					state_next <= idle;
+					state_next <= done;
 					bus_ack_next <= '1';
 					ll_ce_next <= '0';
 				end if;
@@ -129,13 +141,11 @@ begin
 				if ll_ack = '1' then
 					ll_a0_next <= '1';
 					state_next <= long_read_second;
-					bus_ack_next <= '1';
-					ll_ce_next <= '0';
 					bus_q_next <= ll_d & bus_q_internal(15 downto 0);
 				end if;
 			when long_read_second =>
 				if ll_ack = '1' then
-					state_next <= idle;
+					state_next <= done;
 					bus_ack_next <= '1';
 					ll_ce_next <= '0';
 					bus_q_next <= bus_q_internal(31 downto 16) & ll_d;
@@ -144,7 +154,7 @@ begin
 			when word_write =>
 				ll_rw_next <= '1';
 				if ll_ack = '1' then
-					state_next <= idle;
+					state_next <= done;
 					bus_ack_next <= '1';
 					ll_ce_next <= '0';
 					ll_rw_next <= '0';
@@ -154,14 +164,13 @@ begin
 				if ll_ack = '1' then
 					ll_a0_next <= '1';
 					state_next <= long_write_second;
-					bus_ack_next <= '1';
-					ll_ce_next <= '0';
-					ll_rw_next <= '0';
+					ll_ce_next <= '1';
+					ll_rw_next <= '1';
 				end if;
 			when long_write_second =>
 				ll_rw_next <= '1';
 				if ll_ack = '1' then
-					state_next <= idle;
+					state_next <= done;
 					bus_ack_next <= '1';
 					ll_ce_next <= '0';
 					ll_rw_next <= '0';
@@ -176,8 +185,11 @@ begin
 			ll_a <= (others => '0');
 			ll_a0_internal <= '0';
 			ll_ce_internal <= '0';
+			ll_rw <= '0';
+			bus_ack<= '0';
+			bus_q_internal <= (others => '0');
 			state <= idle;
-		elsif rising_edge(clk) then
+		elsif falling_edge(clk) then
 			ll_lb_internal <= ll_lb_next;
 			ll_ub_internal <= ll_ub_next;
 			ll_a0_internal <= ll_a0_next;

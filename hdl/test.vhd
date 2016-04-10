@@ -97,7 +97,7 @@ architecture tb_trollbook of test is
 	
 	signal write_done : boolean := false;
 	
-	signal write_a : integer := 0;
+	signal write_a : integer := 524288;
 	
 	signal uart : std_logic;
 begin
@@ -246,20 +246,37 @@ begin
 					d <= (others => 'Z');
 				end if;
 			
+			-- read from llram
+			when 360 =>
+				a <= x"00080000";
+				d <= (others => 'Z');
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '1';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 362 =>
+				cpu_ts <= '1';
+			when 365 | 367 | 369 | 371 | 373 | 375 | 377 | 379 =>
+				if cpu_ta = '0' then
+					write_done <= true;
+				end if;
+			
 			-- write cycle
-			when 370 =>
+			when 470 =>
 				write_done <= false;
-				a <= x"AAAAAAA0"; --std_logic_vector(to_unsigned(write_a, 32));
-				cpu_siz <= "10";
+				a <= std_logic_vector(to_unsigned(write_a, 32));
+				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 372 =>
+			when 472 =>
 				cpu_ts <= '1';
-				d <= x"55555555"; --x"deadcafe";
-			when 374 | 376 | 378 | 380 =>
+				d <= x"DEADBEEF"; --x"deadcafe";
+			when 473 | 475 | 477 | 479 | 481 | 483 | 485 | 487 =>
 				if cpu_ta = '0' then
 					write_done <= true;
 				end if;

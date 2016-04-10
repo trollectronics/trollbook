@@ -83,7 +83,7 @@ begin
 		end if;
 	end process;
 	
-	process(vga_ce, snd_ce, cpu_ce, vga_a, snd_a, cpu_rw, cpu_a, cpu_d) begin
+	process(vga_ce, snd_ce, cpu_ce, vga_a, snd_a, cpu_rw, cpu_a, cpu_d, cpu_lb, cpu_ub) begin
 		q_next <= (others => '1');
 		we_next <= "11";
 		oe_next <= '1';
@@ -113,7 +113,7 @@ begin
 			a_next <= cpu_a;
 			q_next <= cpu_d;
 			cpu_ack_next <= '1';
-			lb_next <= not cpu_lb;
+			lb_next <= cpu_lb;
 			ub_next <= cpu_ub;
 		end if;
 	end process;

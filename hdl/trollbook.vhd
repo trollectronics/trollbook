@@ -357,9 +357,9 @@ begin
 	u_reset: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	
 	u_llram_bus_adapter: llram_bus_adapter port map(clk => clk33, reset => internal_reset,
-		ll_a => ll_cpu_a, ll_d => ll_cpu_q, ll_q => ll_cpu_d, ll_rw => ll_cpu_rw,
+		ll_a => ll_cpu_a, ll_d => ll_cpu_d, ll_q => ll_cpu_q, ll_rw => ll_cpu_rw,
 		ll_lb => ll_cpu_lb, ll_ub => ll_cpu_ub, ll_ce => ll_cpu_ce, ll_ack => ll_cpu_ack,
-		bus_a => bus_a, bus_d => bus_q, bus_q => bus_d, bus_siz => bus_siz, bus_rw => bus_rw,
+		bus_a => bus_a, bus_d => bus_d, bus_q => bus_q, bus_siz => bus_siz, bus_rw => bus_rw,
 		bus_ce => bus_ce_llram, bus_ack => bus_ack_llram);
 	
 	vga_pwr <= internal_reset;

@@ -41,8 +41,7 @@ entity cpu is
 end cpu;
 
 architecture arch of cpu is
-	type state_type is (idle, read_normal, 
-		write_normal, write_ack,
+	type state_type is (idle, read_normal, write_normal, read_ack, write_ack,
 		read_burst0, read_burst1, read_burst2, read_burst3,
 		write_burst0, write_burst1, write_burst2, write_burst3);
 	
@@ -76,7 +75,7 @@ begin
 	bus_ce_uart <= ce(2);
 	bus_ce_llram <= ce(1);
 	
-	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d) begin
+	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip) begin
 		q_next <= (others => '0');
 		if tip = '0' then
 			case a(23 downto 19) is
@@ -102,7 +101,7 @@ begin
 		end if;
 	end process;
 	
-	process(state, ts, tt, rw, a, bootrom_q, ack)
+	process(state, ts, tt, rw, a, bootrom_q, ack, ce_next)
 		variable check : std_logic_vector(3 downto 0);
 	begin
 		state_next <= state;
@@ -127,15 +126,23 @@ begin
 			
 			when read_normal =>
 				--q_next <= bootrom_q;
-				ta_next <= '0';
-				oe_next <= '1';
-				state_next <= idle;
+				if ce_next(0) = '1' then
+					ta_next <= '0';
+					oe_next <= '1';
+					state_next <= idle;
+				elsif ack = '1' then
+					state_next <= read_ack;
+				end if;
 			
 			when read_burst0 =>
 				--q_next <= bootrom_q;
-				ta_next <= '0';
-				oe_next <= '1';
-				state_next <= idle;
+				if ce_next(0) = '1' then
+					ta_next <= '0';
+					oe_next <= '1';
+					state_next <= idle;
+				elsif ack = '1' then
+					state_next <= read_ack;
+				end if;
 				--bursting disabled
 			when read_burst1 =>
 				--q_next <= x"60046004";
@@ -158,13 +165,12 @@ begin
 					state_next <= write_ack;
 				end if;
 			
-			when write_ack =>
-				ta_next <= '0';
-				state_next <= idle;
-			
 			when write_burst0 =>
-				ta_next <= '0';
-				state_next <= write_burst1;
+				--ta_next <= '0';
+				--state_next <= write_burst1;
+				if ack = '1' then
+					state_next <= write_ack;
+				end if;
 			when write_burst1 =>
 				ta_next <= '0';
 				state_next <= write_burst2;
@@ -175,6 +181,14 @@ begin
 				ta_next <= '0';
 				state_next <= idle;
 			
+			when read_ack =>
+				oe_next <= '1';
+				ta_next <= '0';
+				state_next <= idle;
+			
+			when write_ack =>
+				ta_next <= '0';
+				state_next <= idle;
 		end case;
 	end process;
 	
