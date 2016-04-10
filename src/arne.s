@@ -5,7 +5,7 @@
 
 main:
 	nop
-	sub.l %a1,%a1
+	move.l #0x80000, %a1
 	clr.l %d1
 .L2:
 	move.l %d1,%d3
