@@ -194,6 +194,7 @@ begin
 		end if;
 	end process;
 	
-	tx <= tx_internal;
+	--tx <= tx_internal;
+	tx <= bus_ce;
 	bus_ack <= '1';
 end arch;

@@ -113,8 +113,8 @@ begin
 			a_next <= cpu_a;
 			q_next <= cpu_d;
 			cpu_ack_next <= '1';
-			lb_next <= cpu_lb;
-			ub_next <= cpu_ub;
+			lb_next <= not cpu_lb;
+			ub_next <= not cpu_ub;
 		end if;
 	end process;
 	
