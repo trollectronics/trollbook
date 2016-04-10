@@ -170,14 +170,6 @@ architecture arch of trollbook is
 			rsti : out std_logic;
 			rsto : in std_logic;
 			
-			ll_a : out std_logic_vector(17 downto 0);
-			ll_d : in std_logic_vector(15 downto 0);
-			ll_q : out std_logic_vector(15 downto 0);
-			ll_rw : out std_logic;
-			ll_siz : out std_logic_vector(1 downto 0);
-			ll_ce : out std_logic;
-			ll_ack : in std_logic;
-			
 			bus_a : out std_logic_vector(31 downto 0);
 			bus_d : in std_logic_vector(31 downto 0);
 			bus_q : out std_logic_vector(31 downto 0);
@@ -185,7 +177,9 @@ architecture arch of trollbook is
 			bus_siz : out std_logic_vector(1 downto 0);
 			
 			bus_ce_uart : out std_logic;
-			bus_ack_uart : in std_logic
+			bus_ack_uart : in std_logic;
+			bus_ce_llram : out std_logic;
+			bus_ack_llram : in std_logic
 		);
 	end component;
 	
@@ -215,7 +209,8 @@ architecture arch of trollbook is
 			cpu_d : in std_logic_vector(data_width - 1 downto 0);
 			cpu_q : out std_logic_vector(data_width - 1 downto 0);
 			cpu_rw : in std_logic;
-			cpu_siz : in std_logic_vector(1 downto 0);
+			cpu_ub : in std_logic;
+			cpu_lb : in std_logic;
 			cpu_ce : in std_logic;
 			cpu_ack : out std_logic;
 			
@@ -263,6 +258,30 @@ architecture arch of trollbook is
 		);
 	end component;
 	
+	component llram_bus_adapter is
+		port(
+			reset : in std_logic;
+			clk : in std_logic;
+			
+			ll_a : out std_logic_vector(17 downto 0);
+			ll_d : in std_logic_vector(15 downto 0);
+			ll_q : out std_logic_vector(15 downto 0);
+			ll_rw : out std_logic;
+			ll_lb : out std_logic;
+			ll_ub : out std_logic;
+			ll_ce : out std_logic;
+			ll_ack : in std_logic;
+			
+			bus_a : in std_logic_vector(31 downto 0);
+			bus_d : in std_logic_vector(31 downto 0);
+			bus_q : out std_logic_vector(31 downto 0);
+			bus_rw : in std_logic;
+			bus_siz : in std_logic_vector(1 downto 0);
+			bus_ce : in std_logic;
+			bus_ack : out std_logic
+		);
+	end component;
+	
 	signal cpu_q : std_logic_vector(31 downto 0);
 	signal cpu_oe : std_logic;
 	signal internal_reset : std_logic;
@@ -278,7 +297,8 @@ architecture arch of trollbook is
 	signal ll_cpu_d : std_logic_vector(15 downto 0);
 	signal ll_cpu_q : std_logic_vector(15 downto 0);
 	signal ll_cpu_rw : std_logic;
-	signal ll_cpu_siz : std_logic_vector(1 downto 0);
+	signal ll_cpu_lb : std_logic;
+	signal ll_cpu_ub : std_logic;
 	signal ll_cpu_ce : std_logic;
 	signal ll_cpu_ack : std_logic;
 	
@@ -290,6 +310,9 @@ architecture arch of trollbook is
 	
 	signal bus_ce_uart : std_logic;
 	signal bus_ack_uart : std_logic;
+	
+	signal bus_ce_llram : std_logic;
+	signal bus_ack_llram : std_logic;
 begin
 	u_vga: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
@@ -310,17 +333,17 @@ begin
 		tt => cpu_tt, tm => cpu_tm, siz => cpu_siz, rw => cpu_rw, ts => cpu_ts, tip => cpu_tip, ta => cpu_ta, tea => cpu_tea,
 		tbi => cpu_tbi, ipl => cpu_ipl, bclk => cpu_clk, lfo => cpu_lfo, scd => cpu_scd, rsti => cpu_rsti, rsto => cpu_rsto,
 		
-		ll_a => ll_cpu_a, ll_d => ll_cpu_d, ll_q => ll_cpu_q, ll_rw => ll_cpu_rw, ll_siz => ll_cpu_siz, ll_ce => ll_cpu_ce, ll_ack => ll_cpu_ack,
-		
 		bus_a => bus_a, bus_d => bus_q, bus_q => bus_d, bus_rw => bus_rw, bus_siz => bus_siz,
 		
-		bus_ce_uart => bus_ce_uart, bus_ack_uart => bus_ack_uart);
+		bus_ce_uart => bus_ce_uart, bus_ack_uart => bus_ack_uart,
+		bus_ce_llram => bus_ce_llram, bus_ack_llram => bus_ack_llram);
 	
 	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,
 		a => ll_a, d => ll_d, q => ll_q, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe_internal,
 		vga_a => ll_vga_a, vga_q => ll_vga_q, vga_ce => ll_vga_ce,
-		cpu_a => ll_cpu_a, cpu_d => ll_cpu_q, cpu_q => ll_cpu_d, cpu_rw => ll_cpu_rw, cpu_siz => ll_cpu_siz, cpu_ce => ll_cpu_ce, cpu_ack => ll_cpu_ack,
+		cpu_a => ll_cpu_a, cpu_d => ll_cpu_q, cpu_q => ll_cpu_d, cpu_rw => ll_cpu_rw, cpu_lb => ll_cpu_lb, cpu_ub => ll_cpu_ub,
+		cpu_ce => ll_cpu_ce, cpu_ack => ll_cpu_ack,
 		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
 	
 	u_spi: spi port map(reset => internal_reset, clk => clk33,
@@ -332,6 +355,12 @@ begin
 		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_uart, bus_ack => bus_ack_uart);
 	
 	u_reset: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
+	
+	u_llram_bus_adapter: llram_bus_adapter port map(clk => clk33, reset => internal_reset,
+		ll_a => ll_cpu_a, ll_d => ll_cpu_q, ll_q => ll_cpu_d, ll_rw => ll_cpu_rw,
+		ll_lb => ll_cpu_lb, ll_ub => ll_cpu_ub, ll_ce => ll_cpu_ce, ll_ack => ll_cpu_ack,
+		bus_a => bus_a, bus_d => bus_q, bus_q => bus_d, bus_siz => bus_siz, bus_rw => bus_rw,
+		bus_ce => bus_ce_llram, bus_ack => bus_ack_llram);
 	
 	vga_pwr <= internal_reset;
 	vga_pwm <= not internal_reset;

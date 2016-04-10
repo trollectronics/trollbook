@@ -28,7 +28,8 @@ entity llram is
 		cpu_d : in std_logic_vector(data_width - 1 downto 0);
 		cpu_q : out std_logic_vector(data_width - 1 downto 0);
 		cpu_rw : in std_logic;
-		cpu_siz : in std_logic_vector(1 downto 0);
+		cpu_lb : in std_logic;
+		cpu_ub : in std_logic;
 		cpu_ce : in std_logic;
 		cpu_ack : out std_logic;
 		
@@ -47,10 +48,10 @@ architecture arch of llram is
 	
 	signal we_next : std_logic_vector(1 downto 0);
 	signal we_internal : std_logic_vector(1 downto 0);
+	
+	signal ub_next, lb_next : std_logic;
 begin
 	ce <= '0';
-	ub <= '0';
-	lb <= '0';
 	
 	vga_q <= d;
 	cpu_q <= d;
@@ -65,11 +66,15 @@ begin
 			cpu_ack <= '0';
 			a <= (others => '1');
 			q <= (others => '1');
+			ub <= '0';
+			lb <= '0';
 		elsif falling_edge(clk) then
 			we_internal(0) <= we_next(0);
 			oe <= oe_next;
 			a <= a_next;
 			q <= q_next;
+			ub <= ub_next;
+			lb <= lb_next;
 			
 			cpu_ack <= cpu_ack_next;
 			--snd_ack <= cpu_ack_next;
@@ -82,6 +87,8 @@ begin
 		q_next <= (others => '1');
 		we_next <= "11";
 		oe_next <= '1';
+		lb_next <= '1';
+		ub_next <= '1';
 		
 		cpu_ack_next <= '0';
 		snd_ack_next <= '0';
@@ -91,9 +98,13 @@ begin
 		if vga_ce = '1' then
 			oe_next <= '0';
 			a_next <= vga_a;
+			lb_next <= '0';
+			ub_next <= '0';
 		elsif snd_ce = '1' then
 			oe_next <= '0';
 			a_next <= snd_a;
+			lb_next <= '0';
+			ub_next <= '0';
 			--snd_ack_next <= '1';
 		elsif cpu_ce = '1' then
 			oe_next <= cpu_rw;
@@ -102,6 +113,8 @@ begin
 			a_next <= cpu_a;
 			q_next <= cpu_d;
 			cpu_ack_next <= '1';
+			lb_next <= not cpu_lb;
+			ub_next <= cpu_ub;
 		end if;
 	end process;
 	

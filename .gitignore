@@ -7,3 +7,5 @@
 *.orig
 *.a
 build/
+
+_autosave*.kicad_pcb

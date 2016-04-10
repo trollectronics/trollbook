@@ -27,14 +27,6 @@ entity cpu is
 		rsti : out std_logic;
 		rsto : in std_logic;
 		
-		ll_a : out std_logic_vector(17 downto 0);
-		ll_d : in std_logic_vector(15 downto 0);
-		ll_q : out std_logic_vector(15 downto 0);
-		ll_rw : out std_logic;
-		ll_siz : out std_logic_vector(1 downto 0);
-		ll_ce : out std_logic;
-		ll_ack : in std_logic;
-		
 		bus_a : out std_logic_vector(31 downto 0);
 		bus_d : in std_logic_vector(31 downto 0);
 		bus_q : out std_logic_vector(31 downto 0);
@@ -42,7 +34,9 @@ entity cpu is
 		bus_siz : out std_logic_vector(1 downto 0);
 		
 		bus_ce_uart : out std_logic;
-		bus_ack_uart : in std_logic
+		bus_ack_uart : in std_logic;
+		bus_ce_llram : out std_logic;
+		bus_ack_llram : in std_logic
 	);
 end cpu;
 
@@ -60,9 +54,6 @@ architecture arch of cpu is
 	
 	signal bootrom_q : std_logic_vector(31 downto 0);
 	
-	signal ll_ce_next : std_logic;
-	signal ll_rw_next : std_logic;
-	
 	signal ce, ce_next : std_logic_vector(7 downto 0);
 	signal ack : std_logic;
 begin
@@ -77,18 +68,15 @@ begin
 	ipl <= "111";
 	lfo <= '0';
 	
-	ll_a <= a(18 downto 1);
-	ll_siz <= not siz;
-	ll_q <= d(15 downto 0) when a(1) = '1' else d(31 downto 16);
-	
 	bus_a <= a;
 	bus_q <= d;
 	bus_siz <= not siz;
 	bus_rw <= not rw;
 	
 	bus_ce_uart <= ce(2);
+	bus_ce_llram <= ce(1);
 	
-	process(a, bus_ack_uart, ll_ack) begin
+	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d) begin
 		q_next <= (others => '0');
 		if tip = '0' then
 			case a(23 downto 19) is
@@ -98,7 +86,8 @@ begin
 					ack <= '1';
 				when "00001" => --llram
 					ce_next <= "00000010";
-					ack <= ll_ack;
+					q_next <= bus_d;
+					ack <= bus_ack_llram;
 				when "00010" => --chipset
 					q_next <= bus_d;
 					ce_next <= "00000100";
@@ -113,7 +102,7 @@ begin
 		end if;
 	end process;
 	
-	process(state, ts, tt, rw, a, bootrom_q, ll_ack)
+	process(state, ts, tt, rw, a, bootrom_q, ack)
 		variable check : std_logic_vector(3 downto 0);
 	begin
 		state_next <= state;
@@ -121,9 +110,6 @@ begin
 		oe_next <= '0';
 		ta_next <= '1';
 		check := ts & tt & rw;
-		
-		ll_ce_next <= '0';
-		ll_rw_next <= '0';
 		
 		case state is
 			when idle =>
@@ -134,8 +120,6 @@ begin
 						state_next <= read_burst0;
 					when "0000" =>
 						state_next <= write_normal;
-						ll_ce_next <= '1';
-						ll_rw_next <= '1';
 					when "0010" =>
 						state_next <= write_burst0;
 					when others =>
@@ -170,10 +154,7 @@ begin
 				state_next <= idle;
 			
 			when write_normal =>
-				ll_rw_next <= '1';
-				ll_ce_next <= '1';
-				
-				if ll_ack = '1' then
+				if ack = '1' then
 					state_next <= write_ack;
 				end if;
 			
@@ -206,9 +187,6 @@ begin
 			q <= (others => '1');
 			oe <= '0';
 			
-			ll_ce <= '0';
-			ll_rw <= '0';
-			
 			ce <= (others => '0');
 		elsif rising_edge(clk) then
 			state <= state_next;
@@ -216,8 +194,6 @@ begin
 			q <= q_next;
 			ta <= ta_next;
 			oe <= oe_next;
-			ll_ce <= ll_ce_next;
-			ll_rw <= ll_rw_next;
 			
 			ce <= ce_next;
 		end if;
