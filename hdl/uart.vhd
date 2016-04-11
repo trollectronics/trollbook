@@ -116,7 +116,9 @@ begin
 			txstate <= idle;
 			
 			tx_buffer_internal <= x"FF";
-			baud_div <=  x"0363"; --9600 baud
+			--(33 MHz)/(baud*4)
+			-- baud_div <= x"0363"; --9600 baud
+			baud_div <=  x"0049"; --115200 baud
 			
 			tx_internal <= '1';
 			
