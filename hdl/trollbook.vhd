@@ -347,7 +347,7 @@ begin
 		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
 	
 	u_spi: spi port map(reset => internal_reset, clk => clk33,
-		miso => spi_miso, mosi => open, sck => open, ss => spi_ss);
+		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss);
 	
 	u_uart: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
@@ -369,7 +369,4 @@ begin
 	d <= (others => 'Z') when cpu_oe = '0' else cpu_q;
 	
 	ll_oe <= ll_oe_internal;
-	
-	--lol
-	spi_mosi <= cpu_rsto;
 end arch;

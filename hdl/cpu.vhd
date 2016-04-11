@@ -55,8 +55,6 @@ architecture arch of cpu is
 	
 	signal ce, ce_next : std_logic_vector(7 downto 0);
 	signal ack : std_logic;
-	
-	signal fail : std_logic;
 begin
 	u_bootrom: entity work.bootrom port map(
 		address => a(7 downto 2),
@@ -74,12 +72,11 @@ begin
 	bus_siz <= "11" when siz = "11" else not siz;
 	bus_rw <= not rw;
 	
-	--bus_ce_uart <= ce(2);
+	bus_ce_uart <= ce(2);
 	bus_ce_llram <= ce(1);
 	
 	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip) begin
 		q_next <= (others => '0');
-		fail <= '0';
 		if tip = '0' then
 			case a(23 downto 19) is
 				when "00000" => --bootrom
@@ -204,16 +201,10 @@ begin
 			q <= (others => '1');
 			oe <= '0';
 			
-			bus_ce_uart <= '0';
-			
 			ce <= (others => '0');
 		elsif rising_edge(clk) then
 			state <= state_next;
 			ce <= ce_next;
-			
-			if tip = '0' and a(23 downto 19) = "00001" then
-				bus_ce_uart <= '1';
-			end if;
 			
 		elsif falling_edge(clk) then
 			q <= q_next;
