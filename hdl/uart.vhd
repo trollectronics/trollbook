@@ -72,6 +72,7 @@ begin
 			when parity =>
 				rxstate_next <= stop;
 			when stop =>
+				rxcount_next <= 0;
 				rx_buffer_next <= rx_buffer_internal;
 				rx_full_next <= '1';
 				rxstate_next <= idle;
