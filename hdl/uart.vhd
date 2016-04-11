@@ -129,7 +129,7 @@ begin
 			
 			tx_empty <= '1';
 			rx_full <= '0';
-		elsif rising_edge(clk) then
+		elsif falling_edge(clk) then
 			if baud_count = 0 then
 				rxcount <= rxcount_next;
 				txcount <= txcount_next;

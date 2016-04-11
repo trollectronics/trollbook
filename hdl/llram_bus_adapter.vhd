@@ -189,7 +189,7 @@ begin
 			bus_ack<= '0';
 			bus_q_internal <= (others => '0');
 			state <= idle;
-		elsif falling_edge(clk) then
+		elsif rising_edge(clk) then
 			ll_lb_internal <= ll_lb_next;
 			ll_ub_internal <= ll_ub_next;
 			ll_a0_internal <= ll_a0_next;

@@ -204,12 +204,11 @@ begin
 			ce <= (others => '0');
 		elsif rising_edge(clk) then
 			state <= state_next;
+			ce <= ce_next;
 		elsif falling_edge(clk) then
 			q <= q_next;
 			ta <= ta_next;
 			oe <= oe_next;
-			
-			ce <= ce_next;
 		end if;
 	end process;
 	
