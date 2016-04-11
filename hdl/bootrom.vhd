@@ -42,7 +42,7 @@ USE lpm.all;
 ENTITY bootrom IS
 	PORT
 	(
-		address		: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
+		address		: IN STD_LOGIC_VECTOR (6 DOWNTO 0);
 		q		: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
 	);
 END bootrom;
@@ -65,7 +65,7 @@ ARCHITECTURE SYN OF bootrom IS
 		lpm_widthad		: NATURAL
 	);
 	PORT (
-			address	: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
+			address	: IN STD_LOGIC_VECTOR (6 DOWNTO 0);
 			q	: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
 	);
 	END COMPONENT;
@@ -81,7 +81,7 @@ BEGIN
 		lpm_outdata => "UNREGISTERED",
 		lpm_type => "LPM_ROM",
 		lpm_width => 32,
-		lpm_widthad => 6
+		lpm_widthad => 7
 	)
 	PORT MAP (
 		address => address,
@@ -113,7 +113,7 @@ END SYN;
 -- Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 -- Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
 -- Retrieval info: PRIVATE: MIFfilename STRING "bootrom.hex"
--- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "64"
+-- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "128"
 -- Retrieval info: PRIVATE: OutputRegistered NUMERIC "0"
 -- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
 -- Retrieval info: PRIVATE: RegAdd NUMERIC "0"
@@ -122,7 +122,7 @@ END SYN;
 -- Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "0"
 -- Retrieval info: PRIVATE: SingleClock NUMERIC "1"
 -- Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
--- Retrieval info: PRIVATE: WidthAddr NUMERIC "6"
+-- Retrieval info: PRIVATE: WidthAddr NUMERIC "7"
 -- Retrieval info: PRIVATE: WidthData NUMERIC "32"
 -- Retrieval info: PRIVATE: rden NUMERIC "0"
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KA"
@@ -131,10 +131,10 @@ END SYN;
 -- Retrieval info: CONSTANT: LPM_OUTDATA STRING "UNREGISTERED"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_ROM"
 -- Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "32"
--- Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "6"
--- Retrieval info: USED_PORT: address 0 0 6 0 INPUT NODEFVAL address[5..0]
+-- Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "7"
+-- Retrieval info: USED_PORT: address 0 0 7 0 INPUT NODEFVAL address[6..0]
 -- Retrieval info: USED_PORT: q 0 0 32 0 OUTPUT NODEFVAL q[31..0]
--- Retrieval info: CONNECT: @address 0 0 6 0 address 0 0 6 0
+-- Retrieval info: CONNECT: @address 0 0 7 0 address 0 0 7 0
 -- Retrieval info: CONNECT: q 0 0 32 0 @q 0 0 32 0
 -- Retrieval info: LIBRARY: lpm lpm.lpm_components.all
 -- Retrieval info: GEN_FILE: TYPE_NORMAL bootrom.vhd TRUE

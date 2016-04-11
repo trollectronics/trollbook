@@ -83,8 +83,8 @@ begin
 							ll_ce_next <= '1';
 						when "010" => --byte
 							state_next <= word_read;
-							ll_lb_next <= not bus_a(0);
-							ll_ub_next <= bus_a(0);
+							ll_lb_next <= bus_a(0);
+							ll_ub_next <= not bus_a(0);
 							ll_a0_next <= bus_a(1);
 							ll_ce_next <= '1';
 						when "011" => --long
@@ -105,8 +105,8 @@ begin
 							ll_rw_next <= '1';
 						when "110" => --byte
 							state_next <= word_write;
-							ll_lb_next <= not bus_a(0);
-							ll_ub_next <= bus_a(0);
+							ll_lb_next <= bus_a(0);
+							ll_ub_next <= not bus_a(0);
 							ll_a0_next <= bus_a(1);
 							ll_ce_next <= '1';
 							ll_rw_next <= '1';

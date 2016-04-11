@@ -145,14 +145,14 @@ begin
 		if rising_edge(clk33) then
 			if write_done = true then
 				t <= 366;
-				write_a <= write_a + 2;
+				write_a <= write_a + 4;
 			else
 				t <= t + 1;
 			end if;
 		elsif falling_edge(clk33) then
 			if write_done = true then
 				t <= 366;
-				write_a <= write_a + 2;
+				write_a <= write_a + 4;
 			else
 				t <= t + 1;
 			end if;
@@ -267,7 +267,7 @@ begin
 			when 470 =>
 				write_done <= false;
 				a <= std_logic_vector(to_unsigned(write_a, 32));
-				cpu_siz <= "10";
+				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
 				cpu_ts <= '0';

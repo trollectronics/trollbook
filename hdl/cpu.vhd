@@ -57,7 +57,7 @@ architecture arch of cpu is
 	signal ack : std_logic;
 begin
 	u_bootrom: entity work.bootrom port map(
-		address => a(7 downto 2),
+		address => a(8 downto 2),
 		q => bootrom_q
 	);
 	

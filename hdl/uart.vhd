@@ -140,17 +140,16 @@ begin
 				rx_buffer <= rx_buffer_next;
 				tx_buffer_internal <= tx_buffer_next;
 				
-				rx_full <= rx_full_next;
-				tx_empty <= tx_empty_next;
-				
 				if rxcount = 0 then
+					rx_full <= rx_full_next;
 					if rx_active = '1' then
-						rx_buffer_internal <= rx_buffer_internal(6 downto 0) & rx;
+						rx_buffer_internal <= rx & rx_buffer_internal(7 downto 1);
 					end if;
 					rxstate <= rxstate_next;
 				end if;
 				
 				if txcount = 0 then
+					tx_empty <= tx_empty_next;
 					tx_internal <= tx_next;
 					txstate <= txstate_next;
 				end if;
@@ -164,7 +163,7 @@ begin
 				elsif bus_rw = '1' then
 					case bus_a(2) is
 						when '0' =>
-							tx_buffer_internal <= bus_d(31 downto 24);
+							tx_buffer_internal <= bus_d(7 downto 0);
 							tx_empty <= '0';
 							txstate <= start;
 							txcount <= 3;
@@ -185,7 +184,7 @@ begin
 	process(bus_ce, rx_buffer, bus_a, baud_div, rx_active, rx_full, tx_empty) begin
 		if bus_ce = '1' then
 			if bus_a(2) = '0' then
-				bus_q <= rx_buffer & x"000000";
+				bus_q <= x"000000" & rx_buffer;
 			else
 				bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
 			end if;
