@@ -267,7 +267,7 @@ begin
 			when 470 =>
 				write_done <= false;
 				a <= std_logic_vector(to_unsigned(write_a, 32));
-				cpu_siz <= "00";
+				cpu_siz <= "10";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
 				cpu_ts <= '0';

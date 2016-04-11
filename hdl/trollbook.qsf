@@ -246,7 +246,7 @@ set_location_assignment PIN_194 -to cpu_tm[0]
 set_location_assignment PIN_199 -to cpu_ts
 set_location_assignment PIN_38 -to cpu_tt[1]
 set_location_assignment PIN_36 -to cpu_tt[0]
-set_global_assignment -name FMAX_REQUIREMENT "34 MHz"
+set_global_assignment -name FMAX_REQUIREMENT "33.4 MHz"
 set_global_assignment -name VHDL_FILE llram_bus_adapter.vhd
 set_global_assignment -name SOURCE_FILE bootrom.cmp
 set_global_assignment -name QIP_FILE bootrom.qip

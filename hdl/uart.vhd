@@ -129,7 +129,7 @@ begin
 			
 			tx_empty <= '1';
 			rx_full <= '0';
-		elsif falling_edge(clk) then
+		elsif rising_edge(clk) then
 			if baud_count = 0 then
 				rxcount <= rxcount_next;
 				txcount <= txcount_next;
@@ -182,17 +182,18 @@ begin
 		end if;
 	end process;
 	
-	process(bus_ce, rx_buffer, bus_a, baud_div, rx_active, rx_full, tx_empty) begin
-		if bus_ce = '1' then
-			if bus_a(2) = '0' then
-				bus_q <= rx_buffer & x"000000";
-			else
-				bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
-			end if;
-		else
-			bus_q <= (others => 'Z');
-		end if;
-	end process;
+	-- process(bus_ce, rx_buffer, bus_a, baud_div, rx_active, rx_full, tx_empty) begin
+		-- if bus_ce = '1' then
+			-- if bus_a(2) = '0' then
+				-- bus_q <= rx_buffer & x"000000";
+			-- else
+				-- bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
+			-- end if;
+		-- else
+			-- bus_q <= (others => 'Z');
+		-- end if;
+	-- end process;
+	bus_q <= (others => 'Z');
 	
 	--tx <= tx_internal;
 	tx <= bus_ce;

@@ -1,7 +1,7 @@
 #NO_APP
 .text
-.int 0x00000008
 .int 0x00100000
+.int 0x00000008
 
 main:
         clr.l %d0

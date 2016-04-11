@@ -126,8 +126,10 @@ begin
 				ll_ub_next <= '0';
 				ll_a0_next <= '0';
 				ll_ce_next <= '0';
+				bus_ack_next <= '1';
 				
 				if bus_ce = '0' then
+					bus_ack_next <= '0';
 					state_next <= idle;
 				end if;
 			

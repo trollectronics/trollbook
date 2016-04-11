@@ -57,7 +57,7 @@ begin
 	cpu_q <= d;
 	snd_q <= d;
 	
-	we <= we_internal(0) or we_internal(1);
+	we <= we_internal(0);-- or we_internal(1);
 	
 	process(reset, clk) begin
 		if reset = '1' then
