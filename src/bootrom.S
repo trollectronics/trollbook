@@ -26,6 +26,6 @@
 	cmpi.l #908288, a0
 	bne 1b
 
-2:	
+2:	stop #0x3000
 	bra 2b
 	nop
