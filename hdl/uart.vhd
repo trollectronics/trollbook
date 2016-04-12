@@ -90,6 +90,7 @@ begin
 		case txstate is
 			when idle =>
 				txcount_next <= 0;
+				tx_empty_next <= '1';
 				tx_next <= '1';
 			when start =>
 				txstate_next <= bit0;
@@ -104,7 +105,6 @@ begin
 				tx_next <= '1';
 				txstate_next <= stop;
 			when stop =>
-				tx_empty_next <= '1';
 				tx_next <= '1';
 				txstate_next <= idle;
 		end case;
@@ -169,7 +169,7 @@ begin
 							tx_buffer_internal <= bus_d(7 downto 0);
 							tx_empty <= '0';
 							txstate <= start;
-							txcount <= 3;
+							txcount <= 0;
 						when '1' =>
 							baud_div <= bus_d(31 downto 16);
 							txstate <= idle;

@@ -234,7 +234,7 @@ begin
 				cpu_tm <= "001";
 			when 272 =>
 				cpu_ts <= '1';
-				d <= x"A5000000"; --x"deadcafe";
+				d <= x"000000A5"; --x"deadcafe";
 			when 274 | 276 | 278 | 280 =>
 				if cpu_ta = '0' then
 					a <= (others => '1');
