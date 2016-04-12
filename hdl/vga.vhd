@@ -223,9 +223,9 @@ begin
 	--palette_a <= x"FE" when ll_ce_internal = '1' else x"FF";
 	second_pixel_next <= ll_d(7 downto 0) when pixel_counter mod 2 = 0 else second_pixel;
 	
-	r <= rgb(depth_r - 1 downto 0);
-	g <= rgb(depth_r + depth_g - 1 downto depth_r);
-	b <= rgb(rgb'length - 1 downto depth_r + depth_g);
+	b <= rgb(depth_b - 1 downto 0);
+	g <= rgb(depth_b + depth_g - 1 downto depth_b);
+	r <= rgb(rgb'length - 1 downto depth_b + depth_g);
 	
 	hsync <= hsync_internal;
 	vsync <= vsync_internal;
