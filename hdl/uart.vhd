@@ -16,7 +16,10 @@ entity uart is
 		bus_rw : in std_logic;
 		bus_siz : in std_logic_vector(1 downto 0);
 		bus_ce : in std_logic;
-		bus_ack : out std_logic
+		bus_ack : out std_logic;
+		
+		arne : out std_logic;
+		berit : out std_logic
 	);
 end uart;
 
@@ -44,35 +47,46 @@ architecture arch of uart is
 	signal tx_internal, tx_next : std_logic;
 	signal rx_prev : std_logic;
 begin
-	process(rxstate, rxcount, rx, rx_prev, rx_buffer, rx_full, rx_buffer_internal) begin
+	process(rxstate, rxcount, rx, rx_prev, rx_buffer, rx_full, rx_buffer_internal, bus_ce, bus_rw, bus_a, baud_count) begin
 		rxcount_next <= (rxcount - 1) mod 4;
 		rxstate_next <= rxstate;
 		rx_active <= '0';
 		
 		rx_buffer_next <= rx_buffer;
-		rx_full_next <= rx_full;
+		
+		if bus_ce = '1' and bus_rw = '0' and bus_a(2) = '0' then
+			rx_full_next <= '0';
+		else
+			rx_full_next <= rx_full;
+		end if;
 		
 		case rxstate is
 			when idle =>
 				rxcount_next <= 0;
-				
-				if rx_prev = '0' and rx = '0' then
+				if rx_prev = '0' and rx = '0' and baud_count = 0 then
 					rxstate_next <= start;
 					rxcount_next <= 3;
 				end if;
 				
 			when start =>
-				rxstate_next <= bit0;
 				rx_active <= '1';
+				if baud_count = 0 and rxcount = 0 then
+					rxstate_next <= bit0;
+				end if;
 			when bit0 | bit1 | bit2 | bit3 | bit4 | bit5 | bit6 =>
-				rxstate_next <= state_type'succ(rxstate);
 				rx_active <= '1';
+				if baud_count = 0 and rxcount = 0 then
+					rxstate_next <= state_type'succ(rxstate);
+				end if;
 			when bit7 =>
-				rxstate_next <= stop;
+				if baud_count = 0 and rxcount = 0 then
+					rxstate_next <= stop;
+					end if;
 			when parity =>
-				rxstate_next <= stop;
+				if baud_count = 0 and rxcount = 0 then
+					rxstate_next <= stop;
+				end if;
 			when stop =>
-				rxcount_next <= 0;
 				rx_buffer_next <= rx_buffer_internal;
 				rx_full_next <= '1';
 				rxstate_next <= idle;
@@ -84,22 +98,27 @@ begin
 		txstate_next <= txstate;
 		
 		tx_next <= tx_internal;
+
+		
 		tx_buffer_next <= tx_buffer_internal;
 		tx_empty_next <= tx_empty;
 		
 		case txstate is
 			when idle =>
 				txcount_next <= 0;
-				tx_empty_next <= '1';
 				tx_next <= '1';
+				if tx_empty = '0' then
+					txstate_next <= start;
+					tx_next <= '0';
+				end if;
 			when start =>
 				txstate_next <= bit0;
-				tx_next <= '0';
+				tx_next <= tx_buffer_internal(0);
 			when bit0 | bit1 | bit2 | bit3 | bit4 | bit5 | bit6 =>
-				tx_next <= tx_buffer_internal(state_type'pos(txstate) - state_type'pos(bit0));
+				tx_next <= tx_buffer_internal(state_type'pos(txstate) + 1 - state_type'pos(bit0));
 				txstate_next <= state_type'succ(txstate);
 			when bit7 =>
-				tx_next <= tx_buffer_internal(state_type'pos(txstate) - state_type'pos(bit0));
+				tx_next <= '1';
 				txstate_next <= stop;
 			when parity =>
 				tx_next <= '1';
@@ -107,6 +126,7 @@ begin
 			when stop =>
 				tx_next <= '1';
 				txstate_next <= idle;
+				tx_empty_next <= '1';
 		end case;
 	end process;
 	
@@ -140,36 +160,40 @@ begin
 				
 				rx_prev <= rx;
 				
-				rx_buffer <= rx_buffer_next;
 				tx_buffer_internal <= tx_buffer_next;
 				
 				if rxcount = 0 then
-					rx_full <= rx_full_next;
 					if rx_active = '1' then
 						rx_buffer_internal <= rx & rx_buffer_internal(7 downto 1);
 					end if;
-					rxstate <= rxstate_next;
 				end if;
 				
 				if txcount = 0 then
 					tx_empty <= tx_empty_next;
 					tx_internal <= tx_next;
 					txstate <= txstate_next;
+					if txstate_next = idle then
+						txcount <= 0;
+					elsif txstate_next = start then
+						txcount <= 3;
+					end if;
 				end if;
 			else
 				baud_count <= baud_count - 1;
 			end if;
 			
+			rxstate <= rxstate_next;
+			rx_buffer <= rx_buffer_next;
+			rx_full <= rx_full_next;
+			
 			if bus_ce = '1' then
-				if bus_rw = '0' and bus_a(2) = '0' then
-					rx_full <= '0';
-				elsif bus_rw = '1' then
+				if bus_rw = '1' then
 					case bus_a(2) is
 						when '0' =>
 							tx_buffer_internal <= bus_d(7 downto 0);
 							tx_empty <= '0';
-							txstate <= start;
-							txcount <= 0;
+							--txstate <= start;
+							--txcount <= 0;
 						when '1' =>
 							baud_div <= bus_d(31 downto 16);
 							txstate <= idle;
@@ -198,4 +222,7 @@ begin
 	
 	tx <= tx_internal;
 	bus_ack <= '1';
+	
+	arne <= rx_full;
+	berit <= rx_active;
 end arch;

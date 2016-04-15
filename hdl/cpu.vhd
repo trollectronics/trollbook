@@ -55,6 +55,8 @@ architecture arch of cpu is
 	
 	signal ce, ce_next : std_logic_vector(7 downto 0);
 	signal ack : std_logic;
+	
+	signal done : std_logic;
 begin
 	u_bootrom: entity work.bootrom port map(
 		address => a(8 downto 2),
@@ -108,6 +110,7 @@ begin
 		--q_next <= (others => '0');
 		oe_next <= '0';
 		ta_next <= '1';
+		done <= '0';
 		check := ts & tt & rw;
 		
 		case state is
@@ -124,25 +127,24 @@ begin
 					when others =>
 				end case;
 			
-			when read_normal =>
+			when read_normal | read_burst0=>
 				--q_next <= bootrom_q;
-				if ce_next(0) = '1' then
+				if ack = '1' then
 					ta_next <= '0';
 					oe_next <= '1';
 					state_next <= idle;
-				elsif ack = '1' then
-					state_next <= read_ack;
+					done <= '1';
 				end if;
 			
-			when read_burst0 =>
-				--q_next <= bootrom_q;
-				if ce_next(0) = '1' then
-					ta_next <= '0';
-					oe_next <= '1';
-					state_next <= idle;
-				elsif ack = '1' then
-					state_next <= read_ack;
-				end if;
+			-- when read_burst0 =>
+				----q_next <= bootrom_q;
+				-- if ce_next(0) = '1' then
+					-- ta_next <= '0';
+					-- oe_next <= '1';
+					-- state_next <= idle;
+				-- elsif ack = '1' then
+					-- state_next <= read_ack;
+				-- end if;
 				--bursting disabled
 			when read_burst1 =>
 				--q_next <= x"60046004";
@@ -162,14 +164,18 @@ begin
 			
 			when write_normal =>
 				if ack = '1' then
-					state_next <= write_ack;
+					state_next <= idle;
+					ta_next <= '0';
+					done <= '1';
 				end if;
 			
 			when write_burst0 =>
 				--ta_next <= '0';
 				--state_next <= write_burst1;
 				if ack = '1' then
-					state_next <= write_ack;
+					state_next <= idle;
+					ta_next <= '0';
+					done <= '1';
 				end if;
 			when write_burst1 =>
 				ta_next <= '0';
@@ -204,7 +210,11 @@ begin
 			ce <= (others => '0');
 		elsif rising_edge(clk) then
 			state <= state_next;
-			ce <= ce_next;
+			if done = '1' then
+				ce <= (others => '0');
+			else
+				ce <= ce_next;
+			end if;
 			
 		elsif falling_edge(clk) then
 			q <= q_next;

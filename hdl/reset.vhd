@@ -10,7 +10,7 @@ entity reset is
 end reset;
 
 architecture arch of reset is
-	constant reset_cycles : integer := 100;
+	constant reset_cycles : integer := 100000;
 	
 	signal state : integer range 0 to reset_cycles + 1;
 begin

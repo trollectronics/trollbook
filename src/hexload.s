@@ -1,10 +1,11 @@
 #NO_APP
-.text
-.int 0x00100000
-.int 0x00000008
-
+	.file	"hexload.c"
+	.text
+	.align	2
+	.globl	loadhex
+	.type	loadhex, @function
 loadhex:
-#	movem.l #16128,-(%sp)
+	movem.l #16128,-(%sp)
 	clr.b %d4
 	clr.w %d3
 	clr.l %d1

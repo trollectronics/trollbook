@@ -138,6 +138,11 @@ begin
 					state_next <= done;
 					bus_ack_next <= '1';
 					ll_ce_next <= '0';
+					if bus_a(1) = '0' then
+						bus_q_next <= ll_d & x"0000";
+					else
+						bus_q_next <= x"0000" & ll_d;
+					end if;
 				end if;
 			when long_read_first =>
 				if ll_ack = '1' then

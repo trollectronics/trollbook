@@ -95,9 +95,9 @@ architecture tb_trollbook of test is
 	signal cpu_tip : std_logic;
 	signal cpu_ta : std_logic;
 	
-	signal write_done : boolean := false;
+	signal transfer_done : boolean := false;
 	
-	signal write_a : integer := 524288;
+	signal write_a : integer := 0;--524288;
 	
 	signal uart : std_logic;
 begin
@@ -106,7 +106,7 @@ begin
 	
 	pwron_reset <= '0', '1' after 100 ns;
 	
-	ll_d <= ll_a(6 downto 0) & '0' & ll_a(6 downto 0) & '1' when ll_ce = '0' and ll_oe = '0' else (others => 'Z');
+	ll_d <= (others => 'Z') when ll_ce /= '0' or ll_oe /= '0' else x"DEAD" when ll_a(0) = '0' else  x"BEEF";
 	
 	-- 9600 baud
 	--uart <= '1', '0' after 235 us, '1' after (235 us + 104 us), '0' after (235 us + 104*3 us),'1' after (235 us + 104*5 us),
@@ -147,20 +147,15 @@ begin
 	
 	
 	process(clk33) begin
-		if rising_edge(clk33) then
-			if write_done = true then
-				t <= 366;
-				write_a <= write_a + 4;
+		if falling_edge(clk33) then
+			if transfer_done = true and t > 472 then
+				t <= 466;
+				write_a <= write_a + 2;
 			else
 				t <= t + 1;
 			end if;
-		elsif falling_edge(clk33) then
-			if write_done = true then
-				t <= 366;
-				write_a <= write_a + 4;
-			else
-				t <= t + 1;
-			end if;
+		elsif rising_edge(clk33) then
+			t <= t + 1;
 		end if;
 	end process;
 	
@@ -229,7 +224,6 @@ begin
 			
 			--write to uart
 			when 270 =>
-				write_done <= false;
 				a <= x"00100000"; --std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "01";
 				cpu_tt <= "00";
@@ -240,16 +234,7 @@ begin
 			when 272 =>
 				cpu_ts <= '1';
 				d <= x"000000A5"; --x"deadcafe";
-			when 274 | 276 | 278 | 280 =>
-				if cpu_ta = '0' then
-					a <= (others => '1');
-					cpu_siz <= "11";
-					cpu_tip <= '1';
-					cpu_tt <= "11";
-					cpu_tm <= "111";
-					cpu_rw <= '1';
-					d <= (others => 'Z');
-				end if;
+
 			
 			-- read from llram
 			when 360 =>
@@ -263,31 +248,34 @@ begin
 				cpu_tm <= "001";
 			when 362 =>
 				cpu_ts <= '1';
-			when 365 | 367 | 369 | 371 | 373 | 375 | 377 | 379 =>
-				if cpu_ta = '0' then
-					write_done <= true;
-				end if;
 			
-			-- write cycle
+			
 			when 470 =>
-				write_done <= false;
 				a <= std_logic_vector(to_unsigned(write_a, 32));
-				cpu_siz <= "00";
+				d <= (others => 'Z');
+				cpu_siz <= "10";
 				cpu_tt <= "00";
-				cpu_rw <= '0';
+				cpu_rw <= '1';
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
 			when 472 =>
 				cpu_ts <= '1';
-				d <= x"DEADBEEF"; --x"deadcafe";
-			when 473 | 475 | 477 | 479 | 481 | 483 | 485 | 487 =>
-				if cpu_ta = '0' then
-					write_done <= true;
-				end if;
+			
+			-- when 470 =>
+				-- a <= std_logic_vector(to_unsigned(write_a, 32));
+				-- cpu_siz <= "00";
+				-- cpu_tt <= "00";
+				-- cpu_rw <= '0';
+				-- cpu_ts <= '0';
+				-- cpu_tip <= '0';
+				-- cpu_tm <= "001";
+			-- when 472 =>
+				-- cpu_ts <= '1';
+				-- d <= x"DEADBEEF"; --x"deadcafe";
 			
 			when others =>
-				if write_done = true then
+				if transfer_done = true then
 					a <= (others => '1');
 					cpu_siz <= "11";
 					cpu_tip <= '1';
@@ -295,7 +283,13 @@ begin
 					cpu_tm <= "111";
 					cpu_rw <= '1';
 					d <= (others => 'Z');
-					write_done <= false;
+					transfer_done <= false;
+				end if;
+				
+				if t mod 2 = 1 and t > 260 then
+					if cpu_ta = '0' then
+						transfer_done <= true;
+					end if;
 				end if;
 		end case;
 	end process;

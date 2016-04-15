@@ -246,7 +246,10 @@ architecture arch of trollbook is
 			bus_rw : in std_logic;
 			bus_siz : in std_logic_vector(1 downto 0);
 			bus_ce : in std_logic;
-			bus_ack : out std_logic
+			bus_ack : out std_logic;
+		
+			arne : out std_logic;
+			berit : out std_logic
 		);
 	end component;
 	
@@ -347,12 +350,12 @@ begin
 		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
 	
 	u_spi: spi port map(reset => internal_reset, clk => clk33,
-		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss);
+		miso => spi_miso, mosi => open, sck => open, ss => spi_ss);
 	
 	u_uart: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
 		bus_a => bus_a, bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_uart, bus_ack => bus_ack_uart);
+		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_uart, bus_ack => bus_ack_uart, arne => spi_mosi, berit => spi_clk);
 	
 	u_reset: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	
