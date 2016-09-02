@@ -316,6 +316,8 @@ architecture arch of trollbook is
 	
 	signal bus_ce_llram : std_logic;
 	signal bus_ack_llram : std_logic;
+	
+	signal ll_ub_internal : std_logic;
 begin
 	u_vga: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
@@ -325,7 +327,7 @@ begin
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce);
 	
-	u_sound: sound port map(reset => internal_reset, clk => clk12, mosi => snd_mosi, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+	u_sound: sound port map(reset => internal_reset, clk => clk12, mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
 	u_sdram: sdram port map(reset => internal_reset, clk => clk33,
 		a => ram_a, b => ram_b, cas => ram_cas, ras => ram_ras, we => ram_we, ldqm => ram_ldqm, udqm => ram_udqm,
@@ -343,7 +345,7 @@ begin
 	
 	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,
-		a => ll_a, d => ll_d, q => ll_q, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub, oe => ll_oe_internal,
+		a => ll_a, d => ll_d, q => ll_q, ce => ll_ce, we => ll_we, lb => ll_lb, ub => ll_ub_internal, oe => ll_oe_internal,
 		vga_a => ll_vga_a, vga_q => ll_vga_q, vga_ce => ll_vga_ce,
 		cpu_a => ll_cpu_a, cpu_d => ll_cpu_q, cpu_q => ll_cpu_d, cpu_rw => ll_cpu_rw, cpu_lb => ll_cpu_lb, cpu_ub => ll_cpu_ub,
 		cpu_ce => ll_cpu_ce, cpu_ack => ll_cpu_ack,
@@ -355,7 +357,7 @@ begin
 	u_uart: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
 		bus_a => bus_a, bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_uart, bus_ack => bus_ack_uart, arne => spi_mosi, berit => spi_clk);
+		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_uart, bus_ack => bus_ack_uart, arne => open, berit => open);
 	
 	u_reset: reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	
@@ -370,6 +372,11 @@ begin
 	
 	ll_d <= (others => 'Z') when ll_oe_internal <= '0' else ll_q;
 	d <= (others => 'Z') when cpu_oe = '0' else cpu_q;
+	
+	spi_mosi <= ll_cpu_ce;
+	spi_clk <= ll_cpu_ack;
+	snd_mosi <= ll_ub_internal;
+	ll_ub <= ll_ub_internal;
 	
 	ll_oe <= ll_oe_internal;
 end arch;

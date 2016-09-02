@@ -29,6 +29,7 @@ end llram_bus_adapter;
 architecture arch of llram_bus_adapter is
 	type state_type is (idle, done,
 		word_read, long_read_first, long_read_second,
+		word_read_and_a_half, long_read_first_and_a_half, long_read_second_and_a_half,
 		word_write, long_write_first, long_write_second);
 	
 	signal state, state_next : state_type;
@@ -40,7 +41,7 @@ architecture arch of llram_bus_adapter is
 	signal ll_rw_next : std_logic;
 	
 	signal bus_q_internal, bus_q_next : std_logic_vector(bus_q'range);
-	signal bus_ack_next : std_logic;
+	signal bus_ack_next, bus_ack_internal : std_logic;
 begin
 	bus_q <= bus_q_internal when bus_ce = '1' else (others => 'Z');
 	ll_lb <= ll_lb_internal;
@@ -135,7 +136,7 @@ begin
 			
 			when word_read =>
 				if ll_ack = '1' then
-					state_next <= done;
+					state_next <= word_read_and_a_half;
 					bus_ack_next <= '1';
 					ll_ce_next <= '0';
 					if bus_a(1) = '0' then
@@ -144,19 +145,37 @@ begin
 						bus_q_next <= x"0000" & ll_d;
 					end if;
 				end if;
+			when word_read_and_a_half =>
+				if bus_a(1) = '0' then
+					bus_q_next <= ll_d & x"0000";
+				else
+					bus_q_next <= x"0000" & ll_d;
+				end if;
+				
+				state_next <= done;
+				
 			when long_read_first =>
 				if ll_ack = '1' then
 					ll_a0_next <= '1';
-					state_next <= long_read_second;
+					state_next <= long_read_first_and_a_half;
 					bus_q_next <= ll_d & bus_q_internal(15 downto 0);
 				end if;
+				
+			when long_read_first_and_a_half =>
+				bus_q_next <= ll_d & bus_q_internal(15 downto 0);
+				state_next <= long_read_second;
+			
 			when long_read_second =>
 				if ll_ack = '1' then
-					state_next <= done;
+					state_next <= long_read_second_and_a_half;
 					bus_ack_next <= '1';
 					ll_ce_next <= '0';
 					bus_q_next <= bus_q_internal(31 downto 16) & ll_d;
 				end if;
+			
+			when long_read_second_and_a_half =>
+				bus_q_next <= bus_q_internal(31 downto 16) & ll_d;
+				state_next <= done;
 			
 			when word_write =>
 				ll_rw_next <= '1';
@@ -193,7 +212,8 @@ begin
 			ll_a0_internal <= '0';
 			ll_ce_internal <= '0';
 			ll_rw <= '0';
-			bus_ack<= '0';
+			bus_ack <= '0';
+			bus_ack_internal <= '0';
 			bus_q_internal <= (others => '0');
 			state <= idle;
 		elsif rising_edge(clk) then
@@ -204,10 +224,12 @@ begin
 			ll_ce_internal <= ll_ce_next;
 			ll_rw <= ll_rw_next;
 			
-			bus_ack <= bus_ack_next;
-			bus_q_internal <= bus_q_next;
+			bus_ack_internal <= bus_ack_next;
+			bus_ack <= bus_ack_internal;
 			
 			state <= state_next;
+		elsif falling_edge(clk) then
+			bus_q_internal <= bus_q_next;
 		end if;
 	end process;
 end arch;

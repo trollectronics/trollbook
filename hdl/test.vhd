@@ -241,9 +241,9 @@ begin
 			
 			-- read from llram
 			when 360 =>
-				a <= x"00080002";
+				a <= x"00080000";
 				d <= (others => 'Z');
-				cpu_siz <= "10";
+				cpu_siz <= "01";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';
