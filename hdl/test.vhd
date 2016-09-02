@@ -85,6 +85,8 @@ architecture tb_trollbook of test is
 	signal ll_a : std_logic_vector(17 downto 0);
 	signal ll_ce : std_logic;
 	signal ll_oe : std_logic;
+	signal ll_lb : std_logic;
+	signal ll_ub : std_logic;
 	signal t : integer := 0;
 	
 	signal cpu_tt : std_logic_vector(1 downto 0);
@@ -106,7 +108,8 @@ begin
 	
 	pwron_reset <= '0', '1' after 100 ns;
 	
-	ll_d <= (others => 'Z') when ll_ce /= '0' or ll_oe /= '0' else x"DEAD" when ll_a(0) = '0' else  x"BEEF";
+	ll_d(15 downto 8) <= (others => 'Z') when ll_ce /= '0' or ll_oe /= '0' or ll_ub /= '0' else x"DE" when ll_a(0) = '0' else  x"BE";
+	ll_d(7 downto 0) <= (others => 'Z') when ll_ce /= '0' or ll_oe /= '0' or ll_lb /= '0' else x"AD" when ll_a(0) = '0' else  x"EF";
 	
 	-- 9600 baud
 	--uart <= '1', '0' after 235 us, '1' after (235 us + 104 us), '0' after (235 us + 104*3 us),'1' after (235 us + 104*5 us),
@@ -127,7 +130,7 @@ begin
 		ram_we => open, ram_ldqm => open, ram_udqm => open, ram_cs => open, ram_cke =>open,
 		
 		ll_a => ll_a, ll_d => ll_d, ll_ce => ll_ce, ll_we => open,
-		ll_lb => open, ll_ub => open, ll_oe => ll_oe,
+		ll_lb => ll_lb, ll_ub => ll_ub, ll_oe => ll_oe,
 		
 		vga_r => open, vga_g => open, vga_b => open, vga_hsync => open, vga_vsync => open,
 		vga_den => open, vga_pwr => open, vga_pwm => open,
@@ -238,9 +241,9 @@ begin
 			
 			-- read from llram
 			when 360 =>
-				a <= x"00080000";
+				a <= x"00080002";
 				d <= (others => 'Z');
-				cpu_siz <= "00";
+				cpu_siz <= "10";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';
