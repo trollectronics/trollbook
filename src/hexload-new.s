@@ -5,6 +5,8 @@
 .int 0x00100000
 .int 0x00000008
 
+nop
+
 loadhex:
 	jsr get_byte
 	cmp.b #58, %d7
@@ -57,7 +59,7 @@ loadhex:
 .skip:
 	jsr get_byte
 	cmp.b #10, %d7
-	jeq hexload
+	jeq loadhex
 	jra .skip
 .done:
 	move.l %a1, -(%sp)
@@ -94,7 +96,7 @@ decode_byte:
 get_byte:
 	move.l 1048580, %d7
 	btst #1, %d7
-	jeq .get_byte
+	jeq get_byte
 	move.l 1048576, %d7
 	rts
 

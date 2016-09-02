@@ -5,12 +5,12 @@
 	nop	
 	
 	move.l #524288, %d5
-	move.l #524288, %d6
 	move.l #0x0008070f, %d4
 1:
-	move.b (%d6), %d4
-	move.b %d4, (%d5)
-	addq.l #1, %d5
+	move.l %d4, (%d5)
+	move.l (%d5), %d4
+	move.l %d4, (%d5)
+	addq.l #4, %d5
 	
 	cmpi.l #908288, %d5
 	bne 1b

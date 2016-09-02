@@ -4,6 +4,12 @@
 	.align	2
 	.globl	loadhex
 	.type	loadhex, @function
+
+.int 0x00100000
+.int 0x00000008
+
+nop
+
 loadhex:
 	movem.l #16128,-(%sp)
 	clr.b %d4
