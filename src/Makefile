@@ -1,11 +1,12 @@
 MAKEFLAGS	+=	--no-print-directory
 
+hexload:
+	m68k-elf-as -m68040 -o bootrom.elf hexload.s
+	make bootrom.bin
+
 binload:
 	m68k-elf-as -m68060 -o bootrom.elf bootrom.S
 	#m68k-elf-as -m68060 -o bootrom.elf arne.s
-	make bootrom.bin
-hexload:
-	m68k-elf-as -m68040 -o bootrom.elf hexload.s
 	make bootrom.bin
 
 hexload-new:

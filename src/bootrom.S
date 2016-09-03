@@ -4,6 +4,20 @@
 	
 	nop	
 	
+	move.l #0x12345678, %d4
+	rol.l #8, %d4
+	move.b %d4, 0x80000
+	rol.l #8, %d4
+	move.b %d4, 0x80001
+	rol.l #8, %d4
+	move.b %d4, 0x80002
+	rol.l #8, %d4
+	move.b %d4, 0x80003
+	move.w 0x80002, %d4
+	cmpi.w #0x5678, %d4
+	bne fail
+	bra success
+	
 	move.l #524288, %d5
 	move.l #0x0008070f, %d4
 1:
@@ -31,10 +45,52 @@
 
 	cmpi.l #908288, %d5
 	bne 2b
+	
 
+2:
+	move.l #524288, %d5
+	move.l #525088, %d6
+1:
+	move.l (%d6), %d4
+	rol #8, %d4
+	move.b %d4, (%d5)
+	addq.l #1, %d5
+	rol #8, %d4
+	move.b %d4, (%d5)
+	addq.l #1, %d5
+	rol #8, %d4
+	move.b %d4, (%d5)
+	addq.l #1, %d5
+	rol #8, %d4
+	move.b %d4, (%d5)
+	addq.l #1, %d5
+	
+	addq.l #4, %d6
+	
+	cmpi.l #908288, %d5
+	bne 1b
 
+	bra 2b
 
-
-2:	stop #0x3000
+2:	#stop #0x3000
 	bra 2b
 	nop
+
+fail:
+	move.l #0x04040404, %d4
+	bra fill
+	
+success:
+	move.l #0x02020202, %d4
+	bra fill
+
+fill:
+	move.l #524288, %d5
+1:
+	move.l %d4, (%d5)
+	addq.l #4, %d5
+	
+	cmpi.l #908288, %d5
+	bne 1b
+2:
+	bra 2b

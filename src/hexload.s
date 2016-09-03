@@ -10,66 +10,79 @@
 
 nop
 
+	move.l #524288, %d5
+	move.l #0x03030303, %d4
+1:
+	move.l %d4, (%d5)
+	addq.l #4, %d5
+	
+	cmpi.l #908288, %d5
+	bne 1b
 loadhex:
-	movem.l #16128,-(%sp)
+	move.l %fp,-(%sp)
+	move.l %sp,%fp
+	movem.l #16160,-(%sp)
 	clr.b %d4
 	clr.w %d3
 	clr.l %d1
-	lea 0.w,%a1
+	clr.l %d5
 	move.l #65536,%a0
 	clr.l %d0
-.L31:
-	move.l %d0,%d5
-	subq.l #1,%d5
-	moveq #5,%d7
-	cmp.l %d5,%d7
+.L30:
+	move.l %d0,%a1
+	subq.l #1,%a1
+	moveq #5,%d6
+	cmp.l %a1,%d6
 	jcs .L11
-	move.w .L4(%pc,%d5.l*2),%d5
-	jmp %pc@(2,%d5:w)
+	move.w .L4(%pc,%a1.l*2),%a1
+	jmp %pc@(2,%a1:w)
 	.balignw 2,0x284c
 	.swbeg	&6
 .L4:
 	.word .L3-.L4
 	.word .L5-.L4
-	.word .L33-.L4
+	.word .L32-.L4
 	.word .L7-.L4
-	.word .L36-.L4
-	.word .L23-.L4
+	.word .L35-.L4
+	.word .L22-.L4
 .L11:
 	move.l 1048580,%d0
 	btst #1,%d0
 	jeq .L11
 	move.l 1048576,%d0
 	cmp.b #58,%d0
-	jeq .L35
+	jeq .L34
 	cmp.b #10,%d0
-	jne .L36
+	jne .L35
 	clr.l %d0
 	jra .L8
 .L3:
-	clr.l %d6
-	move.b %d2,%d6
+	clr.l %d7
+	move.b %d2,%d7
+	move.l %d7,%a2
 	clr.l %d1
 	moveq #2,%d0
-	jra .L25
+	jra .L24
 .L5:
 	and.w #255,%d2
-	moveq #1,%d5
-	cmp.l %d1,%d5
+	moveq #1,%d6
+	cmp.l %d1,%d6
 	jne .L12
 	move.w %d2,%d3
 	lsl.w #8,%d3
-	jra .L25
+	jra .L24
 .L12:
 	or.w %d2,%d3
 	moveq #3,%d0
-	jra .L25
+	jra .L24
 .L7:
 	tst.b %d4
 	jne .L13
-	clr.l %d5
-	move.w %d3,%d5
-	move.b %d2,(%a1,%d5.l)
+	clr.l %d6
+	move.w %d3,%d6
+	move.l %d5,%a1
+	add.l %d6,%a1
+	move.b %d2,(%a1)
 	addq.w #1,%d3
 	jra .L14
 .L13:
@@ -81,89 +94,108 @@ loadhex:
 	moveq #1,%d7
 	cmp.l %d1,%d7
 	jne .L17
-	moveq #24,%d5
-	lsl.l %d5,%d2
-	move.l %d2,%a1
+	move.l %d2,%d5
+	moveq #24,%d6
+	lsl.l %d6,%d5
 	jra .L14
 .L17:
 	swap %d2
 	clr.w %d2
-	add.l %d2,%a1
+	add.l %d2,%d5
 	jra .L14
 .L16:
 	cmp.b #5,%d4
-	jne .L19
+	jne .L18
 	moveq #1,%d7
 	cmp.l %d1,%d7
-	sne %d5
-	extb.l %d5
+	sne %d6
+	extb.l %d6
 	move.l %a0,%d7
-	and.l %d5,%d7
+	and.l %d6,%d7
 	move.l %d7,%a0
 	and.l #255,%d2
-	moveq #4,%d5
-	sub.l %d1,%d5
-	lsl.l #3,%d5
-	lsl.l %d5,%d2
+	moveq #4,%d6
+	sub.l %d1,%d6
+	lsl.l #3,%d6
+	lsl.l %d6,%d2
 	add.l %d2,%a0
 .L14:
-	cmp.l %d1,%d6
-	jne .L25
+	cmp.l %d1,%a2
+	jne .L24
 	moveq #5,%d0
-	jra .L25
-.L23:
-	move.l 1048580,%d5
-	btst #1,%d5
-	jeq .L23
-	move.l 1048576,%d5
-	cmp.b #10,%d5
-	sne %d5
-	extb.l %d5
-	and.l %d5,%d0
+	jra .L24
+.L22:
+	move.l 1048580,%d6
+	btst #1,%d6
+	jeq .L22
+	move.l 1048576,%d6
+	cmp.b #10,%d6
+	sne %d6
+	extb.l %d6
+	and.l %d6,%d0
 	jra .L8
-.L33:
+.L32:
 	move.b %d2,%d4
 	clr.l %d1
 	moveq #4,%d0
-	jra .L25
-.L35:
+	jra .L24
+.L34:
 	moveq #1,%d0
-.L25:
+.L24:
 	move.l 1048580,%d2
 	btst #1,%d2
-	jeq .L25
+	jeq .L24
 	move.l 1048576,%d2
 	cmp.b #57,%d2
-	jls .L26
+	jls .L25
 	add.b #-55,%d2
-	jra .L27
-.L26:
+	jra .L26
+.L25:
 	add.b #-48,%d2
-.L27:
+.L26:
 	lsl.b #4,%d2
+.L28:
+	move.l 1048580,%d6
+	btst #1,%d6
+	jeq .L28
+	move.l 1048576,%d6
+	cmp.b #57,%d6
+	jls .L29
+	add.b #-55,%d6
+	jra .L43
 .L29:
-	move.l 1048580,%d5
-	btst #1,%d5
-	jeq .L29
-	move.l 1048576,%d5
-	cmp.b #57,%d5
-	jls .L30
-	add.b #-55,%d5
-	jra .L40
-.L30:
-	add.b #-48,%d5
-.L40:
-	or.b %d5,%d2
+	add.b #-48,%d6
+.L43:
+	or.b %d6,%d2
 	jra .L8
-.L36:
+.L35:
 	moveq #6,%d0
 .L8:
 	addq.l #1,%d1
-	jra .L31
+	jra .L30
 .L15:
-	jmp (%a0)
-.L19:
-.L32:
-	jra .L19
+	jmp 0xddb00
+.L18:
+.L31:
+	jra .L31
 	.size	loadhex, .-loadhex
 	.ident	"GCC: (GNU) 4.8.2"
+
+fail:
+	move.l #0x04040404, %d4
+	bra fill
+	
+success:
+	move.l #0x02020202, %d4
+	bra fill
+
+fill:
+	move.l #524288, %d5
+1:
+	move.l %d4, (%d5)
+	addq.l #4, %d5
+	
+	cmpi.l #908288, %d5
+	bne 1b
+2:
+	bra 2b
