@@ -11,9 +11,9 @@
 	bra start
 
 romfunc:
-	#0xA
+	#0xC
 	bra success
-	#0xE
+	#0x10
 	bra fail
 
 start:

@@ -1,16 +1,21 @@
-ADDRESS = e0000
+ADDRESS	= DDC00
+NAME	= stage2
+TTYDEV	= /dev/ttyUSB0
+ASFLAGS	= -m68040
 
-gradient.hex: gradient.bin
+.PHONY: clean install
+
+$(NAME).hex: $(NAME).bin
 	hexwrite $@ input@$(ADDRESS)=$< entry_point=$(ADDRESS)
 
-gradient.bin: gradient.elf
+$(NAME).bin: $(NAME).elf
 	m68k-elf-objcopy -O binary $< $@
 
-gradient.elf: gradient.S
-	m68k-elf-as -m68040 -o $@ $<
+$(NAME).elf: $(NAME).S
+	m68k-elf-as $(ASFLAGS) -o $@ $<
 
 clean:
-	$(RM) gradient.elf gradient.bin gradient.hex
+	$(RM) $(NAME).elf $(NAME).bin $(NAME).hex
 
 install:
-	cat gradient.hex > /dev/ttyUSB0
+	cat $(NAME).hex > $(TTYDEV)
