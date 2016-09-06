@@ -25,7 +25,7 @@ end uart;
 
 architecture arch of uart is
 	type state_type is (
-		idle, start, bit0, bit1, bit2, bit3, bit4, bit5, bit6, bit7, parity, stop
+		idle, start, bit0, bit1, bit2, bit3, bit4, bit5, bit6, bit7, parity, stop1, stop2
 	);
 	
 	signal rxstate, rxstate_next : state_type;
@@ -80,15 +80,18 @@ begin
 				end if;
 			when bit7 =>
 				if baud_count = 0 and rxcount = 0 then
-					rxstate_next <= stop;
+					rxstate_next <= stop1;
 					end if;
 			when parity =>
 				if baud_count = 0 and rxcount = 0 then
-					rxstate_next <= stop;
+					rxstate_next <= stop1;
 				end if;
-			when stop =>
+			when stop1 =>
 				rx_buffer_next <= rx_buffer_internal;
 				rx_full_next <= '1';
+				rxstate_next <= idle;
+			
+			when stop2 =>
 				rxstate_next <= idle;
 		end case;
 	end process;
@@ -119,11 +122,14 @@ begin
 				txstate_next <= state_type'succ(txstate);
 			when bit7 =>
 				tx_next <= '1';
-				txstate_next <= stop;
+				txstate_next <= stop1;
 			when parity =>
 				tx_next <= '1';
-				txstate_next <= stop;
-			when stop =>
+				txstate_next <= stop1;
+			when stop1 =>
+				tx_next <= '1';
+				txstate_next <= stop2;
+			when stop2 =>
 				tx_next <= '1';
 				txstate_next <= idle;
 				tx_empty_next <= '1';
