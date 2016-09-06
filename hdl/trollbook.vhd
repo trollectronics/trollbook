@@ -179,7 +179,9 @@ architecture arch of trollbook is
 			bus_ce_uart : out std_logic;
 			bus_ack_uart : in std_logic;
 			bus_ce_llram : out std_logic;
-			bus_ack_llram : in std_logic
+			bus_ack_llram : in std_logic;
+			bus_ce_spi: out std_logic;
+			bus_ack_spi. in std_logic
 		);
 	end component;
 	
@@ -228,7 +230,15 @@ architecture arch of trollbook is
 			miso : in std_logic;
 			mosi : out std_logic;
 			sck : out std_logic;
-			ss : out std_logic_vector(2 downto 0)
+			ss : out std_logic_vector(2 downto 0);
+
+			bus_a: in std_logic_vector(31 downto 0);
+			bus_d: in std_logic_vector(31 downto 0);
+			bus_q: out std_logic_vector(31 downto 0);
+			bus_rw: in std_logic;
+			bus_siz: in std_logic_vector(1 downto 0);
+			bus_ce: in std_logic;
+			bus_ack: out std_logic
 		);
 	end component;
 	
@@ -352,7 +362,8 @@ begin
 		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
 	
 	u_spi: spi port map(reset => internal_reset, clk => clk33,
-		miso => spi_miso, mosi => open, sck => open, ss => spi_ss);
+		miso => spi_miso, mosi => spi_mosi, sck => spi_sck, ss => spi_ss
+		bus_a => cpu_a, bus_d => cpu_d, bus_q => cpu_q, bus_rw => cpu_rq, bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => cpu_spi_ce, bus_ack => cpu_cpu_ack);
 	
 	u_uart: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
@@ -373,8 +384,8 @@ begin
 	ll_d <= (others => 'Z') when ll_oe_internal <= '0' else ll_q;
 	d <= (others => 'Z') when cpu_oe = '0' else cpu_q;
 	
-	spi_mosi <= ll_cpu_ce;
-	spi_clk <= ll_cpu_ack;
+	--spi_mosi <= ll_cpu_ce;
+	--spi_clk <= ll_cpu_ack;
 	snd_mosi <= ll_ub_internal;
 	ll_ub <= ll_ub_internal;
 	
