@@ -127,7 +127,7 @@ begin
 				ll_ub_next <= '0';
 				ll_a0_next <= '0';
 				ll_ce_next <= '0';
-				bus_ack_next <= '1';
+				--bus_ack_next <= '1';
 				
 				if bus_ce = '0' then
 					bus_ack_next <= '0';
@@ -156,7 +156,6 @@ begin
 				
 			when long_read_first =>
 				if ll_ack = '1' then
-					ll_a0_next <= '1';
 					state_next <= long_read_first_and_a_half;
 					bus_q_next <= ll_d & bus_q_internal(15 downto 0);
 				end if;
@@ -164,6 +163,7 @@ begin
 			when long_read_first_and_a_half =>
 				bus_q_next <= ll_d & bus_q_internal(15 downto 0);
 				state_next <= long_read_second;
+				ll_a0_next <= '1';
 			
 			when long_read_second =>
 				if ll_ack = '1' then

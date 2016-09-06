@@ -174,7 +174,11 @@ loadhex:
 	addq.l #1,%d1
 	jra .L30
 .L15:
-	jmp 0xddb00
+	moveq #-1,%d0
+	cmp.l %a0,%d0
+	jeq .L18
+	
+	jmp (%a0)
 .L18:
 .L31:
 	jra .L31

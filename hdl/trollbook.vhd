@@ -179,7 +179,9 @@ architecture arch of trollbook is
 			bus_ce_uart : out std_logic;
 			bus_ack_uart : in std_logic;
 			bus_ce_llram : out std_logic;
-			bus_ack_llram : in std_logic
+			bus_ack_llram : in std_logic;
+			
+			arne : out std_logic
 		);
 	end component;
 	
@@ -341,7 +343,9 @@ begin
 		bus_a => bus_a, bus_d => bus_q, bus_q => bus_d, bus_rw => bus_rw, bus_siz => bus_siz,
 		
 		bus_ce_uart => bus_ce_uart, bus_ack_uart => bus_ack_uart,
-		bus_ce_llram => bus_ce_llram, bus_ack_llram => bus_ack_llram);
+		bus_ce_llram => bus_ce_llram, bus_ack_llram => bus_ack_llram,
+		
+		arne => spi_clk);
 	
 	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,
@@ -373,9 +377,12 @@ begin
 	ll_d <= (others => 'Z') when ll_oe_internal <= '0' else ll_q;
 	d <= (others => 'Z') when cpu_oe = '0' else cpu_q;
 	
-	spi_mosi <= ll_cpu_ce;
-	spi_clk <= ll_cpu_ack;
-	snd_mosi <= ll_ub_internal;
+	spi_mosi <= cpu_siz(0);
+	snd_mosi <= cpu_siz(1);
+	
+	--spi_mosi <= ll_cpu_ce;
+	--spi_clk <= ll_cpu_ack;
+	--snd_mosi <= ll_ub_internal;
 	ll_ub <= ll_ub_internal;
 	
 	ll_oe <= ll_oe_internal;
