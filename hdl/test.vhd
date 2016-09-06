@@ -151,9 +151,9 @@ begin
 	
 	process(clk33) begin
 		if falling_edge(clk33) then
-			if transfer_done = true and t > 472 then
-				t <= 466;
-				write_a <= write_a + 2;
+			if transfer_done = true then--and t > 472 then
+				--t <= 466;
+				--write_a <= write_a + 2;
 			else
 				t <= t + 1;
 			end if;
@@ -243,7 +243,7 @@ begin
 			when 360 =>
 				a <= x"00080000";
 				d <= (others => 'Z');
-				cpu_siz <= "01";
+				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';
@@ -263,6 +263,19 @@ begin
 				cpu_tip <= '0';
 				cpu_tm <= "001";
 			when 472 =>
+				cpu_ts <= '1';
+			
+			-- read from llram
+			when 1910 =>
+				a <= x"00080000";
+				d <= (others => 'Z');
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '1';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 1912 =>
 				cpu_ts <= '1';
 			
 			-- when 470 =>

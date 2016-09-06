@@ -4,18 +4,10 @@
 	
 	nop	
 	
-	move.l #0x12345678, %d4
-	rol.l #8, %d4
-	move.b %d4, 0x80000
-	rol.l #8, %d4
-	move.b %d4, 0x80001
-	rol.l #8, %d4
-	move.b %d4, 0x80002
-	rol.l #8, %d4
-	move.b %d4, 0x80003
-	move.w 0x80002, %d4
-	cmpi.w #0x5678, %d4
+	move.l #0x9058850c, %d0
+	cmp.l 0x33, %d0
 	bne fail
+	
 	bra success
 	
 	move.l #524288, %d5

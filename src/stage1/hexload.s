@@ -8,8 +8,15 @@
 .int 0x00100000
 .int 0x00000008
 
-nop
+	bra start
 
+romfunc:
+	#0xA
+	bra success
+	#0xE
+	bra fail
+
+start:
 	move.l #524288, %d5
 	move.l #0x03030303, %d4
 1:
@@ -174,7 +181,11 @@ loadhex:
 	addq.l #1,%d1
 	jra .L30
 .L15:
-	jmp 0xddb00
+	moveq #-1,%d0
+	cmp.l %a0,%d0
+	jeq .L18
+	
+	jmp (%a0)
 .L18:
 .L31:
 	jra .L31

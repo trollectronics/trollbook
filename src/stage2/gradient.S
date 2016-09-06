@@ -7,6 +7,6 @@
 	cmpi.l #908288, %d5
 	bne 1b
 	
-2:	stop #0x3000
+2:	#stop #0x3000
 	bra 2b
 	nop
