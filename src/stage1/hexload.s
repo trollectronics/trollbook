@@ -8,8 +8,15 @@
 .int 0x00100000
 .int 0x00000008
 
-nop
+	bra start
 
+romfunc:
+	#0xA
+	bra success
+	#0xE
+	bra fail
+
+start:
 	move.l #524288, %d5
 	move.l #0x03030303, %d4
 1:
