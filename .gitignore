@@ -6,6 +6,7 @@
 *.hex
 *.orig
 *.a
+.deps
 build/
 
 _autosave*.kicad_pcb
