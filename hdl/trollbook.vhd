@@ -180,8 +180,8 @@ architecture arch of trollbook is
 			bus_ack_uart : in std_logic;
 			bus_ce_llram : out std_logic;
 			bus_ack_llram : in std_logic;
-			
-			arne : out std_logic
+			bus_ce_spi : out std_logic;
+			bus_ack_spi : in std_logic
 		);
 	end component;
 	
@@ -230,7 +230,15 @@ architecture arch of trollbook is
 			miso : in std_logic;
 			mosi : out std_logic;
 			sck : out std_logic;
-			ss : out std_logic_vector(2 downto 0)
+			ss : out std_logic_vector(2 downto 0);
+			
+			bus_a : in std_logic_vector(31 downto 0);
+			bus_d : in std_logic_vector(31 downto 0);
+			bus_q : out std_logic_vector(31 downto 0);
+			bus_rw : in std_logic;
+			bus_siz : in std_logic_vector(1 downto 0);
+			bus_ce : in std_logic;
+			bus_ack : out std_logic
 		);
 	end component;
 	
@@ -319,6 +327,9 @@ architecture arch of trollbook is
 	signal bus_ce_llram : std_logic;
 	signal bus_ack_llram : std_logic;
 	
+	signal bus_ce_spi : std_logic;
+	signal bus_ack_spi : std_logic;
+	
 	signal ll_ub_internal : std_logic;
 begin
 	u_vga: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
@@ -344,8 +355,7 @@ begin
 		
 		bus_ce_uart => bus_ce_uart, bus_ack_uart => bus_ack_uart,
 		bus_ce_llram => bus_ce_llram, bus_ack_llram => bus_ack_llram,
-		
-		arne => spi_clk);
+		bus_ce_spi => bus_ce_spi, bus_ack_spi => bus_ack_spi);
 	
 	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,
@@ -356,7 +366,9 @@ begin
 		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
 	
 	u_spi: spi port map(reset => internal_reset, clk => clk33,
-		miso => spi_miso, mosi => open, sck => open, ss => spi_ss);
+		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss,
+		bus_a => bus_a, bus_d => bus_d, bus_q => bus_q,
+		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_spi, bus_ack => bus_ack_spi);
 	
 	u_uart: uart port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
@@ -377,7 +389,6 @@ begin
 	ll_d <= (others => 'Z') when ll_oe_internal <= '0' else ll_q;
 	d <= (others => 'Z') when cpu_oe = '0' else cpu_q;
 	
-	spi_mosi <= cpu_siz(0);
 	snd_mosi <= cpu_siz(1);
 	
 	--spi_mosi <= ll_cpu_ce;

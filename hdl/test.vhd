@@ -137,7 +137,7 @@ begin
 		
 		snd_mosi => open, snd_clk => open, snd_ss => open, snd_sync => open,
 		
-		spi_miso => '1', spi_mosi => open, spi_clk => open, spi_ss => open,
+		spi_miso => '0', spi_mosi => open, spi_clk => open, spi_ss => open,
 		
 		uart_rx => uart, uart_tx => open,
 		
@@ -228,7 +228,7 @@ begin
 			--write to uart
 			when 270 =>
 				a <= x"00100000"; --std_logic_vector(to_unsigned(write_a, 32));
-				cpu_siz <= "01";
+				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
 				cpu_ts <= '0';
@@ -238,6 +238,19 @@ begin
 				cpu_ts <= '1';
 				d <= x"000000A5"; --x"deadcafe";
 
+			
+			--write to SPI
+			when 280 =>
+				a <= x"00200008"; --std_logic_vector(to_unsigned(write_a, 32));
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '0';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 282 =>
+				cpu_ts <= '1';
+				d <= x"00000003"; --x"deadcafe";
 			
 			-- read from llram
 			when 360 =>
