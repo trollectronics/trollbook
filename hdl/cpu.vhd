@@ -36,15 +36,9 @@ entity cpu is
 		bus_ce_uart : out std_logic;
 		bus_ack_uart : in std_logic;
 		bus_ce_llram : out std_logic;
-<<<<<<< HEAD
-		bus_ack_llram : in std_logic
-		bus_ce_spi: out std_logic;
-		bus_ack_spi: in std_logic;
-=======
 		bus_ack_llram : in std_logic;
-		
-		arne : out std_logic
->>>>>>> 5ef8b4f8b00bff694faa685eff19338d48b89416
+		bus_ce_spi : out std_logic;
+		bus_ack_spi : in std_logic
 	);
 end cpu;
 
@@ -86,9 +80,6 @@ begin
 	bus_ce_uart <= ce(2);
 	bus_ce_llram <= ce(1);
 	
-	
-	arne <= '1' when a = x"000ddb00" and rw = '1' else '0';
-	
 	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip) begin
 		q_next <= (others => '0');
 		
@@ -106,10 +97,10 @@ begin
 					q_next <= bus_d;
 					ce_next <= "00000100";
 					ack <= bus_ack_uart;
-				when "00011" => -- spi
+				when "00100" => --test
 					q_next <= bus_d;
 					ce_next <= "00001000";
-					ack <= bus_spi_spi;
+					ack <= bus_ack_spi;
 				when others =>
 					ce_next <= (others => '0');
 					ack <= '0';
