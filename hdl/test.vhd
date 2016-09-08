@@ -241,7 +241,7 @@ begin
 			
 			--write to SPI
 			when 280 =>
-				a <= x"00200008"; --std_logic_vector(to_unsigned(write_a, 32));
+				a <= x"00200000"; --std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
@@ -250,7 +250,7 @@ begin
 				cpu_tm <= "001";
 			when 282 =>
 				cpu_ts <= '1';
-				d <= x"00000003"; --x"deadcafe";
+				d <= x"0000005a"; --x"deadcafe";
 			
 			-- read from llram
 			when 360 =>

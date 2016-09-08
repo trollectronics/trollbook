@@ -24,7 +24,7 @@ end spi;
 
 architecture arch of spi is
 	type state_type is (
-		idle, bit0, bit1, bit2, bit3, bit4, bit5, bit6, bit7
+		idle, start, bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0
 	);
 	
 	signal state, state_next : state_type;
@@ -56,9 +56,9 @@ begin
 		end if;
 		
 		if count = to_integer(unsigned(baud_div))/2 then
-			sck_next <= '1';
-		elsif count = to_integer(unsigned(baud_div)) then
 			sck_next <= '0';
+		elsif count = to_integer(unsigned(baud_div)) then
+			sck_next <= '1';
 		else
 			sck_next <= sck_internal;
 		end if;
@@ -70,31 +70,32 @@ begin
 		
 		case state is
 			when idle =>
-				count_next <= to_integer(unsigned(baud_div));
+				count_next <= 0;
 				mosi_next <= '1';
 				busy_next <= '0';
 				if busy = '1' then
-					count_next <= 1;
-					state_next <= bit0;
+					count_next <= to_integer(unsigned(baud_div));
+					state_next <= start;
 					mosi_next <= mosi_buffer(0);
 					busy_next <= '1';
 				end if;
-			when bit0 | bit1 | bit2 | bit3 | bit4 | bit5 | bit6 =>
-				mosi_next <= mosi_buffer(state_type'pos(state) + 1 - state_type'pos(bit0));
-				
-				
-				if count = 0 then
-					miso_buffer_next <= miso_buffer(6 downto 0) & miso;
+			when start =>
+				mosi_next <= mosi_buffer(0);
+				if count = to_integer(unsigned(baud_div)) then
+					miso_buffer_next <= miso & miso_buffer(7 downto 1);
+					state_next <= bit7;
+				end if;
+			when bit7 | bit6 | bit5 | bit4 | bit3 | bit2 | bit1 =>
+				mosi_next <= mosi_buffer(state_type'pos(state) + 1 - state_type'pos(bit7));
+				if count = to_integer(unsigned(baud_div)) then
+					miso_buffer_next <= miso & miso_buffer(7 downto 1);
 					state_next <= state_type'succ(state);
 				end if;
-			when bit7 =>
+			when bit0 =>
 				mosi_next <= '1';
-				
-				if count = 0 then
-					miso_buffer_next <= miso_buffer(6 downto 0) & miso;
-					busy_next <= '0';
-					state_next <= idle;
-				end if;
+				busy_next <= '0';
+				state_next <= idle;
+				count_next <= to_integer(unsigned(baud_div))/2;
 		end case;
 	end process;
 	
@@ -105,7 +106,7 @@ begin
 			state <= idle;
 			
 			baud_div <=  x"0001";
-			count <= to_integer(unsigned(baud_div));
+			count <= 0;
 			busy <= '0';
 			ss_internal <= (others => '0');
 			sck_internal <= '0';
@@ -132,11 +133,11 @@ begin
 							baud_div <= bus_d(31 downto 16);
 							state <= idle;
 							busy <= '0';
-							count <= to_integer(unsigned(baud_div));
+							count <= 0;
 						when "10" =>
 							state <= idle;
 							busy <= '0';
-							count <= to_integer(unsigned(baud_div));
+							count <= 0;
 							
 							ss_internal <= bus_d(2 downto 0);
 						when others =>
@@ -145,10 +146,12 @@ begin
 					
 				when others =>
 			end case;
-		elsif falling_edge(clk) then
+			
+			sck_internal <= sck_next;
 			miso_buffer <= miso_buffer_next;
 			mosi_internal <= mosi_next;
-			sck_internal <= sck_next;
+		elsif falling_edge(clk) then
+			
 		end if;
 	end process;
 	
