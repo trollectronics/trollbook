@@ -4,7 +4,7 @@ _start:
 	lea __bss_end, %a1
 	
 1:
-	cmp %a0, %a1
+	cmp.l %a0, %a1
 	beq 2f
 	move.b #0x00, (%a0)+
 	bra 1b
@@ -13,5 +13,8 @@ _start:
 	jsr main
 
 	cmp #0, %d0
+	bne fail
+success:
 	jmp 0xC
+fail:
 	jmp 0x10

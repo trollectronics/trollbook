@@ -48,7 +48,7 @@ begin
 	mosi <= mosi_internal;
 	bus_ack <= '1';
 	
-	process(state, count, baud_div, miso_buffer, mosi_internal, busy) begin
+	process(state, count, baud_div, miso_buffer, mosi_internal, busy, sck_internal, mosi_buffer, miso) begin
 		if count = to_integer(unsigned(baud_div)) then
 			count_next <= 0;
 		else
@@ -98,7 +98,7 @@ begin
 		end case;
 	end process;
 	
-	process(reset, clk) is
+	process(reset, clk, baud_div) is
 		variable check : std_logic_vector(1 downto 0);
 	begin
 		if reset = '1' then
@@ -152,7 +152,9 @@ begin
 		end if;
 	end process;
 	
-	process(bus_ce, bus_a, miso_buffer, busy, ss_internal) begin
+	process(bus_ce, bus_a, miso_buffer, busy, ss_internal, baud_div) begin
+		bus_q <= (others => 'Z');
+		
 		if bus_ce = '1' then
 			case bus_a(3 downto 2) is
 				when "00" =>
@@ -163,8 +165,6 @@ begin
 					bus_q <= x"000000" & "00000" & ss_internal;
 				when others =>
 			end case;
-		else
-			bus_q <= (others => 'Z');
 		end if;
 	end process;
 end arch;

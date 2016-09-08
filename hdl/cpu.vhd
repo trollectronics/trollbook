@@ -80,7 +80,7 @@ begin
 	bus_ce_uart <= ce(2);
 	bus_ce_llram <= ce(1);
 	
-	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip) begin
+	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_spi) begin
 		q_next <= (others => '0');
 		
 		if tip = '0' then

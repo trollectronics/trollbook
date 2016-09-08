@@ -12,13 +12,13 @@ SECTIONS {
 	} > ram
 	.data : {
 		*(.data)
-	}
+	} > ram
 	.bss :  {
 		__bss_start = .;
 		*(.bss) 
 		*(COMMON)
 		__bss_end = .;
-	} 
+	} > ram
 }
 
 ENTRY(_start)
