@@ -105,7 +105,7 @@ begin
 		if reset = '1' then
 			state <= idle;
 			
-			baud_div <=  x"0008";
+			baud_div <=  x"0001";
 			count <= 0;
 			busy <= '0';
 			ss_internal <= (others => '0');
