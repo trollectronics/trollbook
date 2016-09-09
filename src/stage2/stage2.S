@@ -16,8 +16,6 @@ _start:
 	
 	jsr main
 	
-	cpusha %dc
-	
 	cmp #0, %d0
 	bne fail
 success:

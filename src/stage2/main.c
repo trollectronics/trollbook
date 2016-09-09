@@ -9,13 +9,13 @@ int main() {
 	
 	term_init();
 	
-	/*unsigned int i, col = 0;
+	unsigned int i, col = 0;
 	for(;;) {
 		for(i = 0; i < 203; i++)
 			term_puts("Hello, world ", (col++) % 256);
 		
 		term_set_pos(0, 0);
-	}*/
+	}
 	
 	spi_set_clockdiv(165);
 	
