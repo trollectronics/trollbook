@@ -14,10 +14,7 @@ int main() {
 	uart_send_string("OK get ready:\r\n");
 	uart_recv();
 	
-	for(;;)
-		spi_send_recv('a');
-	
-	spi_select_slave(2);
+	spi_select_slave(1);
 	spi_send_recv(0x90);
 	spi_send_recv(0x0);
 	spi_send_recv(0x0);
@@ -35,7 +32,7 @@ int main() {
 	uart_send_hex(b[1]);
 	uart_send_string("\r\n");
 	
-	for(;;)
+	for(;;);
 		
 	return 0;
 }

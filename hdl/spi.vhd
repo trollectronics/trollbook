@@ -82,13 +82,13 @@ begin
 			when start =>
 				mosi_next <= mosi_buffer(7);
 				if count = to_integer(unsigned(baud_div)) then
-					miso_buffer_next <= miso & miso_buffer(7 downto 1);
+					miso_buffer_next <= miso_buffer(6 downto 0) & miso;
 					state_next <= bit7;
 				end if;
 			when bit7 | bit6 | bit5 | bit4 | bit3 | bit2 | bit1 =>
 				mosi_next <= mosi_buffer(7 - (state_type'pos(state) + 1 - state_type'pos(bit7)));
 				if count = to_integer(unsigned(baud_div)) then
-					miso_buffer_next <= miso & miso_buffer(7 downto 1);
+					miso_buffer_next <= miso_buffer(6 downto 0) & miso;
 					state_next <= state_type'succ(state);
 				end if;
 			when bit0 =>
