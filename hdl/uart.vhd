@@ -16,10 +16,7 @@ entity uart is
 		bus_rw : in std_logic;
 		bus_siz : in std_logic_vector(1 downto 0);
 		bus_ce : in std_logic;
-		bus_ack : out std_logic;
-		
-		arne : out std_logic;
-		berit : out std_logic
+		bus_ack : out std_logic
 	);
 end uart;
 
@@ -228,7 +225,4 @@ begin
 	
 	tx <= tx_internal;
 	bus_ack <= '1';
-	
-	arne <= rx_full;
-	berit <= rx_active;
 end arch;

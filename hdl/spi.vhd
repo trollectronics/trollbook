@@ -76,17 +76,17 @@ begin
 				if busy = '1' then
 					count_next <= to_integer(unsigned(baud_div));
 					state_next <= start;
-					mosi_next <= mosi_buffer(0);
+					mosi_next <= mosi_buffer(7);
 					busy_next <= '1';
 				end if;
 			when start =>
-				mosi_next <= mosi_buffer(0);
+				mosi_next <= mosi_buffer(7);
 				if count = to_integer(unsigned(baud_div)) then
 					miso_buffer_next <= miso & miso_buffer(7 downto 1);
 					state_next <= bit7;
 				end if;
 			when bit7 | bit6 | bit5 | bit4 | bit3 | bit2 | bit1 =>
-				mosi_next <= mosi_buffer(state_type'pos(state) + 1 - state_type'pos(bit7));
+				mosi_next <= mosi_buffer(7 - (state_type'pos(state) + 1 - state_type'pos(bit7)));
 				if count = to_integer(unsigned(baud_div)) then
 					miso_buffer_next <= miso & miso_buffer(7 downto 1);
 					state_next <= state_type'succ(state);

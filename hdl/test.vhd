@@ -104,7 +104,7 @@ architecture tb_trollbook of test is
 	signal uart : std_logic;
 begin
 	clk33 <= not clk33 after 15 ns;
-	clk12 <= not clk12 after 384 ns;
+	clk12 <= not clk12 after 41 ns;
 	
 	pwron_reset <= '0', '1' after 100 ns;
 	
@@ -250,7 +250,7 @@ begin
 				cpu_tm <= "001";
 			when 282 =>
 				cpu_ts <= '1';
-				d <= x"0000005a"; --x"deadcafe";
+				d <= x"000000A1"; --x"deadcafe";
 			
 			-- read from llram
 			when 360 =>
