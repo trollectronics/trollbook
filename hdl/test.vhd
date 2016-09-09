@@ -250,7 +250,7 @@ begin
 				cpu_tm <= "001";
 			when 282 =>
 				cpu_ts <= '1';
-				d <= x"000000A1"; --x"deadcafe";
+				d <= x"00000090"; --x"deadcafe";
 			
 			-- read from llram
 			when 360 =>

@@ -1,10 +1,16 @@
 #include <stdarg.h>
 #include "uart.h"
+#include "boot_term.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-#define terminal_putc_simple uart_send
-#define terminal_puts uart_send_string
+//UART
+/*#define terminal_putc_simple uart_send
+#define terminal_puts uart_send_string*/
+
+//DISPLAY
+#define terminal_putc_simple(c) term_putc_term((c), 15)
+#define terminal_puts(s) term_puts((s), 15)
 
 static void terminal_put_counted(char *s, int width) {
 	while(width--)

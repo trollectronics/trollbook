@@ -8,5 +8,6 @@
 
 void spi_select_slave(int slave);
 uint8_t spi_send_recv(uint8_t dat);
+void spi_set_clockdiv(uint16_t clkdiv);
 
 #endif
