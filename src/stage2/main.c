@@ -1,10 +1,22 @@
 #include <stdint.h>
 #include "uart.h"
 #include "spi.h"
+#include "boot_term.h"
 
 int main() {
-	uint8_t b[2];
-	uart_recv();
+	//uint8_t b[2];
+	
+	term_init();
+	
+	unsigned int i, col = 0;
+	for(;;) {
+		for(i = 0; i < 203; i++)
+			term_puts("Hello, world ", (col++) % 256);
+		
+		term_set_pos(0, 0);
+	}
+	
+	/*uart_recv();
 	uart_recv();
 	uart_recv();
 	uart_recv();
@@ -31,7 +43,7 @@ int main() {
 	uart_send(' ');
 	uart_send_hex(b[1]);
 	uart_send_string("\r\n");
-	
+	*/
 	for(;;);
 		
 	return 0;

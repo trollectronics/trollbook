@@ -10,8 +10,14 @@ _start:
 	bra 1b
 	
 2:
+	cinva %bc
+	move.l #0x80008000, %d0
+	movec %d0, %cacr
+	
 	jsr main
-
+	
+	cpusha %dc
+	
 	cmp #0, %d0
 	bne fail
 success:

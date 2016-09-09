@@ -24,7 +24,7 @@ end spi;
 
 architecture arch of spi is
 	type state_type is (
-		idle, start, bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0
+		idle, bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0, stop
 	);
 	
 	signal state, state_next : state_type;
@@ -74,28 +74,28 @@ begin
 				mosi_next <= '1';
 				busy_next <= '0';
 				if busy = '1' then
-					count_next <= to_integer(unsigned(baud_div));
-					state_next <= start;
-					mosi_next <= mosi_buffer(7);
+					count_next <= to_integer(unsigned(baud_div)/2);
+					state_next <= bit7;
+					mosi_next <= '1';
 					busy_next <= '1';
 				end if;
-			when start =>
-				mosi_next <= mosi_buffer(7);
-				if count = to_integer(unsigned(baud_div)) then
-					miso_buffer_next <= miso_buffer(6 downto 0) & miso;
-					state_next <= bit7;
+			when bit7 | bit6 | bit5 | bit4 | bit3 | bit2 | bit1 | bit0 =>
+				mosi_next <= mosi_internal;
+				if count = to_integer(unsigned(baud_div))/2 then
+					mosi_next <= mosi_buffer(7 - (state_type'pos(state) - state_type'pos(bit7)));
 				end if;
-			when bit7 | bit6 | bit5 | bit4 | bit3 | bit2 | bit1 =>
-				mosi_next <= mosi_buffer(7 - (state_type'pos(state) + 1 - state_type'pos(bit7)));
+				
 				if count = to_integer(unsigned(baud_div)) then
 					miso_buffer_next <= miso_buffer(6 downto 0) & miso;
 					state_next <= state_type'succ(state);
 				end if;
-			when bit0 =>
+			when stop =>
 				mosi_next <= '1';
-				busy_next <= '0';
-				state_next <= idle;
-				count_next <= to_integer(unsigned(baud_div))/2;
+				if count = to_integer(unsigned(baud_div))/2 then
+					count_next <= 0;
+					busy_next <= '0';
+					state_next <= idle;
+				end if;
 		end case;
 	end process;
 	
@@ -105,7 +105,7 @@ begin
 		if reset = '1' then
 			state <= idle;
 			
-			baud_div <=  x"0001";
+			baud_div <=  x"0008";
 			count <= 0;
 			busy <= '0';
 			ss_internal <= (others => '0');
