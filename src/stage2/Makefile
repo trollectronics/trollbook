@@ -15,9 +15,9 @@ LD	= m68k-elf-ld
 AR	= m68k-elf-ar
 
 # Compiler and linker flags
-CFLAGS		= -Wall -std=c99 -ffreestanding -fno-builtin -nostdlib -static -lgcc -m68040
+CFLAGS		= -Wall -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040
 ASFLAGS		= -msoft-float
-LDFLAGS		= -T $(LINKSCRIPT)
+LDFLAGS		= -T $(LINKSCRIPT) -lgcc
 
 # Filenames
 ELFFILE		= $(NAME).elf
