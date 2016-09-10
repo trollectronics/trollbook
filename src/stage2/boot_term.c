@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "util.h"
 #include "bios.h"
 #include "boot_term.h"
 #include "vgafont.h"
@@ -108,6 +109,7 @@ void term_export() {
 void term_import() {
 	volatile struct BiosInfo *bi = BIOS_INFO_ADDR;
 	
+	nop();
 	pos_x = bi->term_x;
 	pos_y = bi->term_y;
 	

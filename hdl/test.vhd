@@ -154,6 +154,7 @@ begin
 			if transfer_done = true then--and t > 472 then
 				--t <= 466;
 				--write_a <= write_a + 2;
+				t <= t + 1;
 			else
 				t <= t + 1;
 			end if;
@@ -217,12 +218,12 @@ begin
 				cpu_tm <= "001";
 			when 262 =>
 				cpu_ts <= '1';
-			when 264 =>
-				a <= (others => '1');
-				cpu_siz <= "11";
-				cpu_tip <= '1';
-				cpu_tt <= "11";
-				cpu_tm <= "111";
+			-- when 264 =>
+				-- a <= (others => '1');
+				-- cpu_siz <= "11";
+				-- cpu_tip <= '1';
+				-- cpu_tt <= "11";
+				-- cpu_tm <= "111";
 			
 			
 			--write to uart
@@ -251,6 +252,20 @@ begin
 			when 282 =>
 				cpu_ts <= '1';
 				d <= x"00000090"; --x"deadcafe";
+			
+			--read from SPI
+			when 284 =>
+				a <= x"00200004"; --std_logic_vector(to_unsigned(write_a, 32));
+				d <= (others => 'Z');
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '1';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+				transfer_done <= false;
+			when 286=>
+				cpu_ts <= '1';
 			
 			-- read from llram
 			when 360 =>
