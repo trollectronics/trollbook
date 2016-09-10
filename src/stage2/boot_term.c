@@ -80,7 +80,7 @@ void term_putc_term(unsigned char c, int color) {
 }
 
 
-void term_puts(char *str, int color) {
+void term_puts(const char *str, int color) {
 	for (; *str; str++)
 		term_putc_term((unsigned) *str, color);
 	return;
