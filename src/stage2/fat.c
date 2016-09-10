@@ -26,6 +26,7 @@ freely, subject to the following restrictions:
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "printf.h"
 #include "fat.h"
 
 #define	MAX_FD_OPEN		4
@@ -127,7 +128,7 @@ static int read_sector(uint32_t sector, uint8_t *data) {
 
 
 int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_func)(uint32_t sector, uint8_t *data), uint8_t *buffer) {
-	uint8_t *data = sector_buff;
+	uint8_t *data;
 	uint16_t reserved_sectors;
 	uint8_t *u8;
 	uint8_t tu8;
@@ -135,6 +136,7 @@ int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_fun
 	uint32_t fsinfo;
 	
 	sector_buff = buffer;
+	data = sector_buff;
 	read_sector_call = read_func;
 	write_sector_call = write_func;
 	
@@ -142,7 +144,7 @@ int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_fun
 		return err;
 	
 	if (READ_WORD(data, 11) != 512) {
-		//fprintf(stderr, "Only 512 bytes per sector is supported\n");
+		printf("Only 512 bytes per sector is supported\n");
 		return -1;
 	}
 	fat_state.cluster_size = data[13];
@@ -151,7 +153,7 @@ int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_fun
 
 	u8 = &data[16];
 	if (*u8 != 2) {
-		//fprintf(stderr, "Unsupported FAT: %i FAT:s in filesystem, only 2 supported\n", *u8);
+		printf("Unsupported FAT: %i FAT:s in filesystem, only 2 supported\n", *u8);
 		return -1;
 	}
 	
@@ -174,7 +176,7 @@ int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_fun
 	else
 		tu8 = data[66];
 	if (tu8 != 0x28 && tu8 != 0x29) {
-	//	fprintf(stderr, "FAT signature check failed\n");
+		printf("FAT signature check failed\n");
 		return -1;
 	}
 
@@ -727,7 +729,7 @@ static bool folder_empty(uint32_t cluster) {
 }
 
 
-bool delete_file(const char *path) {
+bool fat_delete_file(const char *path) {
 	uint32_t i;
 	int index = 0;
 	uint32_t sector, cluster;
@@ -761,7 +763,7 @@ bool delete_file(const char *path) {
 }
 
 
-bool create_file(char *path, char *name, uint8_t attrib) {
+bool fat_create_file(char *path, char *name, uint8_t attrib) {
 	uint32_t sector, pcluster, cluster;
 	int index = 0, pindex = 0, i;
 	if (!path) {

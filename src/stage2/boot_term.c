@@ -75,7 +75,9 @@ void term_putc_term(unsigned char c, int color) {
 			pos_y--;
 	} else if (c == '\r')
 		pos_x = 0;
-	else
+	else if (c == '\t') {
+		pos_x = (pos_x + 8) & ~7;
+	} else
 		term_putc(c, color);
 }
 
