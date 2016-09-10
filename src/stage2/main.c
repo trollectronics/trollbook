@@ -61,22 +61,22 @@ int main() {
 	
 	printf("Detecting SD card: ");
 	if((type = sd_init()) == SD_CARD_TYPE_INVALID) {
-		term_puts("failed", 4);
+		term_puts("failed", 4 + 8);
 		goto fail;
 	}
 	
-	term_puts(sd_card_type_name[type], 2);
+	term_puts(sd_card_type_name[type], 2 + 8);
 	term_putc_term('\n', 15);
-	printf(" - Card size: %u\n", sd_get_card_size());
+	printf(" - Card size: %u kB\n", sd_get_card_size()/2);
 	
 	printf("Detecting file system: ");
 	if(fat_init(fat_read_sd, fat_write_sd, fat_buf) < 0) {
-		term_puts("failed", 4);
+		term_puts("failed", 4 + 8);
 		goto fail;
 	}
 	
 	type = fat_type();
-	term_puts(fat_type_name[type], 2);
+	term_puts(fat_type_name[type], 2 + 8);
 	term_putc_term('\n', 15);
 	fat_get_label(label);
 	printf(" - Volume label: %s\n", label);

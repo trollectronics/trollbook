@@ -90,11 +90,12 @@ begin
 					state_next <= state_type'succ(state);
 				end if;
 			when stop =>
-				mosi_next <= '1';
+				mosi_next <= mosi_buffer(0);
 				if count = to_integer(unsigned(baud_div))/2 then
 					count_next <= 0;
 					busy_next <= '0';
 					state_next <= idle;
+					mosi_next <= '1';
 				end if;
 		end case;
 	end process;

@@ -172,7 +172,7 @@ SDCardType sd_poll(void) {
 int16_t sd_recv(void) {
 	uint8_t r;
 	unsigned int tries = 0;
-	while(!~(0xFFFFFF00|(r = spi_send_recv(0xFF))))
+	while((r = spi_send_recv(0xff)) == 0xff)
 		if(tries++ > 5000)
 			return -1;
 	return r;
