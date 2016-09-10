@@ -1,12 +1,12 @@
 #include <stdint.h>
 #include "util.h"
 #include "bios.h"
-#include "boot_term.h"
+#include "terminal.h"
 #include "vgafont.h"
 
 #define MEM_VGA_RAM ((volatile void *) 0x80000)
 
-#define TERM_W		88
+#define TERM_W		100
 #define	TERM_H		30
 
 #define W 800
@@ -17,17 +17,24 @@ static int pos_y;
 static uint32_t vsync_count;
 
 
-uint32_t boot_term_get_vsync() {
+uint32_t terminal_get_vsync() {
 	return vsync_count;
 }
 
 
-void term_init() {
+void terminal_init() {
+	volatile struct BiosInfo *bi = BIOS_INFO_ADDR;
 	int i;
 	volatile uint32_t *vgabuff = MEM_VGA_RAM;
 
 	pos_x = 0;
 	pos_y = 0;
+	
+	bi->font = vgafont_data;
+	bi->term_x = pos_x;
+	bi->term_y = pos_y;
+	bi->def_fg = TERMINAL_COLOR_WHITE;
+	bi->def_bg = TERMINAL_COLOR_BLACK;
 	
 	for (i = 0; i < W*H/4; i++)
 		vgabuff[i] = 0;
@@ -38,19 +45,32 @@ void term_init() {
 	return;
 }
 
+void terminal_clear() {
+	int i;
+	volatile uint32_t *vgabuff = MEM_VGA_RAM;
+	
+	for (i = 0; i < W*H/4; i++)
+		vgabuff[i] = 0;
+	
+	pos_x = pos_y = 0;
+}
 
-void term_putc(int c, int color) {
+void terminal_putc(int c) {
+	volatile struct BiosInfo *bi = BIOS_INFO_ADDR;
 	int i, j;
 	int row, col, data;
 	volatile uint8_t *vgabuff = MEM_VGA_RAM;
-
-	col = pos_x * 9;
+	
+	uint8_t fg = bi->def_fg;
+	uint8_t bg = bi->def_bg;
+	
+	col = pos_x * 8;
 	row = pos_y * 16;
 
 	for (i = 0; i < 16; i++) {
 		data = vgafont_data[c * 16 + i];
 		for (j = 0; j < 8; j++) {
-			vgabuff[(row + i) * W + col + j] = (data & 1) ? color : 0;
+			vgabuff[(row + i) * W + col + j] = (data & 1) ? fg : bg;
 			data >>= 1;
 		}
 	}
@@ -66,7 +86,7 @@ void term_putc(int c, int color) {
 }
 
 
-void term_putc_term(unsigned char c, int color) {
+void terminal_putc_term(unsigned char c) {
 	if (c == '\n') {
 		pos_y++;
 		pos_x = 0;
@@ -78,24 +98,45 @@ void term_putc_term(unsigned char c, int color) {
 	else if (c == '\t') {
 		pos_x = (pos_x + 8) & ~7;
 	} else
-		term_putc(c, color);
+		terminal_putc(c);
 }
 
 
-void term_puts(const char *str, int color) {
+void terminal_puts(const char *str) {
 	for (; *str; str++)
-		term_putc_term((unsigned) *str, color);
+		terminal_putc_term((unsigned) *str);
 	return;
 }
 
 
-void term_set_pos(int x, int y) {
+void terminal_set_pos(int x, int y) {
 	pos_x = x % (TERM_W + 1);
 	pos_y = y % (TERM_H + 1);
 }
 
+void terminal_get_pos(int *x, int *y) {
+	*x = pos_x;
+	*y = pos_y;
+}
 
-void term_export() {
+
+void terminal_set_fg(uint8_t color) {
+	volatile struct BiosInfo *bi = BIOS_INFO_ADDR;
+	
+	bi->def_fg = color;
+	return;
+}
+
+
+void terminal_set_bg(uint8_t color) {
+	volatile struct BiosInfo *bi = BIOS_INFO_ADDR;
+	
+	bi->def_bg = color;
+	return;
+}
+
+
+void terminal_export() {
 	volatile struct BiosInfo *bi = BIOS_INFO_ADDR;
 
 	bi->font = vgafont_data;
@@ -108,7 +149,7 @@ void term_export() {
 }
 
 
-void term_import() {
+void terminal_import() {
 	volatile struct BiosInfo *bi = BIOS_INFO_ADDR;
 	
 	nop();

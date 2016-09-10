@@ -1,10 +1,13 @@
 #include <stdint.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include "uart.h"
 #include "spi.h"
 #include "printf.h"
-#include "boot_term.h"
+#include "terminal.h"
+#include "menu.h"
 #include "sd.h"
+#include "input.h"
 #include "fat.h"
 
 static uint8_t fat_buf[512];
@@ -58,51 +61,6 @@ static const char *fat_type_name[] = {
 
 const char *attribs = "RHSLDA";
 
-static unsigned char *ascii_filter(unsigned char *s) {
-	static unsigned char ret[17];
-	int i = 0;
-	while(i < 16) {
-		ret[i] = (*s < 32 || *s > 126)? '.' : (*s);
-		i++;
-		s++;
-	}
-	return ret;
-}
-
-static void print_sector(uint32_t sector) {
-	SDStreamStatus status;
-	int i;
-	unsigned int count;
-	uint8_t data[17];
-	
-	data[16] = 0;
-	status = SD_STREAM_STATUS_BEGIN;
-	i=0;
-	printf("\nSector %u\n", sector);
-	sd_stream_read_block(&status, sector);
-	if(status == SD_STREAM_STATUS_FAILED) {
-		printf("Failed\n");
-		return;
-	}
-	count = 0;
-	while(status >= 1) {
-		data[i++] = sd_stream_read_block(&status);
-		if(i == 16) {
-			printf("|%04x|%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x|%s\n", 
-				count, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], 
-				data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15],
-				ascii_filter(data)
-			);
-			i = 0;
-			count += 16;
-		}
-	}
-	if(status == SD_STREAM_STATUS_FAILED) {
-		printf("Failed\n");
-		return;
-	}
-}
-
 void pathcat(char *buf, const char *s1, const char *s2) {
 	char c;
 	while((c = *s1++))
@@ -112,6 +70,7 @@ void pathcat(char *buf, const char *s1, const char *s2) {
 		*buf++ = c;
 	*buf++ = 0;
 }
+
 
 static void print_filesize(uint32_t filesize) {
 	if(filesize < 1024)
@@ -125,36 +84,8 @@ static void print_filesize(uint32_t filesize) {
 static char pathbuf[256];
 static char path[256] = "/";
 
-int main() {
-	uint8_t b[2];
-	int type;
-	char label[12];
-	
-	term_init();
-	
-	printf("Detecting SD card: ");
-	if((type = sd_init()) == SD_CARD_TYPE_INVALID) {
-		term_puts("failed", 4 + 8);
-		goto fail;
-	}
-	
-	term_puts(sd_card_type_name[type], 2 + 8);
-	term_putc_term('\n', 15);
-	printf(" - Card size: %u kB\n", sd_get_card_size()/2);
-	
-	printf("Detecting file system: ");
-	if(fat_init(fat_read_sd, fat_write_sd, fat_buf) < 0) {
-		term_puts("failed", 4 + 8);
-		goto fail;
-	}
-	
-	type = fat_type();
-	term_puts(fat_type_name[type], 2 + 8);
-	term_putc_term('\n', 15);
-	fat_get_label(label);
-	printf(" - Volume label: %s\n\n", label);
-	
-	
+void list_dir(void *arg) {
+	terminal_clear();
 	printf("Attrib | Size  | Name\n");
 	printf("-------+-------+----------------\n");
 	
@@ -165,6 +96,11 @@ int main() {
 		for (j = i - 1; j >= 0; j--) {
 			if(list[j].filename[0]) {
 				stat = list[j].attrib;
+				
+				//skip volume labels
+				if(stat & 0x8)
+					continue;
+				
 				for(k = 5; k != ~0; k--) {
 					if(stat & (0x1 << k))
 						printf("%c", attribs[k]);
@@ -186,18 +122,12 @@ int main() {
 		}
 	}
 	
-	for(;;);
-	
-	unsigned int lol, col = 0;
-	for(;;) {
-		for(lol = 0; lol < 203; lol++)
-			term_puts("Hello, world ", (col++) % 256);
-		
-		term_set_pos(0, 0);
-	}
-	
-	
-	
+	input_poll();
+}
+
+void test_spi_rom(void *arg) {
+	uint8_t b[2];
+	terminal_clear();
 	spi_select_slave(1);
 	spi_send_recv(0x90);
 	spi_send_recv(0x0);
@@ -206,14 +136,113 @@ int main() {
 	b[0] = spi_send_recv(0xFF);
 	b[1] = spi_send_recv(0xFF);
 	
-	if(b[0] == 0x1 && b[1] == 0x12)
+	if(b[0] == 0x1 && b[1] == 0x12) {
+		terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
 		printf("OK\n");
-	else
+	} else {
+		terminal_set_fg(TERMINAL_COLOR_LIGHT_RED);
 		printf("Fail\n");
+	}
 	
-	printf("0x%X 0x%X\n", b[0], b[1]);
+	terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
+	printf("Reply from SPI ROM: 0x%X 0x%X\n", b[0], b[1]);
+	
+	input_poll();
+}
+
+void color_demo(void *arg) {
+	unsigned int i, col = 0;
+	for(;;) {
+		for(i = 0; i < 230; i++) {
+			terminal_set_fg(col++);
+			terminal_puts("Hello, world ");
+		}
+		terminal_set_fg(col++);
+		terminal_puts("Hello, wor");
+		terminal_set_pos(0, 0);
+	}
+}
+
+static void clear_and_print(void *arg) {
+	static bool clear = false;
+	
+	if(clear)
+		terminal_clear();
+	
+	clear = true;
+	printf(arg);
+}
+
+
+Menu menu_sub= {
+	clear_and_print,
+	"Sub menu test\n",
+	true,
+	0,
+	2,
+	{
+		{"HEHEUHEHAHEAHUEH", NULL, NULL},
+		{"HEYEAYEAYEA!", NULL, NULL},
+	},
+};
+
+Menu menu_main = {
+	clear_and_print,
+	"Trollectronics Trollbook BIOS\nMain menu\n",
+	false,
+	0,
+	4,
+	{
+		{"Sub menu test", menu_execute, &menu_sub},
+		{"List SD card filesystem", list_dir, NULL},
+		{"Test SPI ROM", test_spi_rom, NULL},
+		{"Color demo", color_demo, NULL},
+	},
+};
+
+int main() {
+	int type;
+	char label[12];
+	
+	terminal_init();
+	
+	printf("Detecting SD card: ");
+	if((type = sd_init()) == SD_CARD_TYPE_INVALID) {
+		goto fail;
+	}
+	
+	terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
+	printf("%s\n", sd_card_type_name[type]);
+	terminal_set_fg(TERMINAL_COLOR_WHITE);
+	printf(" - Card size: ");
+	print_filesize(sd_get_card_size()/2*1024);
+	printf("B\n");
+	
+	printf("Detecting file system: ");
+	if(fat_init(fat_read_sd, fat_write_sd, fat_buf) < 0) {
+		goto fail;
+	}
+	
+	type = fat_type();
+	terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
+	printf("%s\n", fat_type_name[type]);
+	terminal_set_fg(TERMINAL_COLOR_WHITE);
+	fat_get_label(label);
+	printf(" - Volume label: %s\n\n", label);
+	
+	menu_execute(&menu_main);
+	
+	for(;;);
+	
+	
+	
+	for(;;);
 	
 	fail:
+	terminal_set_fg(TERMINAL_COLOR_LIGHT_RED);
+	printf("failed");
+	terminal_set_fg(TERMINAL_COLOR_WHITE);
+	
 	for(;;);
 		
 	return 0;

@@ -84,10 +84,13 @@ SDCardType sd_init(void) {
 	}
 	
 	spi_set_clockdiv(1);
-	dumbdelay(200000);
+	dumbdelay(100000);
 	
 	sd_send_command(16, 512);
 	sd_recv();
+	
+	spi_select_slave(SPI_SLAVE_NONE);
+	spi_send_recv(0xff);
 	
 	return type;
 }
@@ -120,6 +123,8 @@ uint32_t sd_get_card_size(void) {
 	uint32_t size = 0, blocksize;
 	uint8_t ver, size_mult;
 	int i;
+	
+	spi_select_slave(SPI_SLAVE_SD);
 	
 	sd_send_command(9, 0);
 	sd_recv();
@@ -156,6 +161,9 @@ uint32_t sd_get_card_size(void) {
 	for(i = 0; i < 7; i++)
 		spi_send_recv(0xFF);
 	
+	spi_select_slave(SPI_SLAVE_NONE);
+	spi_send_recv(0xff);
+	
 	return size;
 }
 
@@ -188,6 +196,7 @@ uint8_t sd_stream_read_block(SDStreamStatus *status, ...) {
 	
 	switch(*status) {
 		case SD_STREAM_STATUS_BEGIN:
+			spi_select_slave(SPI_SLAVE_SD);
 			*status = SD_BLOCK_SIZE;
 			data = 0;
 			va_start(va, status);
@@ -218,6 +227,10 @@ uint8_t sd_stream_read_block(SDStreamStatus *status, ...) {
 			spi_send_recv(0xFF);
 			if(type == SD_CARD_TYPE_INVALID)
 				*status = SD_STREAM_STATUS_FAILED;
+			
+			spi_select_slave(SPI_SLAVE_NONE);
+			spi_send_recv(0xff);
+			
 			return data;
 		default:
 			(*status)--;
@@ -301,6 +314,7 @@ void sd_stream_write_block(SDStreamStatus *status, ...) {
 	va_start(va, status);
 	switch(*status) {
 		case SD_STREAM_STATUS_BEGIN:
+			spi_select_slave(SPI_SLAVE_SD);
 			*status = SD_BLOCK_SIZE;
 			data = 0;
 			switch(type) {
@@ -333,6 +347,10 @@ void sd_stream_write_block(SDStreamStatus *status, ...) {
 			spi_send_recv(0xFF);
 			if(type == SD_CARD_TYPE_INVALID)
 				*status = SD_STREAM_STATUS_FAILED;
+			
+			spi_select_slave(SPI_SLAVE_NONE);
+			spi_send_recv(0xff);
+			
 			break;
 		default:
 			(*status)--;
@@ -353,6 +371,7 @@ void sd_stream_write_multiple(SDStreamStatus *status, ...) {
 	va_start(va, status);
 	switch(*status) {
 		case SD_STREAM_STATUS_BEGIN:
+			spi_select_slave(SPI_SLAVE_SD);
 			*status = SD_BLOCK_SIZE * va_arg(va, unsigned int);
 			data = 0;
 			switch(type) {
@@ -384,6 +403,10 @@ void sd_stream_write_multiple(SDStreamStatus *status, ...) {
 			while (!spi_send_recv(0xFF));
 			if(type == SD_CARD_TYPE_INVALID)
 				*status = SD_STREAM_STATUS_FAILED;
+			
+			spi_select_slave(SPI_SLAVE_NONE);
+			spi_send_recv(0xff);
+			
 			break;
 		default:
 			switch(*status & 0x1FF) {
