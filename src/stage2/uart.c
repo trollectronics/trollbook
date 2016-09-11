@@ -1,12 +1,15 @@
 #include <stdint.h>
+#include "util.h"
 #include "uart.h"
 
 void uart_send(uint8_t dat) {
+	nop();
 	while(!(UART_REG_STATUS & 0x1));
 	UART_REG_DATA = dat;
 }
 
 uint8_t uart_recv() {
+	nop();
 	while(!(UART_REG_STATUS & 0x2));
 	return UART_REG_DATA;
 }

@@ -2,8 +2,8 @@
 #define _UART_H_
 #include <stdint.h>
 
-#define UART_REG_DATA *((uint32_t *) 0x100000UL)
-#define UART_REG_STATUS *((uint32_t *) 0x100004UL)
+#define UART_REG_DATA *((volatile uint32_t *) 0x100000UL)
+#define UART_REG_STATUS *((volatile uint32_t *) 0x100004UL)
 
 void uart_send(uint8_t dat);
 uint8_t uart_recv();

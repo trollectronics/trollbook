@@ -11,12 +11,10 @@ _start:
 	
 2:
 	cinva %bc
-	move.l #0x80008000, %d0
+	move.l #0x00008000, %d0
 	movec %d0, %cacr
 	
 	jsr main
-	
-	cpusha %dc
 	
 	cmp #0, %d0
 	bne fail
@@ -24,3 +22,11 @@ success:
 	jmp 0xC
 fail:
 	jmp 0x10
+
+
+.align 2
+.global reboot
+reboot:
+	lea 0x100000, %sp
+	jmp 0x8
+	

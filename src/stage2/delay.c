@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "delay.h"
 
-void dumbdelay(uint32_t t) {
+void dumbdelay(volatile uint32_t t) {
 	while(t--);
 }

@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2015 Steven Arnow <s@rdw.se>
+Adapted for trollbook bios in 2016 by Axel Isaksson
 'fat.c' - This file is part of µCFAT
 
 This software is provided 'as-is', without any express or implied
@@ -22,12 +23,10 @@ freely, subject to the following restrictions:
 	distribution.
 */
 
-#ifndef NULL
-#define	NULL	((void *) 0)
-#endif
-
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "printf.h"
 #include "fat.h"
 
 #define	MAX_FD_OPEN		4
@@ -35,18 +34,11 @@ freely, subject to the following restrictions:
 #define	READ_DWORD(x, n)	read_dword(x, n)
 #define	WRITE_WORD(x, n, w)	((x)[(n)] = (w & 0xFF), (x)[(n) + 1] = ((w) >> 8) & 0xFF)
 #define	WRITE_DWORD(x, n, dw)	write_dword(x, n, dw)
-#define GET_ENTRY_CLUSTER(e)	(((READ_WORD(sector_buff, (e) * 32 + 20) << 16) | (READ_WORD(sector_buff, (e) * 32 + 26))) & (fat_state.type != FAT_TYPE_FAT32 ? 0xFFFF : ~0))
+#define	GET_ENTRY_CLUSTER(e)	(((READ_WORD(sector_buff, (e) * 32 + 20) << 16) | (READ_WORD(sector_buff, (e) * 32 + 26))) & (fat_state.type != FAT_TYPE_FAT32 ? 0xFFFF : ~0))
 
 
-int write_sector_call(uint32_t sector, uint8_t *data) {
-	/* TODO: Implement */
-	return -1;
-}
-
-int read_sector_call(uint32_t sector, uint8_t *data) {
-	/* TODO: Implement */
-	return -1;
-}
+int (* write_sector_call)(uint32_t sector, uint8_t *data);
+int (* read_sector_call)(uint32_t sector, uint8_t *data);
 
 static uint32_t read_dword(uint8_t *buff, int byte) {
 	uint32_t dw;
@@ -64,11 +56,6 @@ static void write_dword(uint8_t *buff, int byte, uint32_t dw) {
 static uint32_t locate_record(const char *path, int *record_index, const char *tail);
 
 uint8_t *sector_buff;
-
-enum FATType {
-	FAT_TYPE_FAT16,
-	FAT_TYPE_FAT32,
-};
 
 
 struct {
@@ -140,19 +127,24 @@ static int read_sector(uint32_t sector, uint8_t *data) {
 }
 
 
-int init_fat() {
-	uint8_t *data = sector_buff;
+int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_func)(uint32_t sector, uint8_t *data), uint8_t *buffer) {
+	uint8_t *data;
 	uint16_t reserved_sectors;
 	uint8_t *u8;
 	uint8_t tu8;
 	int err, i;
 	uint32_t fsinfo;
-
+	
+	sector_buff = buffer;
+	data = sector_buff;
+	read_sector_call = read_func;
+	write_sector_call = write_func;
+	
 	if ((err = read_sector(0, data) < 0))
 		return err;
-
+	
 	if (READ_WORD(data, 11) != 512) {
-		//fprintf(stderr, "Only 512 bytes per sector is supported\n");
+		printf("Only 512 bytes per sector is supported\n");
 		return -1;
 	}
 	fat_state.cluster_size = data[13];
@@ -161,7 +153,7 @@ int init_fat() {
 
 	u8 = &data[16];
 	if (*u8 != 2) {
-		//fprintf(stderr, "Unsupported FAT: %i FAT:s in filesystem, only 2 supported\n", *u8);
+		printf("Unsupported FAT: %i FAT:s in filesystem, only 2 supported\n", *u8);
 		return -1;
 	}
 	
@@ -184,7 +176,7 @@ int init_fat() {
 	else
 		tu8 = data[66];
 	if (tu8 != 0x28 && tu8 != 0x29) {
-	//	fprintf(stderr, "FAT signature check failed\n");
+		printf("FAT signature check failed\n");
 		return -1;
 	}
 
@@ -737,7 +729,7 @@ static bool folder_empty(uint32_t cluster) {
 }
 
 
-bool delete_file(const char *path) {
+bool fat_delete_file(const char *path) {
 	uint32_t i;
 	int index = 0;
 	uint32_t sector, cluster;
@@ -771,7 +763,7 @@ bool delete_file(const char *path) {
 }
 
 
-bool create_file(char *path, char *name, uint8_t attrib) {
+bool fat_create_file(char *path, char *name, uint8_t attrib) {
 	uint32_t sector, pcluster, cluster;
 	int index = 0, pindex = 0, i;
 	if (!path) {
@@ -954,4 +946,33 @@ int fat_dirlist(const char *path, struct FATDirList *list, int size, int skip) {
 
 bool fat_valid() {
 	return fat_state.valid;
+}
+
+FATType fat_type() {
+	return fat_state.type;
+}
+
+int fat_get_label(char *buf) {
+	int err;
+	int i;
+	
+	if(!buf)
+		return -1;
+	*buf = 0;
+	
+	if((err = read_sector(0, sector_buff) < 0))
+		return err;
+	
+	if(fat_state.type == FAT_TYPE_FAT16) {
+		for(i = 43; i < 54; i++)
+			*buf++ = sector_buff[i];
+		*buf = 0;
+	} else if (fat_state.type == FAT_TYPE_FAT32) {
+		for(i = 71; i < 82; i++)
+			*buf++ = sector_buff[i];
+		*buf = 0;
+	} else
+		return -1;
+	
+	return 0;
 }
