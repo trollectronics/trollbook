@@ -10,6 +10,8 @@
 #include "input.h"
 #include "fat.h"
 
+void reboot(void *);
+
 static uint8_t fat_buf[512];
 
 static int fat_read_sd(uint32_t sector, uint8_t *data) {
@@ -191,12 +193,13 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n",
 	false,
 	0,
-	4,
+	5,
 	{
 		{"Sub menu test", menu_execute, &menu_sub},
 		{"List SD card filesystem", list_dir, NULL},
 		{"Test SPI ROM", test_spi_rom, NULL},
 		{"Color demo", color_demo, NULL},
+		{"Reboot", reboot, NULL},
 	},
 };
 
@@ -231,10 +234,6 @@ int main() {
 	printf(" - Volume label: %s\n\n", label);
 	
 	menu_execute(&menu_main);
-	
-	for(;;);
-	
-	
 	
 	for(;;);
 	

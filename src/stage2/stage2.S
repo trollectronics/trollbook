@@ -22,3 +22,11 @@ success:
 	jmp 0xC
 fail:
 	jmp 0x10
+
+
+.align 2
+.global reboot
+reboot:
+	lea 0x100000, %sp
+	jmp 0x8
+	
