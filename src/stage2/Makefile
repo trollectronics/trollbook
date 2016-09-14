@@ -15,7 +15,7 @@ LD	= m68k-elf-ld
 AR	= m68k-elf-ar
 
 # Compiler and linker flags
-CFLAGS		= -Wall -O3 -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040
+CFLAGS		= -Wall -Os -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040
 ASFLAGS		= -msoft-float
 LDFLAGS		= -T $(LINKSCRIPT) -lgcc
 
