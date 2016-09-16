@@ -158,9 +158,31 @@ void clear_and_print_filename(void *arg) {
 }
 
 void test_spi_rom(void *arg) {
-	terminal_clear();
-	rom_read(0, (void *) MEM_VGA_RAM, 800*480);
-	input_poll();
+	uint8_t buf[256];
+	char *tmp;
+	int i, j, k;
+	
+	for(j = 0; ; j += 256) {
+		terminal_clear();
+		rom_read(j, buf, 256);
+		for(i = 0; i < 256; i+=16) {
+			tmp =((char *) buf) + i;
+			printf("%04x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\t\t", 
+				j + i,
+				tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], 
+				tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13], tmp[14], tmp[15]
+			);
+			for(k = 0; k < 16; k++) {
+				if(tmp[k] < 32 || tmp[k] > 126)
+					terminal_putc('.');
+				else
+					terminal_putc(tmp[k]);
+			}
+			terminal_putc_term('\n');
+		}
+		
+		input_poll();
+	}
 }
 
 void color_demo(void *arg) {

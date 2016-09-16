@@ -4,25 +4,9 @@
 .int 0x00100000
 .int 0x00000008
 
-	bra start
 
-romfunc:
-	#0xC
-	bra success
-	#0x10
-	bra fail
+bsr spi_load
 
-start:
-	move.l #524288, %d5
-	move.l #0x03030303, %d4
-1:
-	move.l %d4, (%d5)
-	addq.l #4, %d5
-	
-	cmpi.l #908288, %d5
-	bne 1b
-	
-	bra loadhex
 
 
 .text
@@ -160,23 +144,16 @@ get_byte:
 	rts
 
 
+.include "spi_load.s"
 
-
-fail:
-	move.l #0x04040404, %d4
-	bra fill
-	
 success:
-	move.l #0x02020202, %d4
-	bra fill
-
-fill:
 	move.l #524288, %d5
+	move.l #0x02020202, %d4
 1:
 	move.l %d4, (%d5)
 	addq.l #4, %d5
 	
 	cmpi.l #908288, %d5
-	bne 1b
+	bne.b 1b
 2:
-	bra 2b
+	bra.b 2b

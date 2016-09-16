@@ -53,7 +53,7 @@ void hexload(uint8_t (* fetch_byte)(int), int fd) {
 	bool quit = 0;
 	
 	fetch_byte(-1);
-
+	
 	for (count = 0;; count++) {
 		switch (state) {
 			case HEXLOAD_STATE_INIT:
@@ -65,7 +65,7 @@ void hexload(uint8_t (* fetch_byte)(int), int fd) {
 				} else {
 					state = HEXLOAD_STATE_BYTE;
 				}
-					
+				
 				break;
 			case HEXLOAD_STATE_BYTE:
 				bytes_to_read = decoded;
@@ -79,7 +79,7 @@ void hexload(uint8_t (* fetch_byte)(int), int fd) {
 					addr |= decoded;
 					state = HEXLOAD_STATE_TYPE;
 				}
-
+				
 				break;
 			case HEXLOAD_STATE_TYPE:
 				type = decoded;
@@ -122,7 +122,7 @@ void hexload(uint8_t (* fetch_byte)(int), int fd) {
 				continue;
 				break;
 		}
-
+		
 		/* Decode a byte */
 		byte = fetch_byte(fd);
 		if (byte > '9')
@@ -141,7 +141,7 @@ void hexload(uint8_t (* fetch_byte)(int), int fd) {
 	/* Jump to entry point */
 	if (entry_point != (void *) 0xFFFFFFFF)
 		goto *entry_point;
-
+	
 	error:
 	return;
 }

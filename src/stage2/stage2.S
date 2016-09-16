@@ -18,11 +18,25 @@ _start:
 	
 	cmp #0, %d0
 	bne fail
-success:
-	jmp 0xC
-fail:
-	jmp 0x10
 
+fail:
+	move.l #0x04040404, %d4
+	bra fill
+	
+success:
+	move.l #0x02020202, %d4
+	bra fill
+
+fill:
+	move.l #524288, %d5
+1:
+	move.l %d4, (%d5)
+	addq.l #4, %d5
+	
+	cmpi.l #908288, %d5
+	bne 1b
+2:
+	bra 2b
 
 .align 2
 .global reboot
