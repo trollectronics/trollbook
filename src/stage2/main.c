@@ -8,6 +8,7 @@
 #include "menu.h"
 #include "sd.h"
 #include "input.h"
+#include "hexload.h"
 #include "rom.h"
 #include "fat.h"
 
@@ -248,6 +249,26 @@ Menu menu_main = {
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+static uint8_t get_byte(int fd) {
+	static unsigned int count = 0;
+	uint8_t c;
+	
+	if(fd < 0) {
+		count = 0;
+		return 0;
+	}
+	
+	if(!count)
+		fat_read_sect(fd);
+	
+	c = fat_buf[count];
+	
+	if(++count == 512)
+		count = 0;
+	
+	return c;
+}
+
 void select_file_action(void *arg) {
 	int selected = *((int *) arg);
 	int i, j, k, fd, size, x, y;
@@ -321,6 +342,11 @@ void select_file_action(void *arg) {
 
 			break;
 		case 2:
+			fd = fat_open(path, O_RDONLY);
+			hexload(get_byte, fd);
+			printf("Error parsing HEX file\n");
+			fat_close(fd);
+			input_poll();
 			break;
 		case 3:
 			fd = fat_open(path, O_RDONLY);
