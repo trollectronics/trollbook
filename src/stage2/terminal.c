@@ -4,8 +4,6 @@
 #include "terminal.h"
 #include "vgafont.h"
 
-#define MEM_VGA_RAM ((volatile void *) 0x80000)
-
 #define TERM_W		100
 #define	TERM_H		30
 

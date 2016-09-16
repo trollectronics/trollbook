@@ -7,8 +7,6 @@
 static int menu_display(Menu *menu) {
 	int i;
 	
-	printf("----------------------------------------\n");
-	
 	for(i = 0; i < menu->items; i++) {
 		printf("\t");
 		if(i == menu->selected) {
