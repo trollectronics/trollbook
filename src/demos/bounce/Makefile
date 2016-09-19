@@ -3,7 +3,7 @@ TTYDEV		?=/dev/ttyUSB0
 TTYBAUD		?=115200
 
 # Name of the output file
-NAME	= stage2
+NAME	= bounce
 
 # Linkscript
 LINKSCRIPT	:= link.ld

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define MEM_VGA_RAM ((volatile void *) 0x80000)
+
 typedef enum TerminalColor TerminalColor;
 enum TerminalColor {
 	TERMINAL_COLOR_BLACK,
