@@ -98,7 +98,7 @@ static char dir[8][32];
 void list_dir(void *arg) {
 	terminal_clear();
 	printf("%s\n", path);
-	terminal_puts(arg);
+	printf("%s", arg);
 	
 	int files, fd, i, j, k;
 	
@@ -159,14 +159,14 @@ void clear_and_print_filename(void *arg) {
 
 void test_spi_rom(void *arg) {
 	uint8_t buf[256];
-	char *tmp;
+	uint8_t *tmp;
 	int i, j, k;
 	
 	for(j = 0; ; j += 256) {
 		terminal_clear();
 		rom_read(j, buf, 256);
 		for(i = 0; i < 256; i+=16) {
-			tmp =((char *) buf) + i;
+			tmp =((uint8_t *) buf) + i;
 			printf("%04x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\t\t", 
 				j + i,
 				tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], 
@@ -174,11 +174,11 @@ void test_spi_rom(void *arg) {
 			);
 			for(k = 0; k < 16; k++) {
 				if(tmp[k] < 32 || tmp[k] > 126)
-					terminal_putc('.');
+					printf("%c", '.');
 				else
-					terminal_putc(tmp[k]);
+					printf("%c", tmp[k]);
 			}
-			terminal_putc_term('\n');
+			printf("\n");
 		}
 		
 		input_poll();
@@ -205,7 +205,7 @@ static void clear_and_print(void *arg) {
 		terminal_clear();
 	
 	clear = true;
-	terminal_puts(arg);
+	printf("%s", arg);
 }
 
 
@@ -294,7 +294,7 @@ static uint8_t get_byte(int fd) {
 void select_file_action(void *arg) {
 	int selected = *((int *) arg);
 	int i, j, k, fd, size, x, y;
-	volatile char *tmp;
+	volatile uint8_t *tmp;
 	
 	switch(selected) {
 		case 0:
@@ -306,9 +306,9 @@ void select_file_action(void *arg) {
 				fat_read_sect(fd);
 				for(i = 0; i < 512; i++) {
 					if(fat_buf[i] < 32 || fat_buf[i] > 126)
-						terminal_putc('?');
+						printf("?");
 					else
-						terminal_putc(fat_buf[i]);
+						printf("%c", fat_buf[i]);
 					
 				}
 				input_poll();
@@ -324,7 +324,7 @@ void select_file_action(void *arg) {
 				printf("\nSector %u\n", j >> 9);
 				fat_read_sect(fd);
 				for(i = 0; i < 256; i+=16) {
-					tmp =((char *) fat_buf) + i;
+					tmp =((uint8_t *) fat_buf) + i;
 					printf("%04x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\t\t", 
 						j + i,
 						tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], 
@@ -332,18 +332,18 @@ void select_file_action(void *arg) {
 					);
 					for(k = 0; k < 16; k++) {
 						if(tmp[k] < 32 || tmp[k] > 126)
-							terminal_putc('.');
+							printf(".");
 						else
-							terminal_putc(tmp[k]);
+							printf("%c", tmp[k]);
 					}
-					terminal_putc_term('\n');
+					printf("\n");
 					
 				}
 				input_poll();
 				terminal_clear();
 				printf("\nSector %u\n", j >> 9);
 				for(i = 256; i < 512; i+=16) {
-					tmp =((char *) fat_buf) + i;
+					tmp =((uint8_t *) fat_buf) + i;
 					printf("%04x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\t\t", 
 						j + i,
 						tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], 
@@ -351,11 +351,11 @@ void select_file_action(void *arg) {
 					);
 					for(k = 0; k < 16; k++) {
 						if(tmp[k] < 32 || tmp[k] > 126)
-							terminal_putc('.');
+							printf(".");
 						else
-							terminal_putc(tmp[k]);
+							printf("%c", tmp[k]);
 					}
-					terminal_putc_term('\n');
+					printf("\n");
 					
 				}
 				input_poll();
