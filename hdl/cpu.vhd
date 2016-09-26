@@ -190,9 +190,8 @@ begin
 				--ta_next <= '0';
 				--state_next <= write_burst1;
 				if ack = '1' then
-					state_next <= idle;
+					state_next <= write_burst1;
 					ta_next <= '0';
-					done <= '1';
 				end if;
 			when write_burst1 =>
 				ta_next <= '0';
@@ -202,6 +201,7 @@ begin
 				state_next <= write_burst3;
 			when write_burst3 =>
 				ta_next <= '0';
+				done <= '1';
 				state_next <= idle;
 			
 			when read_ack =>

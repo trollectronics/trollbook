@@ -165,35 +165,45 @@ begin
 		end if;
 	end process;
 	
-	sdram: process(clk33) is
+	sdram: process(clk33, ram_ldqm, ram_udqm) is
 		type sdram_state_type is (cas3, cas2, data0, data1, data2, data3, idle);
 		variable sdram_state : sdram_state_type := idle;
+		
+		function mask(data : std_logic_vector(31 downto 0); ldqm : std_logic_vector(1 downto 0); udqm : std_logic_vector(1 downto 0)) return std_logic_vector is
+			variable m : std_logic_vector(31 downto 0) := (others => '1');
+		begin
+			if udqm(1) = '1' then m := m and x"00FFFFFF"; end if;
+			if ldqm(1) = '1' then m := m and x"FF00FFFF"; end if;
+			if udqm(0) = '1' then m := m and x"FFFF00FF"; end if;
+			if ldqm(0) = '1' then m := m and x"FFFFFF00"; end if;
+			return data and m;
+		end function;
 	begin
 		if falling_edge(clk33) then		
 			if sdram_state /= idle then
 				sdram_state := sdram_state_type'rightof(sdram_state);
 			end if;
 			
-			case sdram_state is
-				when data0 =>
-					d <= x"DEADBEE0";
-				when data1 =>
-					d <= x"DEADBEE1";
-				when data2 =>
-					d <= x"DEADBEE2";
-				when data3 =>
-					d <= x"DEADBEE3";
-				
-				when others =>
-					d <= (others => 'Z');
-			end case;
-			
-			if ram_cs = "00" then
+			if ram_cs = "00" and cpu_rw = '1' then
 				if ram_ras = '1' and ram_cas = '0' and ram_we = '1' then
 					sdram_state := cas2;
 				end if;
 			end if;
 		end if;
+		
+		case sdram_state is
+				when data0 =>
+					d <= mask(x"DEADBEE0", ram_ldqm, ram_udqm);
+				when data1 =>
+					d <= mask(x"DEADBEE1", ram_ldqm, ram_udqm);
+				when data2 =>
+					d <= mask(x"DEADBEE2", ram_ldqm, ram_udqm);
+				when data3 =>
+					d <= mask(x"DEADBEE3", ram_ldqm, ram_udqm);
+				
+				when others =>
+					d <= (others => 'Z');
+			end case;
 	end process;
 	
 	process(t, cpu_ta, clk33) begin
@@ -322,6 +332,22 @@ begin
 				cpu_tm <= "001";
 			when 382 =>
 				cpu_ts <= '1';
+			
+			when 420 => --sdram
+				a <= x"00400000";
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '0';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 422 =>
+				cpu_ts <= '1';
+				d <= x"CAFEBEE0";
+			when 425 | 427 | 429 | 431 | 433 | 435 =>
+				if cpu_ta = '0' and clk33'event then
+					d <= std_logic_vector(unsigned(d) + 1);
+				end if;
 			
 			
 			-- read from llram

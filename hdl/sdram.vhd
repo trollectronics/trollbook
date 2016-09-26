@@ -32,7 +32,7 @@ architecture arch of sdram is
 	constant CAS_LATENCY_CYCLES : integer := 2;
 	
 	type state_type is (
-		powerdown, config, idle, open_row, read_command, write_command, precharge, waitstate, refresh
+		powerdown, config, idle, open_row, read_command, write_command, read_precharge, write_precharge, waitstate, refresh
 	);
 	
 	signal state, state_next : state_type;
@@ -168,6 +168,9 @@ begin
 					else --write
 						state_next <= write_command;
 						we_next <= '0';
+						bus_ack_next <= '1';
+						ldqm_next <= "00";
+						udqm_next <= "00";
 					end if;
 				end if;
 				
@@ -175,6 +178,8 @@ begin
 				--if counter = 1 then --cas latency 3
 				if counter = 2 then --cas latency 2
 					bus_ack_next <= '1';
+					ldqm_next <= "00";
+					udqm_next <= "00";
 				end if;
 				
 				if counter = 0 then
@@ -182,21 +187,41 @@ begin
 					ras_next <= '0';
 					cas_next <= '1';
 					we_next <= '0';
-					state_next <= precharge;
+					state_next <= read_precharge;
 				end if;
 			
 			when write_command =>
+				if counter = 0 then
+					a_next(10) <= '0';
+					ras_next <= '0';
+					cas_next <= '1';
+					we_next <= '0';
+					state_next <= write_precharge;
+					bus_ack_next <= '0';
+					ldqm_next <= "11";
+					udqm_next <= "11";
+				end if;
 			
-			when precharge =>
+			when read_precharge =>
 				ras_next <= '1';
 				cas_next <= '1';
 				we_next <= '1';
 				cs_next <= "11";
-				ldqm_next <= "11";
-				udqm_next <= "11";
+				state_next <= waitstate;
+				bus_ack_next <= '1';
+				ldqm_next <= "00";
+				udqm_next <= "00";
+				
+			when write_precharge =>
+				ras_next <= '1';
+				cas_next <= '1';
+				we_next <= '1';
+				cs_next <= "11";
 				state_next <= waitstate;
 			
 			when waitstate =>
+				ldqm_next <= "11";
+				udqm_next <= "11";
 				state_next <= idle;
 			
 			when refresh =>
