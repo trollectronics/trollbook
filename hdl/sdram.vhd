@@ -30,10 +30,16 @@ end sdram;
 architecture arch of sdram is
 	constant RCD_CYCLES : integer := 1;
 	constant CAS_LATENCY_CYCLES : integer := 2;
+	constant INIT_STABILIZE_CYCLES : integer := 20;
 	constant REFRESH_CYCLES : integer := 255;
 	
+	constant MODE_WBL : std_logic := '0';
+	constant MODE_CAS_LATENCY : std_logic_vector(2 downto 0) := "010";
+	constant MODE_BT : std_logic := '0';
+	constant MODE_BURST_LENGTH : std_logic_vector(2 downto 0) := "010";
+	
 	type state_type is (
-		powerdown, config, idle, open_row, read_command, write_command, read_precharge, write_precharge, waitstate, refresh
+		powerdown, init, config, idle, open_row, read_command, write_command, read_precharge, write_precharge, waitstate, refresh
 	);
 	
 	signal state, state_next : state_type;
@@ -45,8 +51,8 @@ architecture arch of sdram is
 	signal cs_next, cs_internal : std_logic_vector(1 downto 0);
 	signal cke_next, cke_internal : std_logic;
 	 
-	signal counter, counter_next : integer;
-	signal refresh_counter, refresh_counter_next : integer;
+	signal counter, counter_next : integer range 0 to INIT_STABILIZE_CYCLES;
+	signal refresh_counter, refresh_counter_next : integer range 0 to REFRESH_CYCLES*2;
 	
 	signal bus_ack_internal, bus_ack_next : std_logic;
 begin
@@ -129,7 +135,29 @@ begin
 		
 		case state is
 			when powerdown =>
+			when init =>
+				ras_next <= '0';
+				cas_next <= '1';
+				we_next <= '0';
+				cs_next <= "00";
+				a_next(10) <= '1';
+				state_next <= config;
+				counter_next <= RCD_CYCLES;
 			when config =>
+				ras_next <= '1';
+				cas_next <= '1';
+				we_next <= '1';
+				
+				if counter = 0 then
+					ras_next <= '0';
+					cas_next <= '0';
+					we_next <= '0';
+					
+					a_next <= "000" & MODE_WBL & "00" & MODE_CAS_LATENCY & MODE_BT & MODE_BURST_LENGTH;
+					b_next <= "00";
+					
+					state_next <= waitstate;
+				end if;
 			when idle =>
 				if refresh_counter = 0 then
 					ras_next <= '0';
@@ -256,9 +284,9 @@ begin
 			cas_internal <= '1';
 			we_internal <= '1';
 			
-			refresh_counter <= REFRESH_CYCLES;
-			counter <= 0;
-			state <= idle;
+			refresh_counter <= REFRESH_CYCLES*2;
+			counter <= INIT_STABILIZE_CYCLES;
+			state <= init;
 			
 			bus_ack_internal <= '0';
 		elsif falling_edge(clk) then
