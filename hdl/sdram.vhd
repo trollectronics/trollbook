@@ -30,6 +30,7 @@ end sdram;
 architecture arch of sdram is
 	constant RCD_CYCLES : integer := 1;
 	constant CAS_LATENCY_CYCLES : integer := 2;
+	constant REFRESH_CYCLES : integer := 255;
 	
 	type state_type is (
 		powerdown, config, idle, open_row, read_command, write_command, read_precharge, write_precharge, waitstate, refresh
@@ -131,6 +132,10 @@ begin
 			when config =>
 			when idle =>
 				if refresh_counter = 0 then
+					ras_next <= '0';
+					cas_next <= '0';
+					we_next <= '1';
+					cs_next <= "00";
 					state_next <= refresh;
 				elsif bus_ce = '1' then
 					state_next <= open_row;
@@ -225,6 +230,12 @@ begin
 				state_next <= idle;
 			
 			when refresh =>
+				ras_next <= '1';
+				cas_next <= '1';
+				we_next <= '1';
+				cs_next <= "11";
+				state_next <= waitstate;
+				refresh_counter_next <= REFRESH_CYCLES;
 			
 			when others =>
 		end case;
@@ -245,6 +256,7 @@ begin
 			cas_internal <= '1';
 			we_internal <= '1';
 			
+			refresh_counter <= REFRESH_CYCLES;
 			counter <= 0;
 			state <= idle;
 			
