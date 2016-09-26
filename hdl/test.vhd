@@ -97,11 +97,19 @@ architecture tb_trollbook of test is
 	signal cpu_tip : std_logic;
 	signal cpu_ta : std_logic;
 	
-	signal transfer_done : boolean := false;
-	
 	signal write_a : integer := 0;--524288;
 	
 	signal uart : std_logic;
+	
+	signal ram_a : std_logic_vector(12 downto 0);
+	signal ram_b : std_logic_vector(1 downto 0);
+	signal ram_cas : std_logic;
+	signal ram_ras : std_logic;
+	signal ram_we : std_logic;
+	signal ram_ldqm : std_logic_vector(1 downto 0);
+	signal ram_udqm : std_logic_vector(1 downto 0);
+	signal ram_cs : std_logic_vector(1 downto 0);
+	signal ram_cke : std_logic;
 begin
 	clk33 <= not clk33 after 15 ns;
 	clk12 <= not clk12 after 41 ns;
@@ -126,8 +134,8 @@ begin
 		cpu_tbi => open, cpu_ipl => open, cpu_clk => open, cpu_lfo => open,
 		cpu_scd => '1', cpu_rsti => open, cpu_rsto => '1',
 		
-		ram_a => open, ram_b => open, ram_cas => open, ram_ras => open,
-		ram_we => open, ram_ldqm => open, ram_udqm => open, ram_cs => open, ram_cke =>open,
+		ram_a => ram_a, ram_b => ram_b, ram_cas => ram_cas, ram_ras => ram_ras,
+		ram_we => ram_we, ram_ldqm => ram_ldqm, ram_udqm => ram_udqm, ram_cs => ram_cs, ram_cke => ram_cke,
 		
 		ll_a => ll_a, ll_d => ll_d, ll_ce => ll_ce, ll_we => open,
 		ll_lb => ll_lb, ll_ub => ll_ub, ll_oe => ll_oe,
@@ -151,15 +159,40 @@ begin
 	
 	process(clk33) begin
 		if falling_edge(clk33) then
-			if transfer_done = true then--and t > 472 then
-				--t <= 466;
-				--write_a <= write_a + 2;
-				t <= t + 1;
-			else
-				t <= t + 1;
-			end if;
+			t <= t + 1;
 		elsif rising_edge(clk33) then
 			t <= t + 1;
+		end if;
+	end process;
+	
+	sdram: process(clk33) is
+		type sdram_state_type is (cas3, cas2, data0, data1, data2, data3, idle);
+		variable sdram_state : sdram_state_type := idle;
+	begin
+		if falling_edge(clk33) then		
+			if sdram_state /= idle then
+				sdram_state := sdram_state_type'rightof(sdram_state);
+			end if;
+			
+			case sdram_state is
+				when data0 =>
+					d <= x"DEADBEE0";
+				when data1 =>
+					d <= x"DEADBEE1";
+				when data2 =>
+					d <= x"DEADBEE2";
+				when data3 =>
+					d <= x"DEADBEE3";
+				
+				when others =>
+					d <= (others => 'Z');
+			end case;
+			
+			if ram_cs = "00" then
+				if ram_ras = '1' and ram_cas = '0' and ram_we = '1' then
+					sdram_state := cas2;
+				end if;
+			end if;
 		end if;
 	end process;
 	
@@ -188,24 +221,23 @@ begin
 				cpu_tm <= "001";
 			when 242 =>
 				cpu_ts <= '1';
+				cpu_tip <= '0';
 			when 244 =>
 				a <= x"00000008";
 				cpu_siz <= "10";
 				cpu_ts <= '0';
+				cpu_tip <= '0';
 			when 246 =>
 				cpu_ts <= '1';
+				cpu_tip <= '0';
 			when 248 =>
 				a <= x"0000000A";
 				cpu_siz <= "01";
 				cpu_ts <= '0';
+				cpu_tip <= '0';
 			when 250 =>
 				cpu_ts <= '1';
-			when 252 =>
-				a <= (others => '1');
-				cpu_siz <= "11";
-				cpu_tip <= '1';
-				cpu_tt <= "11";
-				cpu_tm <= "111";
+				cpu_tip <= '0';
 			
 			when 260 =>
 				a <= x"00000008";
@@ -263,7 +295,6 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-				transfer_done <= false;
 			when 286=>
 				cpu_ts <= '1';
 			
@@ -280,18 +311,18 @@ begin
 			when 362 =>
 				cpu_ts <= '1';
 			
-			
-			when 470 =>
-				a <= std_logic_vector(to_unsigned(write_a, 32));
+			when 380 => --sdram
+				a <= x"00400000";
 				d <= (others => 'Z');
-				cpu_siz <= "10";
+				cpu_siz <= "11";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 472 =>
+			when 382 =>
 				cpu_ts <= '1';
+			
 			
 			-- read from llram
 			when 1910 =>
@@ -319,23 +350,17 @@ begin
 				-- d <= x"DEADBEEF"; --x"deadcafe";
 			
 			when others =>
-				if transfer_done = true then
-					a <= (others => '1');
-					cpu_siz <= "11";
-					cpu_tip <= '1';
-					cpu_tt <= "11";
-					cpu_tm <= "111";
-					cpu_rw <= '1';
-					d <= (others => 'Z');
-					transfer_done <= false;
-				end if;
-				
-				if t mod 2 = 1 and t > 260 then
-					if cpu_ta = '0' then
-						transfer_done <= true;
-					end if;
-				end if;
 		end case;
+		
+		if rising_edge(cpu_ta) then
+			a <= (others => '1');
+			cpu_siz <= "11";
+			cpu_tip <= '1';
+			cpu_tt <= "11";
+			cpu_tm <= "111";
+			cpu_rw <= '1';
+			d <= (others => 'Z');
+		end if;
 	end process;
 	
 end tb_trollbook;

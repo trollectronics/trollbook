@@ -140,7 +140,15 @@ architecture arch of trollbook is
 			ldqm : out std_logic_vector(1 downto 0);
 			udqm : out std_logic_vector(1 downto 0);
 			cs : out std_logic_vector(1 downto 0);
-			cke : out std_logic
+			cke : out std_logic;
+			
+			bus_a : in std_logic_vector(31 downto 0);
+			bus_d : in std_logic_vector(31 downto 0);
+			bus_q : out std_logic_vector(31 downto 0);
+			bus_rw : in std_logic;
+			bus_siz : in std_logic_vector(1 downto 0);
+			bus_ce : in std_logic;
+			bus_ack : out std_logic
 		);
 	end component;
 	
@@ -181,7 +189,9 @@ architecture arch of trollbook is
 			bus_ce_llram : out std_logic;
 			bus_ack_llram : in std_logic;
 			bus_ce_spi : out std_logic;
-			bus_ack_spi : in std_logic
+			bus_ack_spi : in std_logic;
+			bus_ce_sdram : out std_logic;
+			bus_ack_sdram : in std_logic
 		);
 	end component;
 	
@@ -327,11 +337,14 @@ architecture arch of trollbook is
 	signal bus_ce_spi : std_logic;
 	signal bus_ack_spi : std_logic;
 	
+	signal bus_ce_sdram : std_logic;
+	signal bus_ack_sdram : std_logic;
+	
 	signal ll_ub_internal : std_logic;
 begin
 	u_vga: vga generic map(depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
-		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928,
-		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525,
+		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928, --for LCD
+		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525, --for LCD
 		ll_a_start => 0, ll_a_end => 800*480, ll_a_length => 18)
 		port map(reset => internal_reset, clk => clk33, r => vga_r, g => vga_g, b => vga_b,
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
@@ -341,7 +354,10 @@ begin
 	
 	u_sdram: sdram port map(reset => internal_reset, clk => clk33,
 		a => ram_a, b => ram_b, cas => ram_cas, ras => ram_ras, we => ram_we, ldqm => ram_ldqm, udqm => ram_udqm,
-		cs => ram_cs, cke => ram_cke);
+		cs => ram_cs, cke => ram_cke,
+		
+		bus_a => bus_a, bus_d => bus_d, bus_q => bus_q,
+		bus_rw => bus_rw, bus_siz => bus_siz, bus_ce => bus_ce_sdram, bus_ack => bus_ack_sdram);
 	
 	u_cpu: cpu port map(reset => internal_reset, clk => clk33,
 		a => a, d => d, q => cpu_q, oe => cpu_oe,
@@ -352,7 +368,8 @@ begin
 		
 		bus_ce_uart => bus_ce_uart, bus_ack_uart => bus_ack_uart,
 		bus_ce_llram => bus_ce_llram, bus_ack_llram => bus_ack_llram,
-		bus_ce_spi => bus_ce_spi, bus_ack_spi => bus_ack_spi);
+		bus_ce_spi => bus_ce_spi, bus_ack_spi => bus_ack_spi,
+		bus_ce_sdram => bus_ce_sdram, bus_ack_sdram => bus_ack_sdram);
 	
 	u_llram: llram generic map(data_width => 16, addr_width => 18)
 		port map(reset => internal_reset, clk => clk33,

@@ -38,7 +38,9 @@ entity cpu is
 		bus_ce_llram : out std_logic;
 		bus_ack_llram : in std_logic;
 		bus_ce_spi : out std_logic;
-		bus_ack_spi : in std_logic
+		bus_ack_spi : in std_logic;
+		bus_ce_sdram : out std_logic;
+		bus_ack_sdram : in std_logic
 	);
 end cpu;
 
@@ -71,17 +73,24 @@ begin
 	ipl <= "111";
 	lfo <= '0';
 	
-	bus_a <= a;
+	bus_a <= a when tip = '0' else (others => '0');
 	bus_q <= d;
-	bus_siz <= "11" when siz = "11" else not siz;
 	bus_rw <= not rw;
 	
+	bus_ce_sdram <= ce(4);
 	bus_ce_spi <= ce(3);
 	bus_ce_uart <= ce(2);
 	bus_ce_llram <= ce(1);
 	
-	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_spi) begin
+	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_spi, bus_ack_sdram) begin
 		q_next <= (others => '0');
+		
+		if siz = "11" then
+			bus_siz <= "11";
+		else
+			bus_siz <= not siz;
+		end if;
+		--add burst disable the same way
 		
 		if tip = '0' then
 			case a(23 downto 19) is
@@ -101,6 +110,12 @@ begin
 					q_next <= bus_d;
 					ce_next <= "00001000";
 					ack <= bus_ack_spi;
+				when "01000" => --sdram
+					q_next <= bus_d;
+					ce_next <= "00010000";
+					ack <= bus_ack_sdram;
+					bus_siz <= not siz;
+				
 				when others =>
 					ce_next <= (others => '0');
 					ack <= '0';
@@ -112,30 +127,34 @@ begin
 	end process;
 	
 	process(state, ts, tt, rw, a, bootrom_q, ack, ce_next)
-		variable check : std_logic_vector(3 downto 0);
+		variable check : std_logic_vector(1 downto 0);
 	begin
 		state_next <= state;
 		--q_next <= (others => '0');
 		oe_next <= '0';
 		ta_next <= '1';
 		done <= '0';
-		check := ts & tt & rw;
+		check := ts & rw;
 		
 		case state is
 			when idle =>
 				case check is
-					when "0001" =>
-						state_next <= read_normal;
-					when "0011" =>
-						state_next <= read_burst0;
-					when "0000" =>
-						state_next <= write_normal;
-					when "0010" =>
-						state_next <= write_burst0;
+					when "01" =>
+						if siz = "11" then
+							state_next <= read_burst0;
+						else
+							state_next <= read_normal;
+						end if;
+					when "00" =>
+						if siz = "11" then
+							state_next <= write_burst0;
+						else
+							state_next <= write_normal;
+						end if;
 					when others =>
 				end case;
 			
-			when read_normal | read_burst0=>
+			when read_normal =>
 				--q_next <= bootrom_q;
 				if ack = '1' then
 					ta_next <= '0';
@@ -144,30 +163,20 @@ begin
 					done <= '1';
 				end if;
 			
-			-- when read_burst0 =>
-				----q_next <= bootrom_q;
-				-- if ce_next(0) = '1' then
-					-- ta_next <= '0';
-					-- oe_next <= '1';
-					-- state_next <= idle;
-				-- elsif ack = '1' then
-					-- state_next <= read_ack;
-				-- end if;
-				--bursting disabled
+			when read_burst0 =>
+				if ack = '1' then
+					ta_next <= '0';
+					state_next <= read_burst1;
+				end if;
 			when read_burst1 =>
-				--q_next <= x"60046004";
 				ta_next <= '0';
-				oe_next <= '1';
 				state_next <= read_burst2;
 			when read_burst2 =>
-				--q_next <= x"60046004";
 				ta_next <= '0';
-				oe_next <= '1';
 				state_next <= read_burst3;
 			when read_burst3 =>
-				--q_next <= x"60046004";
 				ta_next <= '0';
-				oe_next <= '1';
+				done <= '1';
 				state_next <= idle;
 			
 			when write_normal =>
