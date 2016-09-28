@@ -335,7 +335,7 @@ begin
 			
 			when 420 => --sdram
 				a <= x"00400000";
-				cpu_siz <= "00";
+				cpu_siz <= "10";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
 				cpu_ts <= '0';
