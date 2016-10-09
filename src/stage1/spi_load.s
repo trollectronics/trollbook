@@ -70,7 +70,7 @@ spi_read_long:
 	rts
 
 spi_set_slave:
-	move.l %d0, 0x101008
+	move.l %d0, 0x100808
 	nop
 	rts
 
@@ -79,18 +79,18 @@ spi_send_recv:
 	
 _spi_send_recv_wait_avail:
 	nop
-	move.l 0x101004, %d1
+	move.l 0x100804, %d1
 	tst.b %d1
 	jne _spi_send_recv_wait_avail
 	nop
-	move.l %d0, 0x101000
+	move.l %d0, 0x100800
 _spi_send_recv_wait_done:
 	nop
-	move.l 0x101004, %d1
+	move.l 0x100804, %d1
 	tst.b %d1
 	jne _spi_send_recv_wait_done
 	nop
-	move.l 0x101000, %d0
+	move.l 0x100800, %d0
 
 	move.l (%sp)+, %d1
 	rts

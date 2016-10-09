@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.wor_logic.all;
 
 entity spi is
 	generic(
@@ -20,9 +21,9 @@ entity spi is
 		bus_q : out std_logic_vector(31 downto 0);
 		bus_rw : in std_logic;
 		bus_siz : in std_logic_vector(1 downto 0);
-		chipset_ce : in std_logic_vector(31 downto 0);
-		chipset_ack : out std_logic_vector(31 downto 0);
-		chipset_nack : out std_logic_vector(31 downto 0)
+		chipset_ce : in std_logic_vector(15 downto 0);
+		chipset_ack : out wor_logic_vector(15 downto 0);
+		chipset_nack : out wor_logic_vector(15 downto 0)
 	);
 end spi;
 
@@ -50,8 +51,9 @@ begin
 	ss <= ss_internal;
 	sck <= sck_internal;
 	mosi <= mosi_internal;
-	chipset_ack(peripheral_id) <= '1';
-	chipset_nack(peripheral_id) <= '0';
+	
+	chipset_ack <= (peripheral_id => '1', others => '0');
+	chipset_nack <= (peripheral_id => '0', others => '0');
 	
 	process(state, count, baud_div, miso_buffer, mosi_internal, busy, sck_internal, mosi_buffer, miso) begin
 		if count = to_integer(unsigned(baud_div)) then

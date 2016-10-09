@@ -56,7 +56,7 @@ architecture arch of sdram is
 	
 	signal bus_ack_internal, bus_ack_next : std_logic;
 begin
-	bus_q <= (others => 'X') when bus_ce = '1' else (others => 'Z');
+	bus_q <= (others => 'Z');
 	bus_ack <= bus_ack_internal;
 	
 	--a <= (others => '0');

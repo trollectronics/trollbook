@@ -95,20 +95,20 @@ begin
 		--add burst disable the same way
 		
 		if tip = '0' then
-			case a(31 downto 19) is
-				when "0000000000000" => --bootrom
+			case a(30 downto 19) is
+				when "000000000000" => --bootrom
 					q_next <= bootrom_q;
 					ce_next <= "0001";
 					ack <= '1';
-				when "0000000000001" => --llram
+				when "000000000001" => --llram
 					ce_next <= "0010";
 					q_next <= bus_d;
 					ack <= bus_ack_llram;
-				when "0000000000010" => --chipset
+				when "000000000010" => --chipset
 					q_next <= bus_d;
 					ce_next <= "0100";
 					ack <= bus_ack_chipset;
-				when "1000000000000" => --sdram
+				when "100000000000" => --sdram
 					q_next <= bus_d;
 					ce_next <= "1000";
 					ack <= bus_ack_sdram;

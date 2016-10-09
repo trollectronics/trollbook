@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.wor_logic.all;
 
 entity trollbook is
 	port(
@@ -117,9 +118,9 @@ architecture arch of trollbook is
 	
 	signal ll_ub_internal : std_logic;
 	
-	signal chipset_ce : std_logic_vector(31 downto 0);
-	signal chipset_ack : std_logic_vector(31 downto 0);
-	signal chipset_nack : std_logic_vector(31 downto 0);
+	signal chipset_ce : std_logic_vector(15 downto 0);
+	signal chipset_ack : wor_logic_vector(15 downto 0);
+	signal chipset_nack : wor_logic_vector(15 downto 0);
 begin
 	u_cpu: entity work.cpu port map(reset => internal_reset, clk => clk33,
 		a => a, d => d, q => cpu_q, oe => cpu_oe,
@@ -177,21 +178,21 @@ begin
 	
 	-- *** Hardware Peripherals *** --
 	
-	u_spi: entity work.spi generic map(peripheral_id => 16)
+	u_spi: entity work.spi generic map(peripheral_id => 8)
 		port map(reset => internal_reset, clk => clk33,
 		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss,
 		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
 		bus_rw => bus_rw, bus_siz => bus_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
 	
-	u_uart: entity work.uart generic map(peripheral_id => 17)
+	u_uart: entity work.uart generic map(peripheral_id => 9)
 		port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
 		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
 		bus_rw => bus_rw, bus_siz => bus_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
 	
-	u_vga: entity work.vga generic map(peripheral_id => 18,
+	u_vga: entity work.vga generic map(peripheral_id => 10,
 		depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
 		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928, --for LCD
 		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525, --for LCD
@@ -200,10 +201,13 @@ begin
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce);
 	
-	u_sound: entity work.sound generic map(peripheral_id => 19)
+	u_sound: entity work.sound generic map(peripheral_id => 11)
 		port map(reset => internal_reset, clk => clk12, mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
 	-- *** Output drivers *** --
+	
+	chipset_ack <= (others => '0');
+	chipset_nack <= (others => '0');
 	
 	bus_nack_llram <= '0';
 	bus_nack_sdram <= '0';

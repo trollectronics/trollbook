@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.wor_logic.all;
 
 entity uart is
 	generic(
@@ -18,9 +19,9 @@ entity uart is
 		bus_q : out std_logic_vector(31 downto 0);
 		bus_rw : in std_logic;
 		bus_siz : in std_logic_vector(1 downto 0);
-		chipset_ce : in std_logic_vector(31 downto 0);
-		chipset_ack : out std_logic_vector(31 downto 0);
-		chipset_nack : out std_logic_vector(31 downto 0)
+		chipset_ce : in std_logic_vector(15 downto 0);
+		chipset_ack : out wor_logic_vector(15 downto 0);
+		chipset_nack : out wor_logic_vector(15 downto 0)
 	);
 end uart;
 
@@ -227,7 +228,9 @@ begin
 		end if;
 	end process;
 	
+	
+	chipset_ack <= (peripheral_id => '1', others => '0');
+	chipset_nack <= (peripheral_id => '0', others => '0');
+	
 	tx <= tx_internal;
-	chipset_ack(peripheral_id) <= '1';
-	chipset_nack(peripheral_id) <= '0';
 end arch;
