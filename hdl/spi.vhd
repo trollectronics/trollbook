@@ -3,6 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity spi is
+	generic(
+		peripheral_id : integer range 0 to 31
+	);
 	port(
 		reset : in std_logic;
 		clk : in std_logic;
@@ -12,13 +15,14 @@ entity spi is
 		sck : out std_logic;
 		ss : out std_logic_vector(2 downto 0);
 		
-		bus_a : in std_logic_vector(31 downto 0);
+		chipset_a : in std_logic_vector(7 downto 0);
 		bus_d : in std_logic_vector(31 downto 0);
 		bus_q : out std_logic_vector(31 downto 0);
 		bus_rw : in std_logic;
 		bus_siz : in std_logic_vector(1 downto 0);
-		bus_ce : in std_logic;
-		bus_ack : out std_logic
+		chipset_ce : in std_logic_vector(31 downto 0);
+		chipset_ack : out std_logic_vector(31 downto 0);
+		chipset_nack : out std_logic_vector(31 downto 0)
 	);
 end spi;
 
@@ -46,7 +50,8 @@ begin
 	ss <= ss_internal;
 	sck <= sck_internal;
 	mosi <= mosi_internal;
-	bus_ack <= '1';
+	chipset_ack(peripheral_id) <= '1';
+	chipset_nack(peripheral_id) <= '0';
 	
 	process(state, count, baud_div, miso_buffer, mosi_internal, busy, sck_internal, mosi_buffer, miso) begin
 		if count = to_integer(unsigned(baud_div)) then
@@ -116,7 +121,7 @@ begin
 			mosi_buffer <= (others => '1');
 			mosi_internal <= '1';
 		elsif rising_edge(clk) then
-			check := bus_ce & bus_rw;
+			check := chipset_ce(peripheral_id) & bus_rw;
 			
 			state <= state_next;
 			count <= count_next;
@@ -126,7 +131,7 @@ begin
 			
 			case check is
 				when "11" =>
-					case bus_a(3 downto 2) is
+					case chipset_a(3 downto 2) is
 						when "00" =>
 							mosi_buffer <= bus_d(7 downto 0);
 							busy <= '1';
@@ -156,11 +161,11 @@ begin
 		end if;
 	end process;
 	
-	process(bus_ce, bus_a, miso_buffer, busy, ss_internal, baud_div) begin
+	process(chipset_ce, chipset_a, miso_buffer, busy, ss_internal, baud_div) begin
 		bus_q <= (others => 'Z');
 		
-		if bus_ce = '1' then
-			case bus_a(3 downto 2) is
+		if chipset_ce(peripheral_id) = '1' then
+			case chipset_a(3 downto 2) is
 				when "00" =>
 					bus_q <= x"000000" & miso_buffer;
 				when "01" =>

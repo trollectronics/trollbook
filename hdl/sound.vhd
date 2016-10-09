@@ -2,6 +2,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity sound is
+	generic(
+		peripheral_id : integer range 0 to 31
+	);
 	port(
 		reset : in std_logic;
 		clk : in std_logic;

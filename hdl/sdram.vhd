@@ -56,7 +56,7 @@ architecture arch of sdram is
 	
 	signal bus_ack_internal, bus_ack_next : std_logic;
 begin
-	bus_q <= (others => 'Z');
+	bus_q <= (others => 'U') when bus_ce = '1' else (others => 'Z');
 	bus_ack <= bus_ack_internal;
 	
 	--a <= (others => '0');
@@ -85,7 +85,7 @@ begin
 	cas <= cas_internal;
 	we <= we_internal;
 	
-	process(state, bus_a, bus_siz, a_internal, b_internal, ldqm_internal, udqm_internal, cs_internal, cke_internal, refresh_counter, counter) is
+	process(state, bus_a, bus_siz, bus_rw, bus_ce, a_internal, b_internal, ldqm_internal, udqm_internal, cs_internal, cke_internal, refresh_counter, counter) is
 		type addr_type is record
 			bank : std_logic_vector(1 downto 0);
 			row : std_logic_vector(12 downto 0);

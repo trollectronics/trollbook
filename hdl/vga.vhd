@@ -4,6 +4,8 @@ use ieee.numeric_std.all;
 
 entity vga is
 	generic(
+		peripheral_id : integer range 0 to 31;
+		
 		depth_r : integer;
 		depth_g : integer;
 		depth_b : integer;

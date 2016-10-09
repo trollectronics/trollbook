@@ -3,6 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity uart is
+	generic(
+		peripheral_id : integer range 0 to 31
+	);
 	port(
 		reset : in std_logic;
 		clk : in std_logic;
@@ -10,13 +13,14 @@ entity uart is
 		rx : in std_logic;
 		tx : out std_logic;
 		
-		bus_a : in std_logic_vector(31 downto 0);
+		chipset_a : in std_logic_vector(7 downto 0);
 		bus_d : in std_logic_vector(31 downto 0);
 		bus_q : out std_logic_vector(31 downto 0);
 		bus_rw : in std_logic;
 		bus_siz : in std_logic_vector(1 downto 0);
-		bus_ce : in std_logic;
-		bus_ack : out std_logic
+		chipset_ce : in std_logic_vector(31 downto 0);
+		chipset_ack : out std_logic_vector(31 downto 0);
+		chipset_nack : out std_logic_vector(31 downto 0)
 	);
 end uart;
 
@@ -44,14 +48,14 @@ architecture arch of uart is
 	signal tx_internal, tx_next : std_logic;
 	signal rx_prev : std_logic;
 begin
-	process(rxstate, rxcount, rx, rx_prev, rx_buffer, rx_full, rx_buffer_internal, bus_ce, bus_rw, bus_a, baud_count) begin
+	process(rxstate, rxcount, rx, rx_prev, rx_buffer, rx_full, rx_buffer_internal, chipset_ce, bus_rw, chipset_a, baud_count) begin
 		rxcount_next <= (rxcount - 1) mod 4;
 		rxstate_next <= rxstate;
 		rx_active <= '0';
 		
 		rx_buffer_next <= rx_buffer;
 		
-		if bus_ce = '1' and bus_rw = '0' and bus_a(2) = '0' then
+		if chipset_ce(peripheral_id) = '1' and bus_rw = '0' and chipset_a(2) = '0' then
 			rx_full_next <= '0';
 		else
 			rx_full_next <= rx_full;
@@ -189,9 +193,9 @@ begin
 			rx_buffer <= rx_buffer_next;
 			rx_full <= rx_full_next;
 			
-			if bus_ce = '1' then
+			if chipset_ce(peripheral_id) = '1' then
 				if bus_rw = '1' then
-					case bus_a(2) is
+					case chipset_a(2) is
 						when '0' =>
 							tx_buffer_internal <= bus_d(7 downto 0);
 							tx_empty <= '0';
@@ -211,9 +215,9 @@ begin
 		end if;
 	end process;
 	
-	process(bus_ce, rx_buffer, bus_a, baud_div, rx_active, rx_full, tx_empty) begin
-		if bus_ce = '1' then
-			if bus_a(2) = '0' then
+	process(chipset_ce, rx_buffer, chipset_a, baud_div, rx_active, rx_full, tx_empty) begin
+		if chipset_ce(peripheral_id) = '1' then
+			if chipset_a(2) = '0' then
 				bus_q <= x"000000" & rx_buffer;
 			else
 				bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
@@ -224,5 +228,6 @@ begin
 	end process;
 	
 	tx <= tx_internal;
-	bus_ack <= '1';
+	chipset_ack(peripheral_id) <= '1';
+	chipset_nack(peripheral_id) <= '0';
 end arch;

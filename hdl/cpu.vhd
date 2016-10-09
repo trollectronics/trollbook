@@ -33,14 +33,17 @@ entity cpu is
 		bus_rw : out std_logic;
 		bus_siz : out std_logic_vector(1 downto 0);
 		
-		bus_ce_uart : out std_logic;
-		bus_ack_uart : in std_logic;
 		bus_ce_llram : out std_logic;
 		bus_ack_llram : in std_logic;
-		bus_ce_spi : out std_logic;
-		bus_ack_spi : in std_logic;
+		bus_nack_llram : in std_logic;
+		
+		bus_ce_chipset : out std_logic;
+		bus_ack_chipset : in std_logic;
+		bus_nack_chipset : in std_logic;
+		
 		bus_ce_sdram : out std_logic;
-		bus_ack_sdram : in std_logic
+		bus_ack_sdram : in std_logic;
+		bus_nack_sdram : in std_logic
 	);
 end cpu;
 
@@ -54,10 +57,11 @@ architecture arch of cpu is
 	signal ta_next : std_logic;
 	signal q_next : std_logic_vector(q'range);
 	signal oe_next : std_logic;
+	signal tbi_next : std_logic;
 	
 	signal bootrom_q : std_logic_vector(31 downto 0);
 	
-	signal ce, ce_next : std_logic_vector(7 downto 0);
+	signal ce, ce_next : std_logic_vector(3 downto 0);
 	signal ack : std_logic;
 	
 	signal done : std_logic;
@@ -67,9 +71,7 @@ begin
 		q => bootrom_q
 	);
 	
-	--ta <= '1';
 	tea <= '1';
-	tbi <= '0';
 	ipl <= "111";
 	lfo <= '0';
 	
@@ -77,13 +79,13 @@ begin
 	bus_q <= d;
 	bus_rw <= not rw;
 	
-	bus_ce_sdram <= ce(4);
-	bus_ce_spi <= ce(3);
-	bus_ce_uart <= ce(2);
+	bus_ce_sdram <= ce(3);
+	bus_ce_chipset <= ce(2);
 	bus_ce_llram <= ce(1);
 	
-	process(a, bus_ack_uart, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_spi, bus_ack_sdram) begin
+	process(a, bus_ack_chipset, bus_nack_chipset, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_sdram, siz) begin
 		q_next <= (others => '0');
+		tbi_next <= '0';
 		
 		if siz = "11" then
 			bus_siz <= "11";
@@ -93,29 +95,26 @@ begin
 		--add burst disable the same way
 		
 		if tip = '0' then
-			case a(23 downto 19) is
-				when "00000" => --bootrom
+			case a(31 downto 19) is
+				when "0000000000000" => --bootrom
 					q_next <= bootrom_q;
-					ce_next <= "00000001";
+					ce_next <= "0001";
 					ack <= '1';
-				when "00001" => --llram
-					ce_next <= "00000010";
+				when "0000000000001" => --llram
+					ce_next <= "0010";
 					q_next <= bus_d;
 					ack <= bus_ack_llram;
-				when "00010" => --chipset
+				when "0000000000010" => --chipset
 					q_next <= bus_d;
-					ce_next <= "00000100";
-					ack <= bus_ack_uart;
-				when "00100" => --test
+					ce_next <= "0100";
+					ack <= bus_ack_chipset;
+				when "1000000000000" => --sdram
 					q_next <= bus_d;
-					ce_next <= "00001000";
-					ack <= bus_ack_spi;
-				when "01000" => --sdram
-					q_next <= bus_d;
-					ce_next <= "00010000";
+					ce_next <= "1000";
 					ack <= bus_ack_sdram;
 					bus_siz <= not siz;
-				
+					tbi_next <= '1';
+					
 				when others =>
 					ce_next <= (others => '0');
 					ack <= '0';
@@ -126,7 +125,7 @@ begin
 		end if;
 	end process;
 	
-	process(state, ts, tt, rw, a, bootrom_q, ack, ce_next)
+	process(state, ts, tt, rw, a, bootrom_q, ack, ce_next, siz)
 		variable check : std_logic_vector(1 downto 0);
 	begin
 		state_next <= state;
@@ -223,6 +222,7 @@ begin
 			ta <= '1';
 			q <= (others => '1');
 			oe <= '0';
+			tbi <= '0';
 			
 			ce <= (others => '0');
 		elsif rising_edge(clk) then
@@ -237,6 +237,7 @@ begin
 			q <= q_next;
 			ta <= ta_next;
 			oe <= oe_next;
+			tbi <= tbi_next;
 		end if;
 	end process;
 	
