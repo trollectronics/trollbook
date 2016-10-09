@@ -136,10 +136,10 @@ _decode_byte_lower:
 	rts
 
 get_byte:
-	move.l 1048580, %d0
+	move.l 0x101104, %d0
 	btst #1, %d0
 	jeq get_byte
-	move.l 1048576, %d0
+	move.l 0x101100, %d0
 	and.l #0xFF, %d0
 	rts
 
