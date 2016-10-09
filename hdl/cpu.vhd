@@ -157,7 +157,9 @@ begin
 				--q_next <= bootrom_q;
 				if ack = '1' then
 					ta_next <= '0';
-					oe_next <= '1';
+					if a(31) = '0' then -- no OE for sdram
+						oe_next <= '1';
+					end if;
 					state_next <= idle;
 					done <= '1';
 				end if;

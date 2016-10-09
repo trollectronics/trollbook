@@ -270,7 +270,7 @@ begin
 			
 			--write to uart
 			when 270 =>
-				a <= x"00100000"; --std_logic_vector(to_unsigned(write_a, 32));
+				a <= x"00101100"; --std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
@@ -284,7 +284,7 @@ begin
 			
 			--write to SPI
 			when 280 =>
-				a <= x"00200000"; --std_logic_vector(to_unsigned(write_a, 32));
+				a <= x"00101000"; --std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
@@ -297,7 +297,7 @@ begin
 			
 			--read from SPI
 			when 284 =>
-				a <= x"00200004"; --std_logic_vector(to_unsigned(write_a, 32));
+				a <= x"00101004"; --std_logic_vector(to_unsigned(write_a, 32));
 				d <= (others => 'Z');
 				cpu_siz <= "00";
 				cpu_tt <= "00";
@@ -322,9 +322,9 @@ begin
 				cpu_ts <= '1';
 			
 			when 380 => --sdram
-				a <= x"00400000";
+				a <= x"80000000";
 				d <= (others => 'Z');
-				cpu_siz <= "11";
+				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';
@@ -334,7 +334,7 @@ begin
 				cpu_ts <= '1';
 			
 			when 420 => --sdram
-				a <= x"00400000";
+				a <= x"80000000";
 				cpu_siz <= "10";
 				cpu_tt <= "00";
 				cpu_rw <= '0';

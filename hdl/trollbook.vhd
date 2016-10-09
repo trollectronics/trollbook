@@ -200,7 +200,8 @@ begin
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce);
 	
-	u_sound: entity work.sound generic map(peripheral_id => 19)port map(reset => internal_reset, clk => clk12, mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+	u_sound: entity work.sound generic map(peripheral_id => 19)
+		port map(reset => internal_reset, clk => clk12, mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
 	-- *** Output drivers *** --
 	
