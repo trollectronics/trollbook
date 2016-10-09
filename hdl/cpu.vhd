@@ -65,6 +65,8 @@ architecture arch of cpu is
 	signal ack : std_logic;
 	
 	signal done : std_logic;
+	
+	signal bus_siz_internal : std_logic_vector(1 downto 0);
 begin
 	u_bootrom: entity work.bootrom port map(
 		address => a(8 downto 2),
@@ -83,14 +85,16 @@ begin
 	bus_ce_chipset <= ce(2);
 	bus_ce_llram <= ce(1);
 	
+	bus_siz <= bus_siz_internal;
+	
 	process(a, bus_ack_chipset, bus_nack_chipset, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_sdram, siz) begin
 		q_next <= (others => '0');
 		tbi_next <= '0';
 		
 		if siz = "11" then
-			bus_siz <= "11";
+			bus_siz_internal <= "11";
 		else
-			bus_siz <= not siz;
+			bus_siz_internal <= not siz;
 		end if;
 		--add burst disable the same way
 		
@@ -112,7 +116,7 @@ begin
 					q_next <= bus_d;
 					ce_next <= "1000";
 					ack <= bus_ack_sdram;
-					bus_siz <= not siz;
+					bus_siz_internal <= not siz;
 					tbi_next <= '1';
 					
 				when others =>
@@ -125,7 +129,7 @@ begin
 		end if;
 	end process;
 	
-	process(state, ts, tt, rw, a, bootrom_q, ack, ce_next, siz)
+	process(state, ts, tt, rw, a, bootrom_q, ack, ce_next, bus_siz_internal)
 		variable check : std_logic_vector(1 downto 0);
 	begin
 		state_next <= state;
@@ -139,13 +143,13 @@ begin
 			when idle =>
 				case check is
 					when "01" =>
-						if siz = "11" then
+						if bus_siz_internal = "00" then
 							state_next <= read_burst0;
 						else
 							state_next <= read_normal;
 						end if;
 					when "00" =>
-						if siz = "11" then
+						if bus_siz_internal = "00" then
 							state_next <= write_burst0;
 						else
 							state_next <= write_normal;

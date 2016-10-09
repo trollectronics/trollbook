@@ -312,7 +312,7 @@ begin
 			when 360 =>
 				a <= x"00080000";
 				d <= (others => 'Z');
-				cpu_siz <= "00";
+				cpu_siz <= "11";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';

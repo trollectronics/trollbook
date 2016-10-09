@@ -478,6 +478,10 @@ int main() {
 	
 	terminal_init();
 	
+	/*volatile uint32_t *test = 0x40000000UL;
+	*test = 0xDEADBEEF;
+	printf("test: %x\n", *test);*/
+	
 	printf("Detecting SD card: ");
 	if((type = sd_init()) == SD_CARD_TYPE_INVALID) {
 		goto fail;

@@ -10,10 +10,9 @@ _start:
 	bra 1b
 	
 2:
-	#TODO: cache is broken
-	#cinva %bc
-	#move.l #0x00008000, %d0
-	#movec %d0, %cacr
+	cinva %bc
+	move.l #0x00008000, %d0
+	movec %d0, %cacr
 	
 	jsr main
 	
