@@ -351,7 +351,7 @@ begin
 			
 			
 			-- read from llram
-			when 1910 =>
+			when 440 =>
 				a <= x"00080000";
 				d <= (others => 'Z');
 				cpu_siz <= "00";
@@ -360,7 +360,7 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 1912 =>
+			when 442 =>
 				cpu_ts <= '1';
 			
 			-- when 470 =>
