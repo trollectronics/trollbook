@@ -1,10 +1,11 @@
 #ifndef _SPI_H_
 #define _SPI_H_
 #include <stdint.h>
+#include "peripheral.h"
 
-#define SPI_REG_DATA *((volatile uint32_t *) 0x200000UL)
-#define SPI_REG_STATUS *((volatile uint32_t *) 0x200004UL)
-#define SPI_REG_SS *((volatile uint32_t *) 0x200008UL)
+#define SPI_REG_DATA *((volatile uint32_t *) (PERIPHERAL_SPI_BASE + 0x0))
+#define SPI_REG_STATUS *((volatile uint32_t *) (PERIPHERAL_SPI_BASE + 0x4))
+#define SPI_REG_SS *((volatile uint32_t *) (PERIPHERAL_SPI_BASE + 0x8))
 
 typedef enum SpiSlave SpiSlave;
 

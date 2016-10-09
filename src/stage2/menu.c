@@ -18,7 +18,7 @@ static int menu_display(Menu *menu) {
 			terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
 			terminal_set_bg(TERMINAL_COLOR_BLACK);
 		} else {
-			printf("%s\n", menu->item[i].text);
+			printf(" %s \n", menu->item[i].text);
 		}
 	}
 	
@@ -33,7 +33,7 @@ static int menu_display(Menu *menu) {
 			terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
 			terminal_set_bg(TERMINAL_COLOR_BLACK);
 		} else {
-			printf("Go back\n");
+			printf(" Go back \n");
 		}
 	}
 	

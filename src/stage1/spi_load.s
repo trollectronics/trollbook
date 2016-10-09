@@ -84,7 +84,6 @@ _spi_send_recv_wait_avail:
 	jne _spi_send_recv_wait_avail
 	nop
 	move.l %d0, 0x200000
-	nop
 _spi_send_recv_wait_done:
 	nop
 	move.l 0x200004, %d1
@@ -129,7 +128,7 @@ _spi_return:
 	move.l (%sp)+, %a0 
 	move.l (%sp)+, %d3
 	move.l (%sp)+, %d2
-	move.l (%sp)+, %a1
+	move.l (%sp)+, %d1
 	rts
 _spi_fail:
 	move.l #0, %d0

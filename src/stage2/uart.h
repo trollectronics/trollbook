@@ -1,9 +1,10 @@
 #ifndef _UART_H_
 #define _UART_H_
 #include <stdint.h>
+#include "peripheral.h"
 
-#define UART_REG_DATA *((volatile uint32_t *) 0x100000UL)
-#define UART_REG_STATUS *((volatile uint32_t *) 0x100004UL)
+#define UART_REG_DATA *((volatile uint32_t *) (PERIPHERAL_UART_BASE + 0x0))
+#define UART_REG_STATUS *((volatile uint32_t *) (PERIPHERAL_UART_BASE + 0x4))
 
 void uart_send(uint8_t dat);
 uint8_t uart_recv();

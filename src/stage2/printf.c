@@ -1,25 +1,27 @@
 #include <stdarg.h>
 #include "uart.h"
-//#include "terminal.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
+#define PRINTF_DISPLAY
 
-
-//UART
+#ifdef PRINTF_UART
 static void terminal_putc_simple(char c) {
 	if(c == '\n')
 		uart_send('\r');
 	uart_send((uint8_t) c);
 }
 
-//DISPLAY
-//#define terminal_putc_simple(c) terminal_putc_term((c))
-
 static void terminal_puts(const char *s) {
 	while(*s)
 		terminal_putc_simple(*s++);
 }
+#endif
+
+#ifdef PRINTF_DISPLAY
+#include "terminal.h"
+#define terminal_putc_simple(c) terminal_putc_term((c))
+#endif
 
 static void terminal_put_counted(char *s, int width) {
 	while(width--)

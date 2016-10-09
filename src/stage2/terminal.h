@@ -2,8 +2,9 @@
 #define	_BOOT_TERM_H_
 
 #include <stdint.h>
+#include "peripheral.h"
 
-#define MEM_VGA_RAM ((volatile void *) 0x80000)
+#define MEM_VGA_RAM ((volatile void *) (LLRAM_BASE + 0x0))
 
 typedef enum TerminalColor TerminalColor;
 enum TerminalColor {
