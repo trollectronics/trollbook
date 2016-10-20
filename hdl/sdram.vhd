@@ -141,13 +141,16 @@ begin
 			when powerdown =>
 			
 			when init =>
-				ras_next <= '0';
-				cas_next <= '1';
-				we_next <= '0';
-				cs_next <= "00";
-				a_next(10) <= '1';
-				state_next <= config;
-				counter_next <= RCD_CYCLES;
+				cke_next <= '1';
+				if counter = 0 then
+					ras_next <= '0';
+					cas_next <= '1';
+					we_next <= '0';
+					cs_next <= "00";
+					a_next(10) <= '1';
+					state_next <= config;
+					counter_next <= RCD_CYCLES;
+				end if;
 			
 			when config =>
 				ras_next <= '1';
@@ -166,6 +169,7 @@ begin
 				end if;
 			
 			when idle =>
+				cs_next <= "11";
 				if refresh_counter = 0 then
 					ras_next <= '0';
 					cas_next <= '0';
@@ -202,6 +206,11 @@ begin
 						counter_next <= 0;
 					end if;
 					
+					udqm_next(0) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(1))) or (bus_siz(1) and (not bus_siz(0)) and bus_a(0)) or ((not bus_siz(1)) and bus_siz(0) and (not bus_a(1)));
+					ldqm_next(0) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(1))) or (bus_siz(1) and (not bus_siz(0)) and (not bus_a(0))) or ((not bus_siz(1)) and bus_siz(0) and (not bus_a(1)));
+					ldqm_next(1) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(0))) or (bus_siz(1) and (not bus_siz(0)) and bus_a(1)) or ((not bus_siz(1)) and bus_siz(0) and bus_a(1));
+					udqm_next(1) <= (bus_siz(1) and (not bus_siz(0)) and bus_a(0)) or (bus_siz(1) and (not bus_siz(0)) and bus_a(1)) or ((not bus_siz(1)) and bus_siz(0) and bus_a(1));
+
 					if bus_rw = '0' then --read
 						state_next <= read_command;
 						we_next <= '1';
@@ -209,11 +218,6 @@ begin
 						state_next <= write_command;
 						we_next <= '0';
 						bus_ack_next <= '1';
-						udqm_next(0) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(1))) or (bus_siz(1) and (not bus_siz(0)) and bus_a(0)) or ((not bus_siz(1)) and bus_siz(0) and (not bus_a(1)));
-						ldqm_next(0) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(1))) or (bus_siz(1) and (not bus_siz(0)) and (not bus_a(0))) or ((not bus_siz(1)) and bus_siz(0) and (not bus_a(1)));
-						ldqm_next(1) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(0))) or (bus_siz(1) and (not bus_siz(0)) and bus_a(1)) or ((not bus_siz(1)) and bus_siz(0) and bus_a(1));
-						udqm_next(1) <= (bus_siz(1) and (not bus_siz(0)) and bus_a(0)) or (bus_siz(1) and (not bus_siz(0)) and bus_a(1)) or ((not bus_siz(1)) and bus_siz(0) and bus_a(1));
-				
 					end if;
 				end if;
 				
@@ -221,10 +225,6 @@ begin
 				--if counter = 1 then --cas latency 3
 				if counter = 2 then --cas latency 2
 					bus_ack_next <= '1';
-					udqm_next(1) <= '0';
-					ldqm_next(1) <= '0';
-					udqm_next(0) <= '0';
-					ldqm_next(0) <= '0';
 				end if;
 				
 				if counter = 0 then
@@ -233,6 +233,8 @@ begin
 					cas_next <= '1';
 					we_next <= '0';
 					state_next <= read_precharge;
+					ldqm_next <= "11";
+					udqm_next <= "11";
 				end if;
 			
 			when write_command =>
@@ -254,11 +256,6 @@ begin
 				cs_next <= "11";
 				state_next <= waitstate;
 				bus_ack_next <= '1';
-				
-				udqm_next(0) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(1))) or (bus_siz(1) and (not bus_siz(0)) and bus_a(0)) or ((not bus_siz(1)) and bus_siz(0) and (not bus_a(1)));
-				ldqm_next(0) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(1))) or (bus_siz(1) and (not bus_siz(0)) and (not bus_a(0))) or ((not bus_siz(1)) and bus_siz(0) and (not bus_a(1)));
-				ldqm_next(1) <= (bus_siz(1) and (not bus_siz(0)) and (not bus_a(0))) or (bus_siz(1) and (not bus_siz(0)) and bus_a(1)) or ((not bus_siz(1)) and bus_siz(0) and bus_a(1));
-				udqm_next(1) <= (bus_siz(1) and (not bus_siz(0)) and bus_a(0)) or (bus_siz(1) and (not bus_siz(0)) and bus_a(1)) or ((not bus_siz(1)) and bus_siz(0) and bus_a(1));
 				
 			when write_precharge =>
 				ras_next <= '1';

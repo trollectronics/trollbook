@@ -2,7 +2,7 @@
 .int 0x00100000
 .int 0x00000008
 	
-	nop	
+	nop
 	
 	move.l #524288, %d5
 	move.l #0x0008070f, %d4
