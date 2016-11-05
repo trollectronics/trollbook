@@ -28,6 +28,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:amp
 LIBS:peripheral-board-cache
 EELAYER 25 0
 EELAYER END
