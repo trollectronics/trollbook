@@ -28,6 +28,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:amp
 LIBS:peripheral-board-cache
 EELAYER 25 0
 EELAYER END
@@ -56,4 +57,26 @@ F 3 "" H 4600 2200 50  0000 C CNN
 $EndComp
 Text Notes 6200 2250 0    60   ~ 0
 Digital pot\nAmp
+$Comp
+L TCA0372 U?
+U 1 1 581D2053
+P 4700 3700
+F 0 "U?" H 4600 3800 60  0000 L CNN
+F 1 "TCA0372" H 4500 3700 60  0000 L CNN
+F 2 "" H 4700 3700 60  0001 C CNN
+F 3 "" H 4700 3700 60  0001 C CNN
+	1    4700 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L TCA0372 U?
+U 2 1 581D2125
+P 4700 5100
+F 0 "U?" H 4600 5200 60  0000 L CNN
+F 1 "TCA0372" H 4500 5100 60  0000 L CNN
+F 2 "" H 4700 5100 60  0001 C CNN
+F 3 "" H 4700 5100 60  0001 C CNN
+	2    4700 5100
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
