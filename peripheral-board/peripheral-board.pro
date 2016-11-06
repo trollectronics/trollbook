@@ -1,4 +1,4 @@
-update=sön  6 nov 2016 16:36:34
+update=sön  6 nov 2016 22:09:40
 version=1
 last_client=kicad
 [pcbnew]
@@ -57,5 +57,6 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=lib/amp
+LibName31=lib/card-edge
 [general]
 version=1

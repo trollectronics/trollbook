@@ -35,7 +35,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 9
+Sheet 8 9
 Title ""
 Date ""
 Rev ""
@@ -45,4 +45,15 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+$Comp
+L 10056847-XY1LF CONN8001
+U 1 1 581F82EF
+P 5550 2150
+F 0 "CONN8001" H 5550 2937 60  0000 C CNN
+F 1 "10056847-XY1LF" H 5550 2831 60  0000 C CNN
+F 2 "lib:10056847-XY1LF" H 5550 2150 60  0001 C CNN
+F 3 "" H 5550 2150 60  0001 C CNN
+	1    5550 2150
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
