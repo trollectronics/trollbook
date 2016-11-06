@@ -45,10 +45,16 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Sheet
-S 4600 1350 1400 700 
+S 4600 1350 850  850 
 U 581919F6
 F0 "Keyboard" 60
 F1 "keyboard.sch" 60
+F2 "Q0" O R 5450 1450 60 
+F3 "Q1" O R 5450 1550 60 
+F4 "Q2" O R 5450 1650 60 
+F5 "Q3" O R 5450 1750 60 
+F6 "CLK" I L 4600 1450 60 
+F7 "~RESET" I L 4600 2100 60 
 $EndSheet
 $Sheet
 S 5550 3850 1250 700 
