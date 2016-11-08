@@ -515,4 +515,6 @@ U 581F8966
 F0 "VGA" 60
 F1 "vga.sch" 60
 $EndSheet
+Text Notes 7400 2950 0    60   ~ 0
+Power button\nRGB led
 $EndSCHEMATC

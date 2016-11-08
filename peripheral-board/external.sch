@@ -56,4 +56,36 @@ F 3 "" H 5550 2150 60  0001 C CNN
 	1    5550 2150
 	1    0    0    -1  
 $EndComp
+Text HLabel 2300 1650 0    60   Output ~ 0
+MISO
+Text HLabel 2300 1750 0    60   Input ~ 0
+MOSI
+Text HLabel 2300 1850 0    60   Input ~ 0
+SCK
+Text HLabel 2300 2050 0    60   Input ~ 0
+SS1
+Text HLabel 2300 2150 0    60   Input ~ 0
+SS2
+Text HLabel 2300 2250 0    60   Input ~ 0
+SS3
+Text HLabel 2300 2350 0    60   Input ~ 0
+SS4
+Text HLabel 2300 2550 0    60   Output ~ 0
+INTERRUPT
+Text HLabel 2300 2800 0    60   Input ~ 0
+TX
+Text HLabel 2300 2900 0    60   Output ~ 0
+RX
+Text HLabel 2300 3150 0    60   BiDi ~ 0
+SDA
+Text HLabel 2300 3250 0    60   Input ~ 0
+SCL
+Text HLabel 2300 3550 0    60   Output ~ 0
+DETECT1
+Text HLabel 2300 3650 0    60   Output ~ 0
+DETECT2
+Text HLabel 2300 3750 0    60   Output ~ 0
+DETECT3
+Text HLabel 2300 3850 0    60   Output ~ 0
+DETECT4
 $EndSCHEMATC
