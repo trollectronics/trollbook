@@ -30,6 +30,8 @@ LIBS:contrib
 LIBS:valves
 LIBS:amp
 LIBS:card-edge
+LIBS:switchmode
+LIBS:joystick
 LIBS:peripheral-board-cache
 EELAYER 25 0
 EELAYER END
@@ -80,4 +82,14 @@ F 3 "" H 4700 5100 60  0001 C CNN
 	2    4700 5100
 	1    0    0    -1  
 $EndComp
+Text HLabel 1800 3550 0    60   Input ~ 0
+L
+Text HLabel 1800 3650 0    60   Input ~ 0
+R
+Wire Wire Line
+	1800 3650 2150 3650
+Wire Wire Line
+	2150 3650 2150 3550
+Wire Wire Line
+	2150 3550 1800 3550
 $EndSCHEMATC

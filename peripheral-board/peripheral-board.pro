@@ -1,4 +1,4 @@
-update=sön  6 nov 2016 22:09:40
+update=ons  9 nov 2016 00:02:35
 version=1
 last_client=kicad
 [pcbnew]
@@ -58,5 +58,7 @@ LibName28=contrib
 LibName29=valves
 LibName30=lib/amp
 LibName31=lib/card-edge
+LibName32=lib/switchmode
+LibName33=lib/joystick
 [general]
 version=1

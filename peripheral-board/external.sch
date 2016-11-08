@@ -30,6 +30,8 @@ LIBS:contrib
 LIBS:valves
 LIBS:amp
 LIBS:card-edge
+LIBS:switchmode
+LIBS:joystick
 LIBS:peripheral-board-cache
 EELAYER 25 0
 EELAYER END
