@@ -118,6 +118,8 @@ F0 "Audio" 60
 F1 "audio.sch" 60
 F2 "L" I L 8200 900 60 
 F3 "R" I L 8200 1000 60 
+F4 "SDA" B L 8200 1350 60 
+F5 "SCL" I L 8200 1250 60 
 $EndSheet
 $Comp
 L AVR-ISP-10 CON1001
@@ -376,7 +378,7 @@ Wire Wire Line
 Wire Wire Line
 	3350 6800 4550 6800
 Wire Wire Line
-	4850 6400 5150 6400
+	4800 6400 5150 6400
 Wire Wire Line
 	5150 6400 5150 6300
 Wire Wire Line

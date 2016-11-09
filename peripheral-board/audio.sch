@@ -92,4 +92,14 @@ Wire Wire Line
 	2150 3650 2150 3550
 Wire Wire Line
 	2150 3550 1800 3550
+Text HLabel 1750 3950 0    60   BiDi ~ 0
+SDA
+Text HLabel 1750 3850 0    60   Input ~ 0
+SCL
+Wire Wire Line
+	1750 3850 2150 3850
+Wire Wire Line
+	2150 3850 2150 3950
+Wire Wire Line
+	2150 3950 1750 3950
 $EndSCHEMATC

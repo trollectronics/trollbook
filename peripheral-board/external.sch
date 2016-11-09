@@ -82,12 +82,6 @@ Text HLabel 2300 3150 0    60   BiDi ~ 0
 SDA
 Text HLabel 2300 3250 0    60   Input ~ 0
 SCL
-Text HLabel 2300 3550 0    60   Output ~ 0
-DETECT1
-Text HLabel 2300 3650 0    60   Output ~ 0
-DETECT2
-Text HLabel 2300 3750 0    60   Output ~ 0
-DETECT3
-Text HLabel 2300 3850 0    60   Output ~ 0
-DETECT4
+Text HLabel 2300 3550 0    60   UnSpc ~ 0
+DETECT
 $EndSCHEMATC
