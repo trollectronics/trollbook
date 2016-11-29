@@ -187,23 +187,38 @@ void test_spi_rom(void *arg) {
 }
 
 void test_sdram(void *arg) {
-	volatile uint32_t *test = (void *) 0x40000000UL;
+	volatile uint8_t *test = (void *) 0x40000000UL;
+	volatile uint8_t *loltest = (void *) 0x40000000UL;
+	volatile uint8_t *tmp;
+	int k;
 	//extern uint32_t *hejtest;
 	//uint32_t *test = hejtest;
 	int i;
 	
-	//lolhest();
+	for(i = 0; i < 256; i++) {
+		*test++ = i;
+	}
 	
-	*(test + 1) = 0xCAFEBABE;
-	*test = 0xDEADBEEF;
+	//__asm__ __volatile__ ("cpusha %dc\n");
 	
-	*(test + 2) = 0xB00B1E5;
-	*(test + 3) = 0xA5A5A5A5;
-	
-	//invalidate();
-	
-	for(i = 0; i < 4; i++)
-		printf(": 0x%X\n", *test++);
+	terminal_clear();
+	for(i = 0; i < 256; i+=16) {
+		tmp =((uint8_t *) loltest) + i;
+		printf("%04x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\t\t", 
+			i,
+			tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], 
+			tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13], tmp[14], tmp[15]
+		);
+		for(k = 0; k < 16; k++) {
+			if(tmp[k] < 32 || tmp[k] > 126)
+				printf("%c", '.');
+			else
+				printf("%c", tmp[k]);
+		}
+		printf("\n");
+	}
+
+	input_poll();
 	
 	input_poll();
 }
@@ -388,11 +403,34 @@ void select_file_action(void *arg) {
 
 			break;
 		case 2:
-			fd = fat_open(path, O_RDONLY);
-			hexload(get_byte, fd);
-			printf("Error parsing HEX file\n");
-			fat_close(fd);
-			input_poll();
+			{
+				void *addr;
+				uint32_t ret;
+				fd = fat_open(path, O_RDONLY);
+				if((addr = hexload(get_byte, fd)) == (void *) 0xFFFFFFFF) {
+					printf("Invalid hex file");
+					fat_close(fd);
+					input_poll();
+					break;
+				}
+				fat_close(fd);
+				fd = fat_open(path, O_RDONLY);
+				switch(ret = hexload_validate(get_byte, fd)) {
+					case -1:
+						printf("Hexload general error\n");
+						break;
+					case 0:
+						__asm__ __volatile__ ("cpusha %dc\n");
+						goto *addr;
+						break;
+						
+					default:
+						printf("Hexload validate error at 0x%X\n", ret);
+						break;
+				};
+				fat_close(fd);
+				input_poll();
+			}
 			break;
 		case 3:
 			fd = fat_open(path, O_RDONLY);
