@@ -13,6 +13,7 @@
 #include "fat.h"
 #include "cache.h"
 #include "filebrowse.h"
+#include "memtest.h"
 #include "main.h"
 
 static void clear_and_print(void *arg);
@@ -55,7 +56,7 @@ Menu menu_main = {
 		{"Sub menu test", menu_execute, &menu_sub},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
 		{"Test SPI ROM", test_spi_rom, NULL},
-		{"Test SDRAM", test_sdram, NULL},
+		{"SDRAM Memtest", test_sdram, NULL},
 		{"Color demo", color_demo, NULL},
 		{"Reboot", reboot, NULL},
 	},
@@ -146,38 +147,13 @@ static void test_spi_rom(void *arg) {
 }
 
 static void test_sdram(void *arg) {
-	volatile uint8_t *test = (void *) 0x40000000UL;
-	volatile uint8_t *loltest = (void *) 0x40000000UL;
-	volatile uint8_t *tmp;
-	int k;
-	//extern uint32_t *hejtest;
-	//uint32_t *test = hejtest;
-	int i;
-	
-	for(i = 0; i < 256; i++) {
-		*test++ = i;
-	}
-	
-	//__asm__ __volatile__ ("cpusha %dc\n");
-	
 	terminal_clear();
-	for(i = 0; i < 256; i+=16) {
-		tmp =((uint8_t *) loltest) + i;
-		printf("%04x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\t\t", 
-			i,
-			tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], 
-			tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13], tmp[14], tmp[15]
-		);
-		for(k = 0; k < 16; k++) {
-			if(tmp[k] < 32 || tmp[k] > 126)
-				printf("%c", '.');
-			else
-				printf("%c", tmp[k]);
-		}
-		printf("\n");
-	}
-
-	input_poll();
+	
+	printf("Performing memtest without the cache\n");
+	memtest_run(false);
+	
+	//printf("Performing memtest with the cache\n");
+	//memtest_run(true);
 	
 	input_poll();
 }
