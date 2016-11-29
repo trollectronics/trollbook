@@ -3,7 +3,7 @@
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-#define PRINTF_DISPLAY
+#define PRINTF_UART
 
 #ifdef PRINTF_UART
 static void terminal_putc_simple(char c) {

@@ -37,6 +37,7 @@ static int menu_display(Menu *menu) {
 		}
 	}
 	
+	printf("\n");
 	return 0;
 }
 

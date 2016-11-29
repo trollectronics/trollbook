@@ -11,6 +11,7 @@
 #include "hexload.h"
 #include "rom.h"
 #include "fat.h"
+#include "cache.h"
 
 void reboot(void *);
 void select_file(void *arg);
@@ -185,6 +186,28 @@ void test_spi_rom(void *arg) {
 	}
 }
 
+void test_sdram(void *arg) {
+	volatile uint32_t *test = (void *) 0x40000000UL;
+	//extern uint32_t *hejtest;
+	//uint32_t *test = hejtest;
+	int i;
+	
+	//lolhest();
+	
+	*(test + 1) = 0xCAFEBABE;
+	*test = 0xDEADBEEF;
+	
+	*(test + 2) = 0xB00B1E5;
+	*(test + 3) = 0xA5A5A5A5;
+	
+	//invalidate();
+	
+	for(i = 0; i < 4; i++)
+		printf(": 0x%X\n", *test++);
+	
+	input_poll();
+}
+
 void color_demo(void *arg) {
 	unsigned int i, col = 0;
 	for(;;) {
@@ -259,11 +282,12 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
 	false,
 	0,
-	5,
+	6,
 	{
 		{"Sub menu test", menu_execute, &menu_sub},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
 		{"Test SPI ROM", test_spi_rom, NULL},
+		{"Test SDRAM", test_sdram, NULL},
 		{"Color demo", color_demo, NULL},
 		{"Reboot", reboot, NULL},
 	},
@@ -477,10 +501,6 @@ int main() {
 	char label[12];
 	
 	terminal_init();
-	
-	/*volatile uint32_t *test = 0x40000000UL;
-	*test = 0xDEADBEEF;
-	printf("test: %x\n", *test);*/
 	
 	printf("Detecting SD card: ");
 	if((type = sd_init()) == SD_CARD_TYPE_INVALID) {
