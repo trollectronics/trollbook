@@ -41,6 +41,8 @@ fill:
 .align 2
 .global reboot
 reboot:
+	move.l #0x00000000, %d0
+	movec %d0, %cacr
 	lea 0x100000, %sp
 	jmp 0x8
 	

@@ -4,6 +4,23 @@
 .int 0x00100000
 .int 0x00000008
 
+	move.l #0x03030303, %d4
+
+fill:
+	move.l #524288, %d5
+1:
+	move.l %d4, (%d5)
+	addq.l #4, %d5
+	
+	cmpi.l #908288, %d5
+	bne.b 1b
+
+	move.l #0x00000021, %d1
+1:
+	move.l 0x100904, %d0
+	btst.b #0, %d0
+	beq.b 1b
+	move.l %d1, 0x100900
 
 bsr loadhex
 
@@ -145,15 +162,3 @@ get_byte:
 
 
 .include "spi_load.s"
-
-success:
-	move.l #524288, %d5
-	move.l #0x02020202, %d4
-1:
-	move.l %d4, (%d5)
-	addq.l #4, %d5
-	
-	cmpi.l #908288, %d5
-	bne.b 1b
-2:
-	bra.b 2b

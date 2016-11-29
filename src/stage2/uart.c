@@ -34,3 +34,14 @@ void uart_send_string(char *s) {
 	while((c = *s++))
 		uart_send((uint8_t) c);
 }
+
+void uart_putc_convnl(char c) {
+	if(c == '\n')
+		uart_send('\r');
+	uart_send((uint8_t) c);
+}
+
+void uart_puts_convnl(const char *s) {
+	while(*s)
+		uart_putc_convnl(*s++);
+}

@@ -89,7 +89,7 @@ int hexload_validate(uint8_t (* fetch_byte)(int), int fd) {
 			case HEXLOAD_STATE_DATA:
 				if (type == 0) {
 					if(next[addr] != decoded)
-						return &next[addr];
+						return (int) &next[addr];
 					addr++;
 				} else if (type == 1) {
 					state = HEXLOAD_STATE_SKIP;

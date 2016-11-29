@@ -11,4 +11,7 @@ uint8_t uart_recv();
 void uart_send_hex(uint8_t h);
 void uart_send_string(char *s);
 
+void uart_putc_convnl(char c);
+void uart_puts_convnl(const char *s);
+
 #endif

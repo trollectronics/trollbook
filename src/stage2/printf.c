@@ -1,31 +1,40 @@
 #include <stdarg.h>
-#include "uart.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-#define PRINTF_UART
+#define PRINTF_BOTH
+
+#ifdef PRINTF_BOTH
+#include "uart.h"
+#include "terminal.h"
+
+static void _printf_putc(char c) {
+	uart_putc_convnl(c);
+	terminal_putc_term(c);
+}
+
+static void _printf_puts(char *s) {
+	uart_puts_convnl(s);
+	terminal_puts(s);
+}
+
+#endif
 
 #ifdef PRINTF_UART
-static void terminal_putc_simple(char c) {
-	if(c == '\n')
-		uart_send('\r');
-	uart_send((uint8_t) c);
-}
-
-static void terminal_puts(const char *s) {
-	while(*s)
-		terminal_putc_simple(*s++);
-}
+#include "uart.h"
+#define _printf_putc(c) uart_putc_convnl((c))
+#define _printf_puts(c) uart_puts_convnl((c))
 #endif
 
 #ifdef PRINTF_DISPLAY
 #include "terminal.h"
-#define terminal_putc_simple(c) terminal_putc_term((c))
+#define _printf_putc(c) terminal_putc_term((c))
+#define _printf_puts(c) terminal_puts((c))
 #endif
 
-static void terminal_put_counted(char *s, int width) {
+static void _printf_put_counted(char *s, int width) {
 	while(width--)
-		terminal_putc_simple(*s++);
+		_printf_putc(*s++);
 }
 
 static char *int_to_string(unsigned long long int n, char *s, int base) {
@@ -64,7 +73,7 @@ int vprintf(char *format, va_list va) {
 	
 	for(i=0; (c = *format++); i++) {
 		if(c != '%') {
-			terminal_putc_simple(c);
+			_printf_putc(c);
 			continue;
 		}
 		length = LENGTH_INT;
@@ -78,7 +87,7 @@ int vprintf(char *format, va_list va) {
 				case 0:
 					goto end;
 				case '%':
-					terminal_putc_simple(c);
+					_printf_putc(c);
 					goto next;
 				case '#':
 					prefix = 1;
@@ -110,7 +119,7 @@ int vprintf(char *format, va_list va) {
 				case 'o':
 					base = 8;
 					if(prefix)
-						terminal_putc_simple('0');
+						_printf_putc('0');
 					goto baseconv;
 				case 'p':
 					length = sizeof(void *);
@@ -119,7 +128,7 @@ int vprintf(char *format, va_list va) {
 				case 'X':
 					base = 16;
 					if(prefix)
-						terminal_puts("0x");
+						_printf_puts("0x");
 				case 'u':
 					baseconv:
 					switch(length) {
@@ -164,16 +173,16 @@ int vprintf(char *format, va_list va) {
 							break;
 					}
 					if(signum < 0) {
-						terminal_putc_simple('-');
+						_printf_putc('-');
 						num = -signum;
 					} else
 						num = signum;
 					goto print_num;
 				case 's':
-					terminal_puts(va_arg(va, char *));
+					_printf_puts(va_arg(va, char *));
 					goto next;
 				case 'c':
-					terminal_putc_simple((char) va_arg(va, int));
+					_printf_putc((char) va_arg(va, int));
 					goto next;
 			}
 		}
@@ -184,10 +193,10 @@ int vprintf(char *format, va_list va) {
 			width = j;
 		else
 			while(width > j)  {
-				terminal_putc_simple(pad);
+				_printf_putc(pad);
 				width--;
 			}
-		terminal_put_counted(s, width);
+		_printf_put_counted(s, width);
 		next:;
 	}
 	end:
