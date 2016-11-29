@@ -68,7 +68,7 @@ begin
 			q <= (others => '1');
 			ub <= '0';
 			lb <= '0';
-		elsif falling_edge(clk) then
+		elsif rising_edge(clk) then
 			we_internal(0) <= we_next(0);
 			oe <= oe_next;
 			a <= a_next;
@@ -78,7 +78,7 @@ begin
 			
 			cpu_ack <= cpu_ack_next;
 			--snd_ack <= cpu_ack_next;
-		elsif rising_edge(clk) then
+		elsif falling_edge(clk) then
 			we_internal(1) <= we_next(1);
 		end if;
 	end process;

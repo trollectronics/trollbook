@@ -113,7 +113,7 @@ begin
 					ce_next <= "0100";
 					ack <= bus_ack_chipset;
 				when "100000000000" => --sdram
-					q_next <= bus_d;
+					q_next <= x"DEADBEEF";
 					ce_next <= "1000";
 					ack <= bus_ack_sdram;
 					bus_siz_internal <= not siz;
@@ -161,7 +161,7 @@ begin
 				--q_next <= bootrom_q;
 				if ack = '1' then
 					ta_next <= '0';
-					if a(31) = '0' then -- no OE for sdram
+					if a(30) = '0' then -- no OE for sdram
 						oe_next <= '1';
 					end if;
 					state_next <= idle;
@@ -231,7 +231,7 @@ begin
 			tbi <= '0';
 			
 			ce <= (others => '0');
-		elsif rising_edge(clk) then
+		elsif falling_edge(clk) then
 			state <= state_next;
 			if done = '1' then
 				ce <= (others => '0');
@@ -239,7 +239,7 @@ begin
 				ce <= ce_next;
 			end if;
 			
-		elsif falling_edge(clk) then
+		elsif rising_edge(clk) then
 			q <= q_next;
 			ta <= ta_next;
 			oe <= oe_next;
@@ -247,5 +247,5 @@ begin
 		end if;
 	end process;
 	
-	bclk <= clk;
+	bclk <= not clk;
 end arch;

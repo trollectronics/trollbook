@@ -18,7 +18,7 @@ begin
 	process(pwron_reset, clk) is begin
 		if pwron_reset = '0' then
 			state <= 0;
-		elsif rising_edge(clk) then
+		elsif falling_edge(clk) then
 			if(state /= reset_cycles) then
 				state <= state + 1;
 			end if;

@@ -86,7 +86,7 @@ begin
 		q => rgb
 	);
 	
-	palette_clk <= not clk;
+	palette_clk <= clk;--not clk;
 	
 	hlogic: process(hstate, pixel_counter, hsync_internal, hvisible) begin
 		hstate_next <= hstate;
@@ -170,9 +170,9 @@ begin
 			den_internal <= "00";
 			den <= '0';
 		else
-			if rising_edge(clk) then
+			if falling_edge(clk) then
 				
-			elsif falling_edge(clk) then
+			elsif rising_edge(clk) then
 				second_pixel <= second_pixel_next;
 				--set up llram adress
 				

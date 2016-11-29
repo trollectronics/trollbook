@@ -122,7 +122,7 @@ begin
 			miso_buffer <= (others => '1');
 			mosi_buffer <= (others => '1');
 			mosi_internal <= '1';
-		elsif rising_edge(clk) then
+		elsif falling_edge(clk) then
 			check := chipset_ce(peripheral_id) & bus_rw;
 			
 			state <= state_next;
@@ -158,7 +158,7 @@ begin
 			sck_internal <= sck_next;
 			miso_buffer <= miso_buffer_next;
 			mosi_internal <= mosi_next;
-		elsif falling_edge(clk) then
+		elsif rising_edge(clk) then
 			
 		end if;
 	end process;

@@ -216,7 +216,7 @@ begin
 			bus_ack_internal <= '0';
 			bus_q_internal <= (others => '0');
 			state <= idle;
-		elsif rising_edge(clk) then
+		elsif falling_edge(clk) then
 			ll_lb_internal <= ll_lb_next;
 			ll_ub_internal <= ll_ub_next;
 			ll_a0_internal <= ll_a0_next;
@@ -228,7 +228,7 @@ begin
 			bus_ack <= bus_ack_internal;
 			
 			state <= state_next;
-		elsif falling_edge(clk) then
+		elsif rising_edge(clk) then
 			bus_q_internal <= bus_q_next;
 		end if;
 	end process;

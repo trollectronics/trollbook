@@ -194,7 +194,7 @@ begin
 			
 			when open_row =>
 				if counter = 0 then
-					a_next <= addr.col & "0" & "0" & "00"; --no auto precharge
+					a_next <= "0000" & addr.col; --no auto precharge
 					b_next <= addr.bank;
 					ras_next <= '1';
 					cas_next <= '0';
@@ -222,10 +222,7 @@ begin
 				end if;
 				
 			when read_command =>
-				--if counter = 1 then --cas latency 3
-				if counter = 2 then --cas latency 2
-					bus_ack_next <= '1';
-				end if;
+				bus_ack_next <= '1';
 				
 				if counter = 0 then
 					a_next(10) <= '0';
@@ -319,8 +316,10 @@ begin
 			
 			counter <= counter_next;
 			refresh_counter <= refresh_counter_next;
-		elsif rising_edge(clk) then	
+			
 			bus_ack_internal <= bus_ack_next;
+		elsif rising_edge(clk) then	
+			
 		end if;
 	end process;
 end arch;

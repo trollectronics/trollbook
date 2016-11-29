@@ -87,7 +87,7 @@ architecture tb_trollbook of test is
 	signal ll_oe : std_logic;
 	signal ll_lb : std_logic;
 	signal ll_ub : std_logic;
-	signal t : integer := 0;
+	signal t : integer := -1;
 	
 	signal cpu_tt : std_logic_vector(1 downto 0);
 	signal cpu_tm : std_logic_vector(2 downto 0);
@@ -179,7 +179,7 @@ begin
 			return data and m;
 		end function;
 	begin
-		if falling_edge(clk33) then		
+		if rising_edge(clk33) then		
 			if sdram_state /= idle then
 				sdram_state := sdram_state_type'rightof(sdram_state);
 			end if;
@@ -193,13 +193,17 @@ begin
 		
 		case sdram_state is
 				when data0 =>
-					d <= mask(x"DEADBEE0", ram_ldqm, ram_udqm);
+					--d <= mask(x"DEADBEE0", ram_ldqm, ram_udqm);
+					d <= x"DEADBEE0" after 5ns;
 				when data1 =>
-					d <= mask(x"DEADBEE1", ram_ldqm, ram_udqm);
+					--d <= mask(x"DEADBEE1", ram_ldqm, ram_udqm);
+					d <= x"DEADBEE1" after 5ns;
 				when data2 =>
-					d <= mask(x"DEADBEE2", ram_ldqm, ram_udqm);
+					--d <= mask(x"DEADBEE2", ram_ldqm, ram_udqm);
+					d <= x"DEADBEE2" after 5ns;
 				when data3 =>
-					d <= mask(x"DEADBEE3", ram_ldqm, ram_udqm);
+					--d <= mask(x"DEADBEE3", ram_ldqm, ram_udqm);
+					d <= x"DEADBEE3" after 5ns;
 				
 				when others =>
 					d <= (others => 'Z');
@@ -322,9 +326,9 @@ begin
 				cpu_ts <= '1';
 			
 			when 380 => --sdram
-				a <= x"40000000";
+				a <= x"40000004";
 				d <= (others => 'Z');
-				cpu_siz <= "11";
+				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';
@@ -334,8 +338,8 @@ begin
 				cpu_ts <= '1';
 			
 			when 420 => --sdram
-				a <= x"40000000";
-				cpu_siz <= "10";
+				a <= x"40000004";
+				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
 				cpu_ts <= '0';
