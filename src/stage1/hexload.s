@@ -39,11 +39,7 @@ bsr loadhex
 # d1 = end of file flag
 
 loadhex:
-	move.l %a0, -(%sp)
-	move.l %a1, -(%sp)
-	move.l %d1, -(%sp)
-	move.l %d2, -(%sp)
-	move.l %d3, -(%sp)
+	movem.l %d1-%d3/%a0-%a1, -(%sp)
 	eor.l %d1, %d1
 	move.l %d1, %a0
 	move.l #-1, %a1
@@ -85,11 +81,7 @@ _done:
 	jsr (%a1)
 _returned:
 ## Now return back to caller of hexload
-	move.l (%sp)+, %d3
-	move.l (%sp)+, %d2
-	move.l (%sp)+, %d1
-	move.l (%sp)+, %a1
-	move.l (%sp)+, %a0
+	movem.l (%sp)+, %d1-%d3/%a0-%a1
 	rts
 
 _read_data:
@@ -161,4 +153,4 @@ get_byte:
 	rts
 
 
-.include "spi_load.s"
+.include "spi_load_new.s"
