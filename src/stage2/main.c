@@ -123,7 +123,7 @@ static void test_spi_rom(void *arg) {
 	uint8_t *tmp;
 	int i, j, k;
 	
-	for(j = 0; ; j += 256) {
+	for(j = 0x5DD00; ; j += 256) {
 		terminal_clear();
 		rom_read(j, buf, 256);
 		for(i = 0; i < 256; i+=16) {
@@ -151,9 +151,8 @@ static void test_sdram(void *arg) {
 	
 	printf("Performing memtest without the cache\n");
 	memtest_run(false);
-	
-	//printf("Performing memtest with the cache\n");
-	//memtest_run(true);
+	printf("Performing memtest with the cache\n");
+	memtest_run(true);
 	
 	input_poll();
 }
