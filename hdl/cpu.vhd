@@ -99,26 +99,35 @@ begin
 		--add burst disable the same way
 		
 		if tip = '0' then
-			case a(30 downto 19) is
-				when "000000000000" => --bootrom
-					q_next <= bootrom_q;
-					ce_next <= "0001";
-					ack <= '1';
-				when "000000000001" => --llram
-					ce_next <= "0010";
-					q_next <= bus_d;
-					ack <= bus_ack_llram;
-				when "000000000010" => --chipset
-					q_next <= bus_d;
-					ce_next <= "0100";
-					ack <= bus_ack_chipset;
-				when "100000000000" => --sdram
+			case a(31) is
+				when '0' =>
+					case a(24 downto 19) is
+						when "000000" => --bootrom
+							q_next <= bootrom_q;
+							ce_next <= "0001";
+							ack <= '1';
+						when "000001" => --llram
+							ce_next <= "0010";
+							q_next <= bus_d;
+							ack <= bus_ack_llram;
+						when "000010" => --chipset
+							q_next <= bus_d;
+							ce_next <= "0100";
+							ack <= bus_ack_chipset;
+						
+							
+						when others =>
+							ce_next <= (others => '0');
+							ack <= '0';
+					end case;
+				
+				when '1' => -- sdram
 					q_next <= x"DEADBEEF";
 					ce_next <= "1000";
 					ack <= bus_ack_sdram;
 					bus_siz_internal <= not siz;
 					tbi_next <= '1';
-					
+				
 				when others =>
 					ce_next <= (others => '0');
 					ack <= '0';
@@ -161,7 +170,7 @@ begin
 				--q_next <= bootrom_q;
 				if ack = '1' then
 					ta_next <= '0';
-					if a(30) = '0' then -- no OE for sdram
+					if a(31) = '0' then -- no OE for sdram
 						oe_next <= '1';
 					end if;
 					state_next <= idle;

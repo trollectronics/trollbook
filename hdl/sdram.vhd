@@ -31,7 +31,7 @@ architecture arch of sdram is
 	constant RCD_CYCLES : integer := 1;
 	constant CAS_LATENCY_CYCLES : integer := 2;
 	constant INIT_STABILIZE_CYCLES : integer := 20;
-	constant REFRESH_CYCLES : integer := 255;
+	constant REFRESH_CYCLES : integer := 200;
 	
 	constant MODE_WBL : std_logic := '0';
 	constant MODE_CAS_LATENCY : std_logic_vector(2 downto 0) := "010";
@@ -226,6 +226,7 @@ begin
 				
 				if counter = 0 then
 					a_next(10) <= '0';
+					b_next <= addr.bank;
 					ras_next <= '0';
 					cas_next <= '1';
 					we_next <= '0';
@@ -237,6 +238,7 @@ begin
 			when write_command =>
 				if counter = 0 then
 					a_next(10) <= '0';
+					b_next <= addr.bank;
 					ras_next <= '0';
 					cas_next <= '1';
 					we_next <= '0';

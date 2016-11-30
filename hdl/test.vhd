@@ -326,7 +326,7 @@ begin
 				cpu_ts <= '1';
 			
 			when 380 => --sdram
-				a <= x"40000004";
+				a <= x"80000004";
 				d <= (others => 'Z');
 				cpu_siz <= "00";
 				cpu_tt <= "00";
@@ -338,7 +338,7 @@ begin
 				cpu_ts <= '1';
 			
 			when 420 => --sdram
-				a <= x"40000004";
+				a <= x"81000004";
 				cpu_siz <= "00";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
@@ -347,10 +347,10 @@ begin
 				cpu_tm <= "001";
 			when 422 =>
 				cpu_ts <= '1';
-				d <= x"CAFEBEE0";
-			when 425 | 427 | 429 | 431 | 433 | 435 =>
+				d <= x"CAFEBEE0" after 7ns;
+			when 424 | 426 | 428 | 430 | 432 | 434 =>
 				if cpu_ta = '0' and clk33'event then
-					d <= std_logic_vector(unsigned(d) + 1);
+					d <= std_logic_vector(unsigned(d) + 1) after 7ns;
 				end if;
 			
 			
