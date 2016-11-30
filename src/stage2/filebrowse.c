@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include <stddef.h>
 #include "filebrowse.h"
 #include "fat.h"
 #include "sd.h"
@@ -21,6 +23,15 @@ void select_file(void *arg);
 void select_file_action(void *arg);
 
 void list_dir(void *arg);
+
+typedef struct RomHeader RomHeader;
+struct RomHeader {
+	uint32_t magic;
+	uint32_t entry;
+	uint32_t size;
+	uint32_t dest_addr;
+	uint32_t flash_offset;
+};
 
 Menu menu_dir = {
 	list_dir,
@@ -151,9 +162,70 @@ static uint8_t get_byte(int fd) {
 	return c;
 }
 
+typedef struct HexStat HexStat;
+struct HexStat {
+	uint32_t size;
+	uint32_t offset;
+};
+
+static int _write_rom_byte(volatile uint8_t *addr, uint8_t data, void *arg) {
+	HexStat *stat = arg;
+	uint32_t rom_addr = ((uint32_t) addr) & (ROM_SIZE - 1);
+	rom_write(rom_addr, &data, 1);
+	stat->size++;
+	if(rom_addr < stat->offset)
+		stat->offset = rom_addr;
+	return 0;
+}
+
+void load_hex_to_rom(const char *path) {
+		void *entry;
+		HexStat stat = {0, 0xFFFFFFFF};
+		RomHeader header;
+		int x, y;
+		int fd;
+		
+		printf("Erasing ROM... ");
+		
+		rom_erase();
+		while(rom_status() & 0x1);
+		
+		terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
+		printf("done.\n");
+		terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
+		
+		printf("Writing to ROM... \n");
+		terminal_get_pos(&x, &y);
+		
+		fd = fat_open(path, O_RDONLY);
+		
+		if(hexload(get_byte, fd, _write_rom_byte, &stat, &entry) < 0) {
+			terminal_set_fg(TERMINAL_COLOR_RED);
+			printf("Invalid hex file");
+			terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
+			
+			fat_close(fd);
+			return;
+		}
+		fat_close(fd);
+		
+		header.magic = 0xDEADBEEF;
+		header.entry = (uint32_t) entry;
+		header.size = stat.size;
+		header.dest_addr = LLRAM_BASE | stat.offset;
+		header.flash_offset = stat.offset;
+		
+		rom_write(ROM_SIZE - 512, (void *) &header, sizeof(header));
+		
+		terminal_set_pos(x, y);
+		terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
+		printf("Done");
+		terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
+}
+
 void select_file_action(void *arg) {
 	int selected = *((int *) arg);
-	int i, j, k, fd, size, x, y;
+	int i, j, k, fd, size;
 	volatile uint8_t *tmp;
 	
 	switch(selected) {
@@ -225,10 +297,9 @@ void select_file_action(void *arg) {
 			break;
 		case 2:
 			{
-				void *addr;
-				uint32_t ret;
+				void *addr, *entry;
 				fd = fat_open(path, O_RDONLY);
-				if((addr = hexload(get_byte, fd)) == (void *) 0xFFFFFFFF) {
+				if(hexload(get_byte, fd, hexload_write_byte, NULL, &entry) < 0) {
 					printf("Invalid hex file");
 					fat_close(fd);
 					input_poll();
@@ -236,19 +307,17 @@ void select_file_action(void *arg) {
 				}
 				fat_close(fd);
 				fd = fat_open(path, O_RDONLY);
-				switch(ret = hexload_validate(get_byte, fd)) {
-					case -1:
-						printf("Hexload general error\n");
-						break;
-					case 0:
-						__asm__ __volatile__ ("cpusha %dc\n");
-						goto *addr;
-						break;
-						
-					default:
-						printf("Hexload validate error at 0x%X\n", ret);
-						break;
-				};
+				
+				if(hexload(get_byte, fd, hexload_verify_byte, NULL, &addr) < 0) {
+					printf("Hexload validate error at 0x%X\n", addr);
+					fat_close(fd);
+					input_poll();
+					break;
+				}
+				
+				__asm__ __volatile__ ("cpusha %dc\n");
+				goto *addr;
+				
 				fat_close(fd);
 				input_poll();
 			}
@@ -274,40 +343,7 @@ void select_file_action(void *arg) {
 			terminal_clear();
 			break;
 		case 4:
-			printf("Erasing ROM... ");
-			
-			rom_erase();
-			while(rom_status() & 0x1);
-			
-			terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
-			printf("done.\n");
-			terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
-			
-			printf("Writing to ROM... ");
-			terminal_get_pos(&x, &y);
-			
-			fd = fat_open(path, O_RDONLY);
-			size = fat_fsize(fd);
-	
-			for(j = 0; j < size; j += 512) {
-				terminal_set_pos(x, y);
-				printf("sector %u                 ", j >> 9);
-				fat_read_sect(fd);
-				rom_write(j, (void *) fat_buf, 512);
-			}
-			if(size & 0x1FF) {
-				terminal_set_pos(x, y);
-				printf("sector %u                 ", j >> 9);
-				fat_read_sect(fd);
-				rom_write(j, (void *) fat_buf, size & 0x1FF);
-			}
-			
-			fat_close(fd);
-			
-			terminal_set_pos(x, y);
-			terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
-			printf("done.                       \n");
-			terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
+			load_hex_to_rom(path);
 			input_poll();
 			
 			break;

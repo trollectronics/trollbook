@@ -23,9 +23,9 @@ freely, subject to the following restrictions:
 	distribution.
 */
 
-//#include <stdint.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 /* XXX: This loader will only work on 32 bit systems! */
 
@@ -39,8 +39,18 @@ enum HexloadState {
 	HEXLOAD_STATE_SKIP,
 };
 
+int hexload_verify_byte(volatile uint8_t *addr, uint8_t data, void *arg) {
+	if(*addr == data)
+		return 0;
+	return -1;
+}
 
-int hexload_validate(uint8_t (* fetch_byte)(int), int fd) {
+int hexload_write_byte(volatile uint8_t *addr, uint8_t data, void *arg) {
+	*addr = data;
+	return 0;
+}
+
+int hexload(uint8_t (* fetch_byte)(int), int fd, int (data_byte)(volatile uint8_t *addr, uint8_t data, void *arg), void *data_byte_arg, void **addr_out) {
 	enum HexloadState state = HEXLOAD_STATE_INIT;
 	void *entry_point = (void *) 0x10000;
 	volatile uint8_t *next = (void *) 0x0;
@@ -88,8 +98,11 @@ int hexload_validate(uint8_t (* fetch_byte)(int), int fd) {
 				break;
 			case HEXLOAD_STATE_DATA:
 				if (type == 0) {
-					if(next[addr] != decoded)
-						return (int) &next[addr];
+					if(data_byte(next + addr, decoded, data_byte_arg) < 0) {
+						if(addr_out)
+							*addr_out = (void *) (next + addr);
+						return -1;
+					}
 					addr++;
 				} else if (type == 1) {
 					state = HEXLOAD_STATE_SKIP;
@@ -104,8 +117,11 @@ int hexload_validate(uint8_t (* fetch_byte)(int), int fd) {
 					if (count == 1)
 						entry_point = 0;
 					entry_point += (decoded << ((4 - count) << 3));
-				} else
+				} else {
+					if(addr_out)
+						*addr_out = NULL;
 					return -1;
+				}
 				if (count == bytes_to_read)
 					state = HEXLOAD_STATE_CHECKSUM;
 				break;
@@ -140,113 +156,8 @@ int hexload_validate(uint8_t (* fetch_byte)(int), int fd) {
 	}
 	
 	load_done:
-	/* Jump to entry point */
-	/*if (entry_point != (void *) 0xFFFFFFFF) {
-		__asm__ __volatile__ ("cpusha %dc\n");
-		goto *entry_point;
-	}*/
+	if(addr_out)
+		*addr_out = entry_point;
 	
 	return 0;
-}
-
-
-void *hexload(uint8_t (* fetch_byte)(int), int fd) {
-	enum HexloadState state = HEXLOAD_STATE_INIT;
-	void *entry_point = (void *) 0xFFFFFFFF;
-	volatile uint8_t *next = (void *) 0x0;
-	uint8_t byte;
-	int count;
-	uint8_t decoded;
-	int bytes_to_read;
-	uint16_t addr = 0;
-	uint8_t type = 0;
-	bool quit = 0;
-	
-	fetch_byte(-1);
-	
-	for (count = 0;; count++) {
-		switch (state) {
-			case HEXLOAD_STATE_INIT:
-				if ((byte = fetch_byte(fd)) != ':') {
-					if (byte == '\n')
-						continue;
-					state = HEXLOAD_STATE_SKIP;
-					continue;
-				} else {
-					state = HEXLOAD_STATE_BYTE;
-				}
-				
-				break;
-			case HEXLOAD_STATE_BYTE:
-				bytes_to_read = decoded;
-				count = 0;
-				state = HEXLOAD_STATE_ADDRESS;
-				break;
-			case HEXLOAD_STATE_ADDRESS:
-				if (count == 1)
-					addr = decoded << 8;
-				else {
-					addr |= decoded;
-					state = HEXLOAD_STATE_TYPE;
-				}
-				
-				break;
-			case HEXLOAD_STATE_TYPE:
-				type = decoded;
-				state = HEXLOAD_STATE_DATA;
-				count = 0;
-				break;
-			case HEXLOAD_STATE_DATA:
-				if (type == 0)
-					next[addr] = decoded, addr++;
-				else if (type == 1) {
-					state = HEXLOAD_STATE_SKIP;
-					quit = true;
-					continue;
-				} else if (type == 4) {
-					if (count == 1)
-						next = 0, next += (decoded << 24);
-					else
-						next += (decoded << 16);
-				} else if (type == 5) {
-					if (count == 1)
-						entry_point = 0;
-					entry_point += (decoded << ((4 - count) << 3));
-				} else
-					return (void *) 0xFFFFFFFF;
-				if (count == bytes_to_read)
-					state = HEXLOAD_STATE_CHECKSUM;
-				break;
-			case HEXLOAD_STATE_CHECKSUM:
-				//TODO: Check checksum
-				state = HEXLOAD_STATE_SKIP;
-				continue;
-				break;
-			case HEXLOAD_STATE_SKIP:
-				if (((byte = fetch_byte(fd))) == '\n') {
-					if (quit)
-						goto load_done;
-					state = HEXLOAD_STATE_INIT;
-					continue;
-				}
-				continue;
-				break;
-		}
-		
-		/* Decode a byte */
-		byte = fetch_byte(fd);
-		if (byte > '9')
-			decoded = (byte - 0x37);
-		else
-			decoded = byte - 0x30;
-		decoded <<= 4;
-		byte = fetch_byte(fd);
-		if (byte > '9')
-			decoded |= (byte - 0x37);
-		else
-			decoded |= byte - 0x30;
-	}
-	
-	load_done:
-	return entry_point;
 }

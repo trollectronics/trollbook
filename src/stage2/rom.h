@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define ROM_SIZE 0x80000
+
 typedef enum RomCommand RomCommand;
 enum RomCommand {
 	ROM_COMMAND_WRITE_ENABLE = 0x6,
