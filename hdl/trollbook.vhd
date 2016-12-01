@@ -161,6 +161,8 @@ begin
 		bus_ce => bus_ce_llram, bus_ack => bus_ack_llram);
 	
 	u_chipset: entity work.chipset port map(
+			reset => internal_reset, clk => clk33,
+			
 			bus_a => bus_a,
 			bus_ce_chipset => bus_ce_chipset,
 			bus_ack_chipset => bus_ack_chipset,
@@ -203,6 +205,13 @@ begin
 	
 	u_sound: entity work.sound generic map(peripheral_id => 11)
 		port map(reset => internal_reset, clk => clk12, mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+	
+	u_extint: entity work.extint generic map(peripheral_id => 12)
+		port map(reset => internal_reset, clk => clk33,
+		interrupt => ext_int,
+		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
+		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
 	
 	-- *** Output drivers *** --
 	

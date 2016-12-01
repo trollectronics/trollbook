@@ -163,19 +163,24 @@ begin
 		end if;
 	end process;
 	
-	process(chipset_ce, chipset_a, miso_buffer, busy, ss_internal, baud_div) begin
-		bus_q <= (others => 'Z');
-		
-		if chipset_ce(peripheral_id) = '1' then
-			case chipset_a(3 downto 2) is
-				when "00" =>
-					bus_q <= x"000000" & miso_buffer;
-				when "01" =>
-					bus_q <= baud_div & "000000000000000" & busy;
-				when "10" =>
-					bus_q <= x"000000" & "00000" & ss_internal;
-				when others =>
-			end case;
+	process(reset, clk) begin
+		if reset = '1' then
+			bus_q <= (others => 'Z');
+		elsif falling_edge(clk) then
+			if chipset_ce(peripheral_id) = '1' then
+				case chipset_a(3 downto 2) is
+					when "00" =>
+						bus_q <= x"000000" & miso_buffer;
+					when "01" =>
+						bus_q <= baud_div & "000000000000000" & busy;
+					when "10" =>
+						bus_q <= x"000000" & "00000" & ss_internal;
+					when others =>
+						bus_q <= (others => 'Z');
+				end case;
+			else
+				bus_q <= (others => 'Z');
+			end if;
 		end if;
 	end process;
 end arch;

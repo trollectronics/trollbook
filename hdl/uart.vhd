@@ -216,15 +216,19 @@ begin
 		end if;
 	end process;
 	
-	process(chipset_ce, rx_buffer, chipset_a, baud_div, rx_active, rx_full, tx_empty) begin
-		if chipset_ce(peripheral_id) = '1' then
-			if chipset_a(2) = '0' then
-				bus_q <= x"000000" & rx_buffer;
-			else
-				bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
-			end if;
-		else
+	process(reset, clk) begin
+		if reset = '1' then
 			bus_q <= (others => 'Z');
+		elsif falling_edge(clk) then
+			if chipset_ce(peripheral_id) = '1' then
+				if chipset_a(2) = '0' then
+					bus_q <= x"000000" & rx_buffer;
+				else
+					bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
+				end if;
+			else
+				bus_q <= (others => 'Z');
+			end if;
 		end if;
 	end process;
 	

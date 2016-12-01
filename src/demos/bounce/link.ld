@@ -5,7 +5,7 @@ MEMORY {
 	bios(rwx): ORIGIN = 0xDDC00, LENGTH = 0x100
 	stage2(rwx): ORIGIN = 0xDDD00, LENGTH = 0x19000
 	sram(rwx): ORIGIN = 0xF6D00, LENGTH = 0x9300
-	dram(rwx): ORIGIN = 0x40000000, LENGTH = 64M
+	dram(rwx): ORIGIN = 0x80000000, LENGTH = 64M
 }
 
 SECTIONS {

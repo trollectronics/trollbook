@@ -14,6 +14,9 @@ struct InputButtons {
 	uint32_t back : 1;
 };
 
-InputButtons input_poll();
+InputButtons input_poll_uart();
+InputButtons input_poll_temp_spi();
+
+#define input_poll input_poll_temp_spi
 
 #endif

@@ -31,7 +31,7 @@ architecture arch of sdram is
 	constant RCD_CYCLES : integer := 1;
 	constant CAS_LATENCY_CYCLES : integer := 2;
 	constant INIT_STABILIZE_CYCLES : integer := 20;
-	constant REFRESH_CYCLES : integer := 200;
+	constant REFRESH_CYCLES : integer := 250;
 	
 	constant MODE_WBL : std_logic := '0';
 	constant MODE_CAS_LATENCY : std_logic_vector(2 downto 0) := "010";

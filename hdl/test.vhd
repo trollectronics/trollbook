@@ -149,7 +149,7 @@ begin
 		
 		uart_rx => uart, uart_tx => open,
 		
-		ext_int => "1111",
+		ext_int => "1010",
 		
 		clk33 => clk33, clk12 => clk12,
 		
@@ -299,9 +299,9 @@ begin
 				cpu_ts <= '1';
 				d <= x"00000090"; --x"deadcafe";
 			
-			--read from SPI
-			when 284 =>
-				a <= x"00100804"; --std_logic_vector(to_unsigned(write_a, 32));
+			--read from extint
+			when 288 =>
+				a <= x"00100C00"; --std_logic_vector(to_unsigned(write_a, 32));
 				d <= (others => 'Z');
 				cpu_siz <= "00";
 				cpu_tt <= "00";
@@ -309,7 +309,7 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 286=>
+			when 290=>
 				cpu_ts <= '1';
 			
 			-- read from llram
