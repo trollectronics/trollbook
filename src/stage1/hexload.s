@@ -4,6 +4,12 @@
 .int 0x00100000
 .int 0x00000008
 
+move.b 0x100C00, %d0
+btst.b #0, 0x100C03
+beq 4f
+bsr.w spi_load
+
+4:
 	move.l #0x03030303, %d4
 
 fill:
