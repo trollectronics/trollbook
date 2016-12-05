@@ -8,6 +8,8 @@
 #include "input.h"
 #include "hexload.h"
 #include "rom.h"
+#include "mmu040.h"
+#include "elf.h"
 #include "main.h"
 
 static const char *attribs = "RHSLDA";
@@ -18,6 +20,7 @@ static char path[256] = "/";
 static char dir[8][32];
 
 static void clear_and_print_filename(void *arg);
+static void execute_elf(void *arg);
 
 void select_file(void *arg);
 void select_file_action(void *arg);
@@ -56,11 +59,12 @@ Menu menu_file= {
 	"----------------------------------------\n",
 	true,
 	0,
-	5,
+	6,
 	{
 		{"Read as text", select_file_action, &menu_file.selected},
 		{"Read as hex", select_file_action, &menu_file.selected},
-		{"Execute", select_file_action, &menu_file.selected},
+		{"Execute HEX", select_file_action, &menu_file.selected},
+		{"Execute ELF", execute_elf, &menu_file.selected},
 		{"Display on screen", select_file_action, &menu_file.selected},
 		{"Flash to boot ROM", select_file_action, &menu_file.selected},
 	},
@@ -221,6 +225,41 @@ void load_hex_to_rom(const char *path) {
 		terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
 		printf("Done");
 		terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
+}
+
+static void execute_elf(void *arg) {
+	int fd, size, i, j;
+	void *entry;
+	extern void *end;
+	uint8_t *tmp = end;
+	
+	fd = fat_open(path, O_RDONLY);
+	size = fat_fsize(fd);
+	
+	for(j = 512; j < size; j += 512) {
+		fat_read_sect(fd);
+		for(i = 0; i < 512; i++) {
+			*tmp++ = fat_buf[i];
+		}
+	}
+	fat_read_sect(fd);
+	for(i = 0; i < j - size; i++) {
+		*tmp++ = fat_buf[i];
+	}
+	
+	fat_close(fd);
+	
+	
+	mmu040_init();
+	printf("MMU Init\n");
+	if(!(entry = elf_load(end))) {
+		printf("Failed to load ELF\n");
+		input_poll();
+		return;
+	}
+	printf("ELF load successful, press any key\n");
+	input_poll();
+	mmu_enable_and_jump(entry, 0, NULL);
 }
 
 void select_file_action(void *arg) {

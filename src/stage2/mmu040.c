@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdalign.h>
 #include "terminal.h"
+#include "printf.h"
 #include "mmu040.h"
 
 #define SRP_URP_DESCRIPTOR_BITS 9
@@ -35,6 +36,9 @@ static void *_allocate_frame() {
 	
 	allocated_frames++;
 	frame = (void *) (SDRAM_BASE + PAGE_SIZE*allocated_frames);
+	
+	printf("allocated frame at 0x%X\n", frame);
+	
 	#if PAGE_SIZE == 4096
 	mmu040_zero_4k(frame);
 	#else

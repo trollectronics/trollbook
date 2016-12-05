@@ -20,6 +20,7 @@ SECTIONS {
 		*(COMMON)
 		__bss_end = .;
 	} > ram
+	end = .;
 }
 
 ENTRY(_start)

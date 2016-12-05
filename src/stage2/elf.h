@@ -135,4 +135,6 @@ struct ElfProgramHeader {
 	uint32_t align;
 };
 
+int (*(elf_load(void *elf)))(int argc, char **argv);
+
 #endif
