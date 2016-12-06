@@ -8,6 +8,9 @@
 #include "input.h"
 #include "hexload.h"
 #include "rom.h"
+#include "mmu040.h"
+#include "elf.h"
+#include "util.h"
 #include "main.h"
 
 static const char *attribs = "RHSLDA";
@@ -18,6 +21,7 @@ static char path[256] = "/";
 static char dir[8][32];
 
 static void clear_and_print_filename(void *arg);
+static void execute_elf(void *arg);
 
 void select_file(void *arg);
 void select_file_action(void *arg);
@@ -56,11 +60,12 @@ Menu menu_file= {
 	"----------------------------------------\n",
 	true,
 	0,
-	5,
+	6,
 	{
 		{"Read as text", select_file_action, &menu_file.selected},
 		{"Read as hex", select_file_action, &menu_file.selected},
-		{"Execute", select_file_action, &menu_file.selected},
+		{"Execute HEX", select_file_action, &menu_file.selected},
+		{"Execute ELF", execute_elf, &menu_file.selected},
 		{"Display on screen", select_file_action, &menu_file.selected},
 		{"Flash to boot ROM", select_file_action, &menu_file.selected},
 	},
@@ -223,6 +228,52 @@ void load_hex_to_rom(const char *path) {
 		terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
 }
 
+static void execute_elf(void *arg) {
+	int fd, size, i, j;
+	void *entry;
+	//extern void *end;
+	uint8_t *tmp = (void *)(0xDDD00 + 96*1024);
+	
+	printf("Load file to RAM\n");
+	fd = fat_open(path, O_RDONLY);
+	size = fat_fsize(fd);
+	
+	for(j = 512; j < size; j += 512) {
+		fat_read_sect(fd);
+		for(i = 0; i < 512; i++) {
+			*tmp++ = fat_buf[i];
+		}
+	}
+	fat_read_sect(fd);
+	for(i = 0; i < j - size; i++) {
+		*tmp++ = fat_buf[i];
+	}
+	
+	fat_close(fd);
+	printf("File loaded\n");
+	
+	mmu040_init();
+	printf("MMU Init\n");
+	if(!(entry = elf_load((void *) (0xDDD00 + 96*1024)))) {
+		printf("Failed to load ELF\n");
+		input_poll();
+		return;
+	}
+	printf("ELF load successful, entry is 0x%X, press any key\n", entry);
+	input_poll();
+	void *addr = (void *) 0x10000000UL;
+	printf("code 0x%08x\n", mmu040_get_physical_manual((uint32_t) addr));
+	printf("stack 0x%08x\n", mmu040_get_physical_manual(0xFFFFF000UL));
+	mmu_enable();
+	printf("MMU enabled\n");
+	
+	printf("arne is 0x%08x\n", mmu_test_read(addr));
+	printf("berit is 0x%08x\n", mmu_test_read((void *)0xFFFFF000UL));
+	input_poll();
+	mmu_disable();
+	mmu_enable_and_jump(entry, 0, NULL);
+}
+
 void select_file_action(void *arg) {
 	int selected = *((int *) arg);
 	int i, j, k, fd, size;
@@ -322,7 +373,7 @@ void select_file_action(void *arg) {
 				input_poll();
 			}
 			break;
-		case 3:
+		case 4:
 			fd = fat_open(path, O_RDONLY);
 			size = fat_fsize(fd);
 			tmp = MEM_VGA_RAM;
@@ -342,7 +393,7 @@ void select_file_action(void *arg) {
 			input_poll();
 			terminal_clear();
 			break;
-		case 4:
+		case 5:
 			load_hex_to_rom(path);
 			input_poll();
 			

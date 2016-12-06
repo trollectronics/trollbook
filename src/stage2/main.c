@@ -14,12 +14,13 @@
 #include "cache.h"
 #include "filebrowse.h"
 #include "memtest.h"
+#include "serial-transfer.h"
 #include "main.h"
 
 static void clear_and_print(void *arg);
 static void test_spi_rom(void *arg);
 static void test_sdram(void *arg);
-static void color_demo(void *arg);
+void color_demo(void *arg);
 
 uint8_t fat_buf[512];
 
@@ -51,10 +52,11 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
 	false,
 	0,
-	6,
+	7,
 	{
 		{"Sub menu test", menu_execute, &menu_sub},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
+		{"Serial file transfer to SD", serial_transfer_recv, NULL},
 		{"Test SPI ROM", test_spi_rom, NULL},
 		{"SDRAM Memtest", test_sdram, NULL},
 		{"Color demo", color_demo, NULL},
@@ -157,7 +159,7 @@ static void test_sdram(void *arg) {
 	input_poll();
 }
 
-static void color_demo(void *arg) {
+void color_demo(void *arg) {
 	unsigned int i, col = 0;
 	for(;;) {
 		for(i = 0; i < 230; i++) {

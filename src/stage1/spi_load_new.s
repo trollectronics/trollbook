@@ -91,15 +91,15 @@ spi_load:
 	bsr.b spi_load_data
 
 2:	# Success
-	move.b #0x53, %d0
-	move.b %d0, 0x100903
+#	move.b #0x53, %d0
+#	move.b %d0, 0x100903
 	jsr (%a0)
 	bra.b 1f
 
 3:	
 	# Error
-	move.b #0x44, %d0
-	move.b %d0, 0x100903
+#	move.b #0x44, %d0
+#	move.b %d0, 0x100903
 	move.l %sp, %d0
 1:	
 	# Return

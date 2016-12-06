@@ -5,6 +5,9 @@ use work.wor_logic.all;
 
 entity chipset is
 	port(
+		reset : in std_logic;
+		clk : in std_logic;
+		
 		bus_a : in std_logic_vector(31 downto 0);
 		bus_ce_chipset : in std_logic;
 		bus_ack_chipset : out std_logic;
@@ -22,8 +25,7 @@ begin
 	process(bus_ce_chipset, bus_a, chipset_ack, chipset_nack) is
 	begin
 		chipset_ce <= (others => '0');
-		bus_ack_chipset <= '1'; --TODO: fix
-		bus_nack_chipset <= '0';
+		bus_nack_chipset <= '0'; --TODO: fix
 		
 		if bus_ce_chipset = '1' then
 			for i in 0 to 15 loop
@@ -35,4 +37,17 @@ begin
 			end loop;
 		end if;
 	end process;
+	
+	process(reset, clk) begin
+		if reset = '1' then
+			bus_ack_chipset <= '0';
+		elsif falling_edge(clk) then
+			if bus_ce_chipset = '1' then
+				bus_ack_chipset <= '1';
+			else
+				bus_ack_chipset <= '0';
+			end if;
+		end if;
+	end process;
+	
 end arch;

@@ -22,3 +22,7 @@ uint8_t spi_send_recv(uint8_t dat) {
 void spi_set_clockdiv(uint16_t clkdiv) {
 	SPI_REG_STATUS = ((uint32_t) clkdiv) << 16;
 }
+
+uint16_t spi_get_clockdiv() {
+	return ((SPI_REG_STATUS) >> 16);
+}

@@ -12,7 +12,7 @@ typedef enum SpiSlave SpiSlave;
 enum SpiSlave {
 	SPI_SLAVE_NONE,
 	SPI_SLAVE_ROM,
-	SPI_SLAVE_TGB,
+	SPI_SLAVE_KBD,
 	SPI_SLAVE_SD,
 	SPI_SLAVE_EXT0,
 	SPI_SLAVE_EXT1,
@@ -23,5 +23,6 @@ enum SpiSlave {
 void spi_select_slave(int slave);
 uint8_t spi_send_recv(uint8_t dat);
 void spi_set_clockdiv(uint16_t clkdiv);
+uint16_t spi_get_clockdiv();
 
 #endif
