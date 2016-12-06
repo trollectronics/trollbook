@@ -19,7 +19,7 @@
 static void clear_and_print(void *arg);
 static void test_spi_rom(void *arg);
 static void test_sdram(void *arg);
-static void color_demo(void *arg);
+void color_demo(void *arg);
 
 uint8_t fat_buf[512];
 
@@ -157,7 +157,7 @@ static void test_sdram(void *arg) {
 	input_poll();
 }
 
-static void color_demo(void *arg) {
+void color_demo(void *arg) {
 	unsigned int i, col = 0;
 	for(;;) {
 		for(i = 0; i < 230; i++) {

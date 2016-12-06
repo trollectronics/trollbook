@@ -50,9 +50,9 @@ enum Mmu040UpperLevelDescriptorType {
 
 typedef struct Mmu040RegTranslationControl Mmu040RegTranslationControl;
 struct Mmu040RegTranslationControl {
-	uint32_t enable : 1;
-	uint32_t page_size : 1;
-	uint32_t : 30;
+	uint16_t enable : 1;
+	uint16_t page_size : 1;
+	uint16_t : 14;
 };
 
 typedef struct Mmu040RegTransparentTranslation Mmu040RegTransparentTranslation;
@@ -145,6 +145,8 @@ union Mmu040PageTableDescriptor {
 void mmu040_init();
 void *mmu040_allocate_frame(uint32_t virtual_address, bool write_protected);
 void mmu_bus_error();
+uint32_t mmu_test_read(void *addr);
+void *mmu040_get_physical_manual(uint32_t virtual_address);
 //void *mmu_get_physical(void *phys);
 void mmu040_zero_4k(void *addr);
 void mmu_enable_and_jump(void *address, int argc, char **argv);
@@ -152,8 +154,8 @@ void mmu_set_tc(Mmu040RegTranslationControl *tc);
 void mmu_get_tc(Mmu040RegTranslationControl *tc);
 void mmu_set_srp(Mmu040RegRootPointer *srp);
 void mmu_get_srp(Mmu040RegRootPointer *srp);
-void mmu_set_crp(Mmu040RegRootPointer *crp);
-void mmu_get_crp(Mmu040RegRootPointer *crp);
+void mmu_set_urp(Mmu040RegRootPointer *urp);
+void mmu_get_urp(Mmu040RegRootPointer *urp);
 void mmu_set_dttr(Mmu040RegTransparentTranslation *ttr, int num);
 void mmu_get_dttr(Mmu040RegTransparentTranslation *ttr, int num);
 void mmu_set_ittr(Mmu040RegTransparentTranslation *ttr, int num);

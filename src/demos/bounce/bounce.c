@@ -15,8 +15,6 @@ int main() {
 	int size = 20;
 	unsigned char col = 0;
 	
-	for(i = 0; i < DISPLAY_W*DISPLAY_H; i++)
-		MEM_VGA_RAM[i] = 0x0;
 	
 	for(;;) {
 		for(i = y; i < y + size; i++)

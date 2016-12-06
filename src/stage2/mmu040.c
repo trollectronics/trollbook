@@ -1,16 +1,18 @@
 #include <stdint.h>
 #include <stdbool.h>
-#include <stdalign.h>
+#include <stddef.h>
 #include "terminal.h"
 #include "printf.h"
 #include "mmu040.h"
 
 #define SRP_URP_DESCRIPTOR_BITS 9
 
-#define ROOT_LEVEL_DESCRIPTOR_BITS 7
+#define ROOT_LEVEL_DESCRIPTOR_BITS 9
 #define ROOT_LEVEL_DESCRIPTORS (1 << ROOT_LEVEL_DESCRIPTOR_BITS)
 #define POINTER_LEVEL_DESCRIPTOR_BITS 7
 #define POINTER_LEVEL_DESCRIPTORS (1 << POINTER_LEVEL_DESCRIPTOR_BITS)
+#define PAGE_LEVEL_DESCRIPTOR_BITS 6
+#define PAGE_LEVEL_DESCRIPTORS (1 << PAGE_LEVEL_DESCRIPTOR_BITS)
 
 #define PAGE_DESCRIPTORS_8K 32
 #define PAGE_DESCRIPTORS_4K 64
@@ -25,19 +27,18 @@ static Mmu040PointerTableDescriptor *pointer_td = (void *) (SDRAM_BASE + ROOT_LE
 static Mmu040PageTableDescriptor *page_td = (void *) (SDRAM_BASE + PAGE_SIZE);
 
 static void _get_table_indices(uint32_t virtual_address, uint32_t *root_table_index, uint32_t *pointer_table_index, uint32_t *page_table_index) {
-	*root_table_index = (virtual_address >> (32 - ROOT_LEVEL_DESCRIPTOR_BITS)) & (ROOT_LEVEL_DESCRIPTORS - 1);
-	*pointer_table_index = (virtual_address >> (32 - ROOT_LEVEL_DESCRIPTOR_BITS - POINTER_LEVEL_DESCRIPTOR_BITS)) & (POINTER_LEVEL_DESCRIPTORS - 1);
-	*page_table_index = (virtual_address >> PAGE_OFFSET_BITS) & (PAGE_SIZE - 1);
+	*root_table_index = (virtual_address >> (32 - (ROOT_LEVEL_DESCRIPTOR_BITS - 2))) & (ROOT_LEVEL_DESCRIPTORS - 1);
+	*pointer_table_index = (virtual_address >> (32 - (ROOT_LEVEL_DESCRIPTOR_BITS - 2) - (POINTER_LEVEL_DESCRIPTOR_BITS - 2))) & (POINTER_LEVEL_DESCRIPTORS - 1);
+	*page_table_index = (virtual_address >> PAGE_OFFSET_BITS) & (PAGE_LEVEL_DESCRIPTORS - 1);
 }
 
 static void *_allocate_frame() {
-	//TODO: optimize with faster memset
 	void *frame;
 	
 	allocated_frames++;
 	frame = (void *) (SDRAM_BASE + PAGE_SIZE*allocated_frames);
 	
-	printf("allocated frame at 0x%X\n", frame);
+	//printf("allocated frame at 0x%X\n", frame);
 	
 	#if PAGE_SIZE == 4096
 	mmu040_zero_4k(frame);
@@ -115,7 +116,13 @@ void mmu040_init() {
 	Mmu040RegRootPointer srp = {
 		.root_pointer = ((uint32_t) root_td) >> SRP_URP_DESCRIPTOR_BITS,
 	};
+	
+	Mmu040RegRootPointer urp = {
+		.root_pointer = 0x0,
+	};
+	
 	mmu_set_srp(&srp);
+	mmu_set_urp(&urp);
 	
 	mmu_set_ittr(&ttr0, 0);
 	mmu_set_dttr(&ttr0, 0);
@@ -133,6 +140,8 @@ void *mmu040_allocate_frame(uint32_t virtual_address, bool write_protected) {
 	void *frame;
 	
 	_get_table_indices(virtual_address, &root_table_index, &pointer_table_index, &page_table_index);
+	
+	printf("Mapping frame to 0x%X as %s (%u %u %u)\n", virtual_address, write_protected ? "R" : "RW", root_table_index, pointer_table_index, page_table_index);
 	
 	if(UDT_IS_RESIDENT(root_td[root_table_index].table.upper_level_descriptor_type)) {
 		pointer_table = (void *) (root_td[root_table_index].table.table_address << ROOT_LEVEL_DESCRIPTOR_BITS);
@@ -162,10 +171,39 @@ void *mmu040_allocate_frame(uint32_t virtual_address, bool write_protected) {
 		page_table[page_table_index].page.write_protected = write_protected;
 		page_table[page_table_index].page.page_descriptor_type = MMU040_PAGE_DESCRIPTOR_TYPE_RESIDENT;
 	}
-	
 	return frame;
 }
 
+void *mmu040_get_physical_manual(uint32_t virtual_address) {
+	uint32_t root_table_index, pointer_table_index, page_table_index;
+	Mmu040PointerTableDescriptor *pointer_table;
+	Mmu040PageTableDescriptor *page_table;
+	void *frame;
+	
+	_get_table_indices(virtual_address, &root_table_index, &pointer_table_index, &page_table_index);
+	
+	if(UDT_IS_RESIDENT(root_td[root_table_index].table.upper_level_descriptor_type)) {
+		pointer_table = (void *) (root_td[root_table_index].table.table_address << ROOT_LEVEL_DESCRIPTOR_BITS);
+	} else {
+		printf("Failed root table lookup\n");
+		return NULL;
+	}
+	
+	if(UDT_IS_RESIDENT(pointer_table[pointer_table_index].table.upper_level_descriptor_type)) {
+		page_table = (void *) (pointer_table[pointer_table_index].table.table_address << POINTER_LEVEL_DESCRIPTOR_BITS);
+	} else {
+		printf("Failed pointer table lookup\n");
+		return NULL;
+	}
+	
+	if(PDT_IS_RESIDENT(page_table[page_table_index].page.page_descriptor_type)) {
+		frame = (void *) (page_table[page_table_index].page.physical_address << PAGE_OFFSET_BITS);
+	} else {
+		printf("Failed page table lookup\n");
+		return NULL;
+	}
+	return frame;
+}
 
 void mmu_bus_error() {
 	terminal_set_fg(TERMINAL_COLOR_LIGHT_RED);

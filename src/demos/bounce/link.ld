@@ -14,15 +14,17 @@ SECTIONS {
 		*(.text)
 		*(.rodata*)
 	} > virtual
-	.data : {
+	
+	.data ALIGN(4096): {
 		*(.data)
-	} > virtual
-	.bss :  {
+	}
+	
+	.bss ALIGN(4096): {
 		__bss_start = .;
 		*(.bss) 
 		*(COMMON)
 		__bss_end = .;
-	} > virtual
+	}
 }
 
 ENTRY(_start)
