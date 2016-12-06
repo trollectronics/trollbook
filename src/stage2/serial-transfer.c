@@ -2,13 +2,16 @@
 #include "uart.h"
 #include "fat.h"
 #include "peripheral.h"
+#include "terminal.h"
+#include "printf.h"
+#include "input.h"
 #include "main.h"
 
 typedef struct Header Header;
 struct Header {
 	uint32_t magic;
 	uint32_t size;
-	char fname[11];
+	char fname[12];
 };
 
 void serial_transfer_recv() {
@@ -16,17 +19,26 @@ void serial_transfer_recv() {
 	uint8_t *buf = (void *) SDRAM_BASE, *writebuf;
 	char pathbuf[32] = "/0", *tmp;
 	int fd, i, j;
+	uint8_t c;
+	
+	uart_flush();
+	terminal_clear();
+	printf("Serial file transfer\n");
 	
 	writebuf = buf;
 	
 	do {
 		header.magic <<= 8;
-		header.magic |= uart_recv();;
-	} while(header.magic != 0x4649534B);
+		header.magic |= uart_recv();
+	} while(header.magic != 0x4649534BUL);
 	
 	for(i = 0; i < 4; i++) {
 		header.size <<= 8;
 		header.size |= uart_recv();
+	}
+	
+	for(i = 0; i < 11; i++) {
+		header.fname[i] = uart_recv();
 	}
 	
 	for(i = 0; i < header.size; i++) {
@@ -60,4 +72,6 @@ void serial_transfer_recv() {
 		fat_write_sect(fd);
 	}
 	fat_close(fd);
+	printf("Done writing to file %s\n", pathbuf);
+	input_poll();
 }

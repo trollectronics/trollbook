@@ -7,6 +7,7 @@
 #define UART_REG_STATUS *((volatile uint32_t *) (PERIPHERAL_UART_BASE + 0x4))
 
 void uart_send(uint8_t dat);
+uint8_t uart_flush();
 uint8_t uart_recv();
 void uart_send_hex(uint8_t h);
 void uart_send_string(char *s);

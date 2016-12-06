@@ -88,12 +88,12 @@ static int fat_write_sd(uint32_t sector, uint8_t *data) {
 	
 	status = SD_STREAM_STATUS_BEGIN;
 	
-	sd_stream_read_block(&status, sector);
+	sd_stream_write_block(&status, sector);
 	if(status == SD_STREAM_STATUS_FAILED)
 		return -1;
 	
 	while(status >= 1)
-		sd_stream_read_block(&status, *data++);
+		sd_stream_write_block(&status, *data++);
 	
 	if(status == SD_STREAM_STATUS_FAILED)
 		return -1;

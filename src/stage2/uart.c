@@ -8,6 +8,10 @@ void uart_send(uint8_t dat) {
 	UART_REG_DATA = dat;
 }
 
+uint8_t uart_flush() {
+	return UART_REG_DATA;
+}
+
 uint8_t uart_recv() {
 	nop();
 	while(!(UART_REG_STATUS & 0x2));
