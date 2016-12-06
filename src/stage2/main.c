@@ -14,6 +14,7 @@
 #include "cache.h"
 #include "filebrowse.h"
 #include "memtest.h"
+#include "serial-transfer.h"
 #include "main.h"
 
 static void clear_and_print(void *arg);
@@ -51,10 +52,11 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
 	false,
 	0,
-	6,
+	7,
 	{
 		{"Sub menu test", menu_execute, &menu_sub},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
+		{"Serial file transfer to SD", serial_transfer_recv, NULL},
 		{"Test SPI ROM", test_spi_rom, NULL},
 		{"SDRAM Memtest", test_sdram, NULL},
 		{"Color demo", color_demo, NULL},
