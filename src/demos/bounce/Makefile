@@ -43,8 +43,7 @@ df = $(DEPDIR)/$(*F)
 all: $(HEXFILE)
 
 install:
-	stty -F $(TTYDEV) $(TTYBAUD)
-	cat $(NAME).hex > $(TTYDEV)
+	../../misc/bios-fupl/bios-fupl.elf $(NAME).elf $(TTYDEV)
 
 clean:
 	$(RM) $(HEXFILE) $(ELFFILE) $(OBJFILES)

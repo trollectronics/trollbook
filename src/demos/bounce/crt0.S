@@ -12,6 +12,10 @@ _start:
 |	bra 1b
 	
 2:
+	cinva %bc
+	move.l #0x80008000, %d0
+	movec %d0, %cacr
+	
 	bra main
 	
 	cmp #0, %d0
