@@ -1,5 +1,5 @@
 # Trollbook
-*Homebrew 68040 palmtop computer*
+*Homebrew 68040 palmtop computer* (http://h4xxel.org/electronics/trollbook/)
 
 This is a work-in-progress palmtop (ish) sized clamshell laptop that we've been
 working on for a while.
