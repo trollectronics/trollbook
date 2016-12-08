@@ -1,5 +1,5 @@
 # Trollbook
-## Homebrew 68040 palmtop computer
+*Homebrew 68040 palmtop computer*
 
 This is a work-in-progress palmtop (ish) sized clamshell laptop that we've been
 working on for a while.
@@ -13,14 +13,14 @@ display and backlight.
 
 The hardware specs as of now can be summed up as following:
 
-Motorola 68040FE33V CPU, running at 33 MHz
-Altera Flex10KA FPGA for glue logic and peripherals (video, uart, spi etc.)
-512 kB of SRAM (used for frame buffer and stage 2 BIOS code)
-64 MB of SDRAM
-800x480 resolution 7" TFT display, driven at 256 colors (from a 16-bpp palette)
-Stereo audio DAC, samplerate of 44.1 kHz.
-SD card interface over SPI
-On-board SPI Flash ROM (512 kB) for bootstrapping code
+ - Motorola 68040FE33V CPU, running at 33 MHz
+ - Altera Flex10KA FPGA for glue logic and peripherals (video, uart, spi etc.)
+ - 512 kB of SRAM (used for frame buffer and stage 2 BIOS code)
+ - 64 MB of SDRAM
+ - 800x480 resolution 7" TFT display, driven at 256 colors (from a 16-bpp palette)
+ - Stereo audio DAC, samplerate of 44.1 kHz.
+ - SD card interface over SPI
+ - On-board SPI Flash ROM (512 kB) for bootstrapping code
 
 The (blue) mainboard is a 10x10 cm 4-layer board, designed by us and manufactured by a Chinese PCB fab
 
