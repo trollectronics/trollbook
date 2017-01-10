@@ -60,16 +60,18 @@ int (*(elf_load(void *elf)))(int argc, char **argv) {
 		alloc_count = (program_header->memsize + (PAGE_SIZE - 1))/PAGE_SIZE;
 		file_count = program_header->filesize;
 		
+		printf("%s @ 0x%X alloc=%u load=%u\n", write_protected ? "Text" : "Data/BSS", program_header->virtual_address, alloc_count*PAGE_SIZE, file_count);
 		for(j = 0; j < alloc_count; j++) {
-			printf("%s @ 0x%X count=%u\n", write_protected ? "Text" : "Data/BSS", program_header->virtual_address, file_count);
 			p = mmu040_allocate_frame((program_header->virtual_address & ~0xFFF) + PAGE_SIZE*j, write_protected);
 			
 			if(file_count) {
-				memcpy(p, elf + program_header->offset + PAGE_SIZE*j, file_count & (PAGE_SIZE - 1));
-				if(file_count < PAGE_SIZE)
+				if(file_count < PAGE_SIZE) {
+					memcpy(p, elf + program_header->offset + PAGE_SIZE*j, file_count);
 					file_count = 0;
-				else
+				} else {
+					memcpy(p, elf + program_header->offset + PAGE_SIZE*j, PAGE_SIZE);
 					file_count -= PAGE_SIZE;
+				}
 			}
 		}
 	}
@@ -77,6 +79,7 @@ int (*(elf_load(void *elf)))(int argc, char **argv) {
 	entry = (void *) header->entry;
 	
 	/* Allocate stack */
+	printf("stack @ 0x%X count=%u\n", UINT_MAX - PAGE_SIZE + 1, PAGE_SIZE);
 	mmu040_allocate_frame(UINT_MAX - PAGE_SIZE + 1, false);
 	return entry;
 }

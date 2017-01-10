@@ -5,4 +5,6 @@
 
 extern Menu menu_dir;
 
+void execute_elf_path(const char *_path);
+
 #endif

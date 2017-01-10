@@ -20,6 +20,7 @@
 static void clear_and_print(void *arg);
 static void test_spi_rom(void *arg);
 static void test_sdram(void *arg);
+static void autoboot(void *arg);
 void color_demo(void *arg);
 
 uint8_t fat_buf[512];
@@ -52,8 +53,9 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
 	false,
 	0,
-	7,
+	8,
 	{
+		{"Boot kernel.elf", autoboot, NULL},
 		{"Sub menu test", menu_execute, &menu_sub},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
 		{"Serial file transfer to SD", serial_transfer_recv, NULL},
@@ -170,6 +172,10 @@ void color_demo(void *arg) {
 		terminal_puts("Hello, wor");
 		terminal_set_pos(0, 0);
 	}
+}
+
+static void autoboot(void *arg) {
+	execute_elf_path("/KERNEL.ELF");
 }
 
 int main() {

@@ -19,3 +19,12 @@ void *memcpy(void *dest, void *src, uint32_t n) {
 	
 	return NULL;
 }
+
+char *strcpy(char *dest, char *src) {
+	char *ret = dest;
+	while(*src) {
+		*dest++ = *src++;
+	}
+	
+	return ret;
+}

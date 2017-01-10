@@ -251,8 +251,11 @@ static void execute_elf(void *arg) {
 	
 	fat_close(fd);
 	printf("File loaded\n");
+	printf("Highest addr used is 0x%X\n", tmp);
+	input_poll();
 	
 	mmu040_init();
+	terminal_clear();
 	printf("MMU Init\n");
 	if(!(entry = elf_load((void *) (0xDDD00 + 96*1024)))) {
 		printf("Failed to load ELF\n");
@@ -261,17 +264,13 @@ static void execute_elf(void *arg) {
 	}
 	printf("ELF load successful, entry is 0x%X, press any key\n", entry);
 	input_poll();
-	void *addr = (void *) 0x10000000UL;
-	printf("code 0x%08x\n", mmu040_get_physical_manual((uint32_t) addr));
-	printf("stack 0x%08x\n", mmu040_get_physical_manual(0xFFFFF000UL));
-	mmu_enable();
-	printf("MMU enabled\n");
-	
-	printf("arne is 0x%08x\n", mmu_test_read(addr));
-	printf("berit is 0x%08x\n", mmu_test_read((void *)0xFFFFF000UL));
-	input_poll();
 	mmu_disable();
 	mmu_enable_and_jump(entry, 0, NULL);
+}
+
+void execute_elf_path(const char *_path) {
+	strcpy(path, _path);
+	execute_elf(NULL);
 }
 
 void select_file_action(void *arg) {

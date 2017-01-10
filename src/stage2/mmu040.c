@@ -141,7 +141,7 @@ void *mmu040_allocate_frame(uint32_t virtual_address, bool write_protected) {
 	
 	_get_table_indices(virtual_address, &root_table_index, &pointer_table_index, &page_table_index);
 	
-	printf("Mapping frame to 0x%X as %s (%u %u %u)\n", virtual_address, write_protected ? "R" : "RW", root_table_index, pointer_table_index, page_table_index);
+	printf("Mapping frame to 0x%X as %s (%u %u %u)", virtual_address, write_protected ? "R" : "RW", root_table_index, pointer_table_index, page_table_index);
 	
 	if(UDT_IS_RESIDENT(root_td[root_table_index].table.upper_level_descriptor_type)) {
 		pointer_table = (void *) (root_td[root_table_index].table.table_address << ROOT_LEVEL_DESCRIPTOR_BITS);
@@ -167,10 +167,12 @@ void *mmu040_allocate_frame(uint32_t virtual_address, bool write_protected) {
 		
 		page_table[page_table_index].page.physical_address =  (((uint32_t) frame) >> PAGE_OFFSET_BITS);
 		page_table[page_table_index].page.supervisor = true;
-		page_table[page_table_index].page.cache_mode = MMU040_CACHE_MODE_CACHE_COPY_BACK;
+		page_table[page_table_index].page.cache_mode = MMU040_CACHE_MODE_NOCACHE;
 		page_table[page_table_index].page.write_protected = write_protected;
 		page_table[page_table_index].page.page_descriptor_type = MMU040_PAGE_DESCRIPTOR_TYPE_RESIDENT;
 	}
+	
+	printf(" frame 0x%X\n", frame);
 	return frame;
 }
 

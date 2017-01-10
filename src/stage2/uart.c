@@ -5,16 +5,20 @@
 void uart_send(uint8_t dat) {
 	nop();
 	while(!(UART_REG_STATUS & 0x1));
+	nop();
 	UART_REG_DATA = dat;
+	nop();
 }
 
 uint8_t uart_flush() {
+	nop();
 	return UART_REG_DATA;
 }
 
 uint8_t uart_recv() {
 	nop();
 	while(!(UART_REG_STATUS & 0x2));
+	nop();
 	return UART_REG_DATA;
 }
 
