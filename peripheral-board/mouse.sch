@@ -32,8 +32,9 @@ LIBS:amp
 LIBS:card-edge
 LIBS:switchmode
 LIBS:joystick
+LIBS:digital-pot
 LIBS:peripheral-board-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -53,7 +54,7 @@ U 1 1 5822698D
 P 5100 2600
 F 0 "U3001" H 4772 2653 60  0000 R CNN
 F 1 "PSPNUB" H 4772 2547 60  0000 R CNN
-F 2 "" H 5100 2600 60  0001 C CNN
+F 2 "lib:PSPNUB" H 5100 2600 60  0001 C CNN
 F 3 "" H 5100 2600 60  0001 C CNN
 	1    5100 2600
 	1    0    0    -1  

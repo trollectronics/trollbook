@@ -32,8 +32,9 @@ LIBS:amp
 LIBS:card-edge
 LIBS:switchmode
 LIBS:joystick
+LIBS:digital-pot
 LIBS:peripheral-board-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -84,4 +85,15 @@ Text HLabel 2300 3250 0    60   Input ~ 0
 SCL
 Text HLabel 2300 3550 0    60   UnSpc ~ 0
 DETECT
+$Comp
+L C C8001
+U 1 1 58246CCC
+P 4250 1900
+F 0 "C8001" H 4365 1946 50  0000 L CNN
+F 1 "C" H 4365 1855 50  0000 L CNN
+F 2 "" H 4288 1750 50  0000 C CNN
+F 3 "" H 4250 1900 50  0000 C CNN
+	1    4250 1900
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

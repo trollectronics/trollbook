@@ -1,4 +1,4 @@
-update=ons  9 nov 2016 02:15:43
+update=tor 10 nov 2016 08:20:07
 version=1
 last_client=kicad
 [pcbnew]
@@ -60,5 +60,6 @@ LibName30=lib/amp
 LibName31=lib/card-edge
 LibName32=lib/switchmode
 LibName33=lib/joystick
+LibName34=lib/digital-pot
 [general]
 version=1
