@@ -204,7 +204,8 @@ begin
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce);
 	
 	u_sound: entity work.sound generic map(peripheral_id => 11)
-		port map(reset => internal_reset, clk => clk12, mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+		port map(reset => internal_reset, clk => clk33, clk_snd => clk12,
+		mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
 	u_extint: entity work.extint generic map(peripheral_id => 12)
 		port map(reset => internal_reset, clk => clk33,
