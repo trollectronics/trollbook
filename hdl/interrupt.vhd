@@ -46,13 +46,13 @@ begin
 		end loop;
 		
 		for i in 0 to 15 loop
-			if chipset_int(i) = '1' and priority(i) /= "000" then
+			if chipset_int(i) = '1' then
 				flag_next(i) <= '1';
 			end if;
 		end loop;
 		
 		for i in 0 to 3 loop
-			if external_interrupt(i) = '0' and priority(i + 16) /= "000" then
+			if external_interrupt(i) = '0' then
 				flag_next(i + 16) <= '1';
 			end if;
 		end loop;
