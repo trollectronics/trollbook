@@ -284,7 +284,6 @@ begin
 			when 272 =>
 				cpu_ts <= '1';
 				d <= x"000000A5"; --x"deadcafe";
-
 			
 			--write to SPI
 			when 280 =>
@@ -311,6 +310,19 @@ begin
 				cpu_tm <= "001";
 			when 290=>
 				cpu_ts <= '1';
+			
+			-- enable vsync interrupt
+			when 300 =>
+				a <= x"00100028";
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '0';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 302 =>
+				cpu_ts <= '1';
+				d <= x"00000001"; -- priority
 			
 			-- read from llram
 			when 360 =>
@@ -378,6 +390,19 @@ begin
 			-- when 472 =>
 				-- cpu_ts <= '1';
 				-- d <= x"DEADBEEF"; --x"deadcafe";
+			
+			-- clear vsync interrupt
+			when 915250 =>
+				a <= x"001000A8";
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '0';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 915252 =>
+				cpu_ts <= '1';
+				d <= x"00000000"; -- flag
 			
 			when others =>
 		end case;

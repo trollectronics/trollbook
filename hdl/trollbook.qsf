@@ -247,7 +247,7 @@ set_location_assignment PIN_199 -to cpu_ts
 set_location_assignment PIN_38 -to cpu_tt[1]
 set_location_assignment PIN_36 -to cpu_tt[0]
 set_global_assignment -name FMAX_REQUIREMENT "33.4 MHz"
-set_global_assignment -name VHDL_FILE extint.vhd
+set_global_assignment -name VHDL_FILE interrupt.vhd
 set_global_assignment -name VHDL_FILE wor_logic.vhd
 set_global_assignment -name VHDL_FILE chipset.vhd
 set_global_assignment -name VHDL_FILE llram_bus_adapter.vhd

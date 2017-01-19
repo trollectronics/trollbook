@@ -5,7 +5,7 @@ use work.wor_logic.all;
 
 entity uart is
 	generic(
-		peripheral_id : integer range 0 to 31
+		peripheral_id : integer range 0 to 15
 	);
 	port(
 		reset : in std_logic;

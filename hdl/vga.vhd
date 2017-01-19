@@ -1,10 +1,11 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.wor_logic.all;
 
 entity vga is
 	generic(
-		peripheral_id : integer range 0 to 31;
+		peripheral_id : integer range 0 to 15;
 		
 		depth_r : integer;
 		depth_g : integer;
@@ -37,7 +38,9 @@ entity vga is
 		
 		ll_a : out std_logic_vector(ll_a_length - 1 downto 0);
 		ll_d : in std_logic_vector(15 downto 0);
-		ll_ce : out std_logic
+		ll_ce : out std_logic;
+		
+		chipset_int : out wor_logic_vector(15 downto 0)
 	);
 end vga;
 
@@ -61,6 +64,7 @@ architecture arch of vga is
 	
 	signal hsync_internal : std_logic;
 	signal vsync_internal : std_logic;
+	signal vsync_old : std_logic;
 	signal den_internal : std_logic_vector(1 downto 0);
 	
 	signal rgb : std_logic_vector((depth_r + depth_g + depth_b) - 1 downto 0);
@@ -86,7 +90,7 @@ begin
 		q => rgb
 	);
 	
-	palette_clk <= clk;--not clk;
+	palette_clk <= clk;
 	
 	hlogic: process(hstate, pixel_counter, hsync_internal, hvisible) begin
 		hstate_next <= hstate;
@@ -216,13 +220,23 @@ begin
 		end if;
 	end process;
 	
-	--g <=  std_logic_vector(to_unsigned(pixel_counter, g'length));
-	--b <=  std_logic_vector(to_unsigned(line_counter, b'length));
+	process(clk, reset) begin
+		if reset = '1' then
+			vsync_old <= '1';
+			chipset_int <= (others => '0');
+		elsif rising_edge(clk) then
+			chipset_int <= (others => '0');
+			if vsync_old = '1' and vsync_internal = '0' then
+				chipset_int(peripheral_id) <= '1';
+			end if;
+			
+			vsync_old <= vsync_internal;
+		end if;
+	end process;
 	
 	ll_ce <= ll_ce_internal;
 	
 	palette_a <= ll_d(15 downto 8) when pixel_counter mod 2 = 0 else second_pixel;
-	--palette_a <= x"FE" when ll_ce_internal = '1' else x"FF";
 	second_pixel_next <= ll_d(7 downto 0) when pixel_counter mod 2 = 0 else second_pixel;
 	
 	b <= rgb(depth_b - 1 downto 0);
@@ -231,8 +245,4 @@ begin
 	
 	hsync <= hsync_internal;
 	vsync <= vsync_internal;
-	
-	--g <= (others => '1') when (pixel_counter mod 2) = 0 and den_internal = '1' else (others => '0');
-	--b <= (others => '1') when (line_counter mod 2) = 0 and den_internal = '1' else (others => '0');
-	
 end arch;

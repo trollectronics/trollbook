@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity cpu is
 	port(
@@ -43,7 +44,9 @@ entity cpu is
 		
 		bus_ce_sdram : out std_logic;
 		bus_ack_sdram : in std_logic;
-		bus_nack_sdram : in std_logic
+		bus_nack_sdram : in std_logic;
+		
+		interrupt_level : in std_logic_vector(2 downto 0)
 	);
 end cpu;
 
@@ -58,6 +61,7 @@ architecture arch of cpu is
 	signal q_next : std_logic_vector(q'range);
 	signal oe_next : std_logic;
 	signal tbi_next : std_logic;
+	signal ipl_next : std_logic_vector(2 downto 0);
 	
 	signal bootrom_q : std_logic_vector(31 downto 0);
 	
@@ -74,8 +78,8 @@ begin
 	);
 	
 	tea <= '1';
-	ipl <= "111";
-	lfo <= '0';
+	
+	lfo <= '1';
 	
 	bus_a <= a when tip = '0' else (others => '0');
 	bus_q <= d;
@@ -87,7 +91,9 @@ begin
 	
 	bus_siz <= bus_siz_internal;
 	
-	process(a, bus_ack_chipset, bus_nack_chipset, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_sdram, siz) begin
+	ipl_next <= not interrupt_level;
+	
+	process(a, bus_ack_chipset, bus_nack_chipset, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_sdram, siz, tt) begin
 		q_next <= (others => '0');
 		tbi_next <= '0';
 		
@@ -98,7 +104,7 @@ begin
 		end if;
 		--add burst disable the same way
 		
-		if tip = '0' then
+		if tip = '0' and tt(1) = '0' then --normal read/write
 			case a(31) is
 				when '0' =>
 					case a(24 downto 19) is
@@ -150,21 +156,25 @@ begin
 		
 		case state is
 			when idle =>
-				case check is
-					when "01" =>
-						if bus_siz_internal = "00" then
-							state_next <= read_burst0;
-						else
-							state_next <= read_normal;
-						end if;
-					when "00" =>
-						if bus_siz_internal = "00" then
-							state_next <= write_burst0;
-						else
-							state_next <= write_normal;
-						end if;
-					when others =>
-				end case;
+				if ts = '0' and tt = "11" then
+					state_next <= write_ack;
+				else
+					case check is
+						when "01" =>
+							if bus_siz_internal = "00" then
+								state_next <= read_burst0;
+							else
+								state_next <= read_normal;
+							end if;
+						when "00" =>
+							if bus_siz_internal = "00" then
+								state_next <= write_burst0;
+							else
+								state_next <= write_normal;
+							end if;
+						when others =>
+					end case;
+				end if;
 			
 			when read_normal =>
 				--q_next <= bootrom_q;
@@ -238,6 +248,7 @@ begin
 			q <= (others => '1');
 			oe <= '0';
 			tbi <= '0';
+			ipl <= "111";
 			
 			ce <= (others => '0');
 		elsif falling_edge(clk) then
@@ -247,12 +258,14 @@ begin
 			else
 				ce <= ce_next;
 			end if;
-			
+				
 		elsif rising_edge(clk) then
 			q <= q_next;
 			ta <= ta_next;
 			oe <= oe_next;
 			tbi <= tbi_next;
+			
+			ipl <= ipl_next;
 		end if;
 	end process;
 	

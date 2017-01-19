@@ -121,6 +121,9 @@ architecture arch of trollbook is
 	signal chipset_ce : std_logic_vector(15 downto 0);
 	signal chipset_ack : wor_logic_vector(15 downto 0);
 	signal chipset_nack : wor_logic_vector(15 downto 0);
+	signal chipset_int : wor_logic_vector(15 downto 0);
+	
+	signal cpu_interrupt_level : std_logic_vector(2 downto 0);
 begin
 	u_cpu: entity work.cpu port map(reset => internal_reset, clk => clk33,
 		a => a, d => d, q => cpu_q, oe => cpu_oe,
@@ -131,7 +134,9 @@ begin
 		
 		bus_ce_llram => bus_ce_llram, bus_ack_llram => bus_ack_llram, bus_nack_llram => bus_nack_llram,
 		bus_ce_chipset => bus_ce_chipset, bus_ack_chipset => bus_ack_chipset, bus_nack_chipset => bus_nack_chipset,
-		bus_ce_sdram => bus_ce_sdram, bus_ack_sdram => bus_ack_sdram, bus_nack_sdram => bus_nack_sdram);
+		bus_ce_sdram => bus_ce_sdram, bus_ack_sdram => bus_ack_sdram, bus_nack_sdram => bus_nack_sdram,
+		
+		interrupt_level => cpu_interrupt_level);
 	
 	-- *** RAM *** --
 	
@@ -161,19 +166,29 @@ begin
 		bus_ce => bus_ce_llram, bus_ack => bus_ack_llram);
 	
 	u_chipset: entity work.chipset port map(
-			reset => internal_reset, clk => clk33,
-			
-			bus_a => bus_a,
-			bus_ce_chipset => bus_ce_chipset,
-			bus_ack_chipset => bus_ack_chipset,
-			bus_nack_chipset => bus_nack_chipset,
-			
-			chipset_ce => chipset_ce,
-			chipset_ack => chipset_ack,
-			chipset_nack => chipset_nack
-		);
+		reset => internal_reset, clk => clk33,
+		
+		bus_a => bus_a,
+		bus_ce_chipset => bus_ce_chipset,
+		bus_ack_chipset => bus_ack_chipset,
+		bus_nack_chipset => bus_nack_chipset,
+		
+		chipset_ce => chipset_ce,
+		chipset_ack => chipset_ack,
+		chipset_nack => chipset_nack);
 	
 	-- *** System peripherals *** --
+	
+	u_interrupt: entity work.interrupt generic map(peripheral_id => 0)
+		port map(reset => internal_reset, clk => clk33,
+		external_interrupt => ext_int,
+		
+		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
+		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
+		chipset_int => chipset_int,
+		
+		cpu_interrupt_level => cpu_interrupt_level);
 	
 	-- u_sysinfo
 	-- u_timer
@@ -201,23 +216,19 @@ begin
 		ll_a_start => 0, ll_a_end => 800*480, ll_a_length => 18)
 		port map(reset => internal_reset, clk => clk33, r => vga_r, g => vga_g, b => vga_b,
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
-		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce);
+		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce,
+		
+		chipset_int => chipset_int);
 	
 	u_sound: entity work.sound generic map(peripheral_id => 11)
 		port map(reset => internal_reset, clk => clk33, clk_snd => clk12,
 		mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
-	u_extint: entity work.extint generic map(peripheral_id => 12)
-		port map(reset => internal_reset, clk => clk33,
-		interrupt => ext_int,
-		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz,
-		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
-	
 	-- *** Output drivers *** --
 	
 	chipset_ack <= (others => '0');
 	chipset_nack <= (others => '0');
+	chipset_int <= (others => '0');
 	
 	bus_nack_llram <= '0';
 	bus_nack_sdram <= '0';
