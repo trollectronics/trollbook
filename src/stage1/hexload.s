@@ -4,8 +4,7 @@
 .int 0x00100000
 .int 0x00000008
 
-move.b 0x100C00, %d0
-btst.b #0, 0x100C03
+btst.l #16, 0x100080
 beq 4f
 bsr.w spi_load
 

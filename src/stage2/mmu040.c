@@ -181,7 +181,7 @@ void *mmu040_allocate_frame(uint32_t virtual_address, bool write_protected) {
 		
 		page_table[page_table_index].page.physical_address = PAGE_LEVEL_ADDR_FIELD((uint32_t) frame);
 		page_table[page_table_index].page.supervisor = true;
-		page_table[page_table_index].page.cache_mode = MMU040_CACHE_MODE_NOCACHE;
+		page_table[page_table_index].page.cache_mode = MMU040_CACHE_MODE_CACHE_COPY_BACK;
 		page_table[page_table_index].page.write_protected = write_protected;
 		page_table[page_table_index].page.page_descriptor_type = MMU040_PAGE_DESCRIPTOR_TYPE_RESIDENT;
 	}

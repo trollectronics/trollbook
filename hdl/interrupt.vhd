@@ -117,7 +117,11 @@ begin
 						end if;
 					end if;
 				else
-					if INTERRUPT_AVAILBLE(i) = '1' then
+					if chipset_a(7 downto 2) = "100000" then -- status
+						bus_q <= x"000" & external_interrupt & x"0000";
+					elsif chipset_a(7 downto 2) = "000000" then -- control
+						bus_q <= (others => '0');
+					elsif INTERRUPT_AVAILBLE(i) = '1' then
 						if chipset_a(7) = '0' then
 							bus_q <= x"0000000" & "0" & priority(i);
 						else
