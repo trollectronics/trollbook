@@ -40,7 +40,7 @@ entity vga is
 		ll_d : in std_logic_vector(15 downto 0);
 		ll_ce : out std_logic;
 		
-		chipset_int : out wor_logic_vector(15 downto 0)
+		chipset_int : out std_logic_vector(15 downto 0)
 	);
 end vga;
 
@@ -223,9 +223,9 @@ begin
 	process(clk, reset) begin
 		if reset = '1' then
 			vsync_old <= '1';
-			chipset_int <= (others => '0');
+			chipset_int(peripheral_id) <= '0';
 		elsif rising_edge(clk) then
-			chipset_int <= (others => '0');
+			chipset_int(peripheral_id) <= '0';
 			if vsync_old = '1' and vsync_internal = '0' then
 				chipset_int(peripheral_id) <= '1';
 			end if;

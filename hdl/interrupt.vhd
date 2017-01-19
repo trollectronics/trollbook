@@ -21,7 +21,7 @@ entity interrupt is
 		chipset_ce : in std_logic_vector(15 downto 0);
 		chipset_ack : out wor_logic_vector(15 downto 0);
 		chipset_nack : out wor_logic_vector(15 downto 0);
-		chipset_int : in wor_logic_vector(15 downto 0);
+		chipset_int : in std_logic_vector(15 downto 0);
 		
 		cpu_interrupt_level : out std_logic_vector(2 downto 0)
 	);
@@ -37,7 +37,11 @@ architecture arch of interrupt is
 	signal flag : flag_type(19 downto 0);
 	signal flag_next : flag_type(19 downto 0);
 	signal priority : priority_type(19 downto 0);
+	
+	signal cpu_interrupt_level_internal : std_logic_vector(2 downto 0);
 begin
+	cpu_interrupt_level <= cpu_interrupt_level_internal;
+	
 	process(flag, chipset_int, external_interrupt, priority) begin
 		for i in 0 to 31 loop
 			if INTERRUPT_AVAILBLE(i) = '1' then
@@ -63,7 +67,7 @@ begin
 		variable bits : unsigned(7 downto 0);
 	begin
 		if reset = '1' then
-			cpu_interrupt_level <= (others => '0');
+			cpu_interrupt_level_internal <= (others => '0');
 		elsif falling_edge(clk) then
 			level := (others => '0');
 			bits := (others => '0');
@@ -76,13 +80,13 @@ begin
 				end if;
 			end loop;
 			
-			for i in 7 downto 0 loop
+			for i in 0 to 7 loop
 				if bits(i) = '1' then
 					level := std_logic_vector(to_unsigned(i, 3));
 				end if;
 			end loop;
 			
-			cpu_interrupt_level <= level;
+			cpu_interrupt_level_internal <= level;
 		end if;
 	end process;
 	
@@ -118,7 +122,7 @@ begin
 					end if;
 				else
 					if chipset_a(7 downto 2) = "100000" then -- status
-						bus_q <= x"000" & external_interrupt & x"0000";
+						bus_q <= x"000" & external_interrupt & x"000" & '0' & cpu_interrupt_level_internal;
 					elsif chipset_a(7 downto 2) = "000000" then -- control
 						bus_q <= (others => '0');
 					elsif INTERRUPT_AVAILBLE(i) = '1' then

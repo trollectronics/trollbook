@@ -121,7 +121,7 @@ architecture arch of trollbook is
 	signal chipset_ce : std_logic_vector(15 downto 0);
 	signal chipset_ack : wor_logic_vector(15 downto 0);
 	signal chipset_nack : wor_logic_vector(15 downto 0);
-	signal chipset_int : wor_logic_vector(15 downto 0);
+	signal chipset_int : std_logic_vector(15 downto 0);
 	
 	signal cpu_interrupt_level : std_logic_vector(2 downto 0);
 begin
@@ -228,7 +228,7 @@ begin
 	
 	chipset_ack <= (others => '0');
 	chipset_nack <= (others => '0');
-	chipset_int <= (others => '0');
+	chipset_int <= (others => 'Z');
 	
 	bus_nack_llram <= '0';
 	bus_nack_sdram <= '0';
