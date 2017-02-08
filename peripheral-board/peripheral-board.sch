@@ -33,12 +33,13 @@ LIBS:card-edge
 LIBS:switchmode
 LIBS:joystick
 LIBS:digital-pot
+LIBS:vref
 LIBS:peripheral-board-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 9
+Sheet 1 10
 Title ""
 Date ""
 Rev ""
@@ -593,4 +594,6 @@ F 3 "" H 3300 1200 50  0000 C CNN
 	1    3350 1250
 	0    -1   -1   0   
 $EndComp
+Text Notes 2800 800  0    60   ~ 0
+status led on sd card slave select?
 $EndSCHEMATC

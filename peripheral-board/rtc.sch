@@ -33,12 +33,13 @@ LIBS:card-edge
 LIBS:switchmode
 LIBS:joystick
 LIBS:digital-pot
+LIBS:vref
 LIBS:peripheral-board-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 9
+Sheet 5 10
 Title ""
 Date ""
 Rev ""

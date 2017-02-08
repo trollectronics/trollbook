@@ -1,4 +1,4 @@
-update=tor 10 nov 2016 08:20:07
+update=ons  8 feb 2017 09:50:21
 version=1
 last_client=kicad
 [pcbnew]
@@ -61,5 +61,6 @@ LibName31=lib/card-edge
 LibName32=lib/switchmode
 LibName33=lib/joystick
 LibName34=lib/digital-pot
+LibName35=lib/vref
 [general]
 version=1
