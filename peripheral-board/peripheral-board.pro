@@ -1,4 +1,4 @@
-update=ons  8 feb 2017 09:50:21
+update=mån 13 feb 2017 11:38:19
 version=1
 last_client=kicad
 [pcbnew]
@@ -62,5 +62,6 @@ LibName32=lib/switchmode
 LibName33=lib/joystick
 LibName34=lib/digital-pot
 LibName35=lib/vref
+LibName36=lib/audio
 [general]
 version=1
