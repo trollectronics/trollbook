@@ -22,6 +22,7 @@ LDFLAGS		= -T $(LINKSCRIPT) -lgcc
 # Filenames
 ELFFILE		= $(NAME).elf
 HEXFILE		= $(NAME).hex
+BINFILE		= $(NAME).bin
 
 # Find all source files automatically
 CFILES          = $(wildcard *.c)
@@ -40,14 +41,14 @@ df = $(DEPDIR)/$(*F)
 .PHONY: all clean install
 .SUFFIXES:
 
-all: $(HEXFILE)
+all: $(HEXFILE) $(BINFILE)
 
 install:
 	stty -F $(TTYDEV) $(TTYBAUD)
 	cat $(NAME).hex > $(TTYDEV)
 
 clean:
-	$(RM) $(HEXFILE) $(ELFFILE) $(OBJFILES)
+	$(RM) $(HEXFILE) $(ELFFILE) $(BINFILE) $(OBJFILES)
 	$(RM) -R $(DEPDIR)
 
 $(ELFFILE): $(OBJFILES)
@@ -56,6 +57,9 @@ $(ELFFILE): $(OBJFILES)
 $(HEXFILE): $(ELFFILE)
 	m68k-elf-objcopy -O ihex $< $@
 	srec_cat -O $@ -Intel $@ -Intel
+
+$(BINFILE): $(ELFFILE)
+	m68k-elf-objcopy -O binary $< $@
 
 $(DEPDIR):
 	@mkdir -p $@
