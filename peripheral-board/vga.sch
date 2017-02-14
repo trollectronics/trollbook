@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:peripheral-board-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -34,6 +35,7 @@ LIBS:switchmode
 LIBS:joystick
 LIBS:digital-pot
 LIBS:vref
+LIBS:switches
 LIBS:peripheral-board-cache
 EELAYER 26 0
 EELAYER END
@@ -50,10 +52,10 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L CONN_01X06 P9001
+L CONN_01X06 P10001
 U 1 1 581F8990
 P 4700 2400
-F 0 "P9001" H 4777 2441 50  0000 L CNN
+F 0 "P10001" H 4777 2441 50  0000 L CNN
 F 1 "VGA" H 4777 2350 50  0000 L CNN
 F 2 "Socket_Strips:Socket_Strip_Straight_1x06" H 4700 2400 50  0001 C CNN
 F 3 "" H 4700 2400 50  0000 C CNN
@@ -81,10 +83,10 @@ HSYNC
 Text Label 4150 2650 0    60   ~ 0
 VSYNC
 $Comp
-L GND #PWR067
+L GND #PWR10001
 U 1 1 581F8A49
 P 4100 2450
-F 0 "#PWR067" H 4100 2200 50  0001 C CNN
+F 0 "#PWR10001" H 4100 2200 50  0001 C CNN
 F 1 "GND" V 4105 2322 50  0000 R CNN
 F 2 "" H 4100 2450 50  0000 C CNN
 F 3 "" H 4100 2450 50  0000 C CNN

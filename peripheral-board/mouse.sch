@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:peripheral-board-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -34,6 +35,7 @@ LIBS:switchmode
 LIBS:joystick
 LIBS:digital-pot
 LIBS:vref
+LIBS:switches
 LIBS:peripheral-board-cache
 EELAYER 26 0
 EELAYER END
@@ -61,10 +63,10 @@ F 3 "" H 5100 2600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3V3 #PWR022
+L +3V3 #PWR3001
 U 1 1 582269F3
 P 5100 2050
-F 0 "#PWR022" H 5100 1900 50  0001 C CNN
+F 0 "#PWR3001" H 5100 1900 50  0001 C CNN
 F 1 "+3V3" H 5115 2223 50  0000 C CNN
 F 2 "" H 5100 2050 50  0000 C CNN
 F 3 "" H 5100 2050 50  0000 C CNN
@@ -72,10 +74,10 @@ F 3 "" H 5100 2050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR023
+L GND #PWR3002
 U 1 1 58226A0A
 P 5100 3150
-F 0 "#PWR023" H 5100 2900 50  0001 C CNN
+F 0 "#PWR3002" H 5100 2900 50  0001 C CNN
 F 1 "GND" H 5105 2977 50  0000 C CNN
 F 2 "" H 5100 3150 50  0000 C CNN
 F 3 "" H 5100 3150 50  0000 C CNN
