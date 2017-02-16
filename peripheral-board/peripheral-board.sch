@@ -402,8 +402,6 @@ U 581F8966
 F0 "VGA" 60
 F1 "vga.sch" 60
 $EndSheet
-Text Notes 6850 2950 0    60   ~ 0
-Power button\nRGB led
 $Comp
 L R R1001
 U 1 1 58224307
@@ -437,8 +435,6 @@ F 3 "" H 2050 1300 50  0000 C CNN
 	1    2050 1300
 	1    0    0    -1  
 $EndComp
-Text Notes 2800 800  0    60   ~ 0
-status led on sd card slave select?
 Text Label 10400 5750 0    60   ~ 0
 EXT_AN
 Text Label 10400 4750 0    60   ~ 0
@@ -814,17 +810,6 @@ Wire Wire Line
 	4950 4300 5450 4300
 Wire Wire Line
 	4950 4400 5450 4400
-$Comp
-L R R1005
-U 1 1 58A7B843
-P 5750 4300
-F 0 "R1005" V 5543 4300 50  0000 C CNN
-F 1 "R" V 5634 4300 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V -270 450 50  0001 C CNN
-F 3 "" H -200 450 50  0001 C CNN
-	1    5750 4300
-	0    1    1    0   
-$EndComp
 NoConn ~ 1400 1800
 NoConn ~ 1400 2100
 Text Label 950  1800 0    60   ~ 0

@@ -947,4 +947,8 @@ Wire Wire Line
 Wire Wire Line
 	2950 4450 3450 4450
 Connection ~ 3000 4450
+Text Label 6000 2000 0    60   ~ 0
+CHRG_SW
+Text Label 6000 2400 0    60   ~ 0
+CHRG_SENSE
 $EndSCHEMATC
