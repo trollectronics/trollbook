@@ -8012,6 +8012,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 180))
     )
+    (model ${KISYS3DMOD}/Socket_Strips.3dshapes/Socket_Strip_Straight_1x04_Pitch2.54mm.wrl
+      (at (xyz 0.15 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (module Socket_Strips:Socket_Strip_Straight_1x29 (layer B.Cu) (tedit 0) (tstamp 581F9A86)
