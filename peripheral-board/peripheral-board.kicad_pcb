@@ -2,7 +2,7 @@
 
   (general
     (links 675)
-    (no_connects 281)
+    (no_connects 259)
     (area 84.924999 19.899999 250.075001 150.075001)
     (thickness 1.6)
     (drawings 59)
@@ -37,7 +37,7 @@
   )
 
   (setup
-    (last_trace_width 0.5)
+    (last_trace_width 0.3)
     (user_trace_width 0.25)
     (user_trace_width 0.4)
     (user_trace_width 0.5)
@@ -6885,6 +6885,11 @@
       (net 78 /SPI_MOSI))
     (pad 1 smd rect (at 7 0.8 180) (size 1 1.5) (layers B.Cu B.Paste B.Mask)
       (net 96 /SPI_SS3))
+    (model ${KIPRJMOD}/3d/SD-RSMT-2-MQ.step
+      (at (xyz 0.005905511811023622 -0.6003937007874016 0.0610236220472441))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 90))
+    )
   )
 
   (module Connect:JACK_ALIM (layer B.Cu) (tedit 58A5B99C) (tstamp 589CD59E)
@@ -8007,6 +8012,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 180))
     )
+    (model ${KISYS3DMOD}/Socket_Strips.3dshapes/Socket_Strip_Straight_1x04_Pitch2.54mm.wrl
+      (at (xyz 0.15 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (module Socket_Strips:Socket_Strip_Straight_1x29 (layer B.Cu) (tedit 0) (tstamp 581F9A86)
@@ -8093,6 +8103,11 @@
       (at (xyz 1.4 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 180))
+    )
+    (model ${KISYS3DMOD}/Socket_Strips.3dshapes/Socket_Strip_Straight_1x29_Pitch2.54mm.wrl
+      (at (xyz 1.399606299212598 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
 
@@ -10588,7 +10603,7 @@
   (gr_line (start 237.5 80.9) (end 237.5 148.9) (layer Eco2.User) (width 0.2))
   (gr_line (start 186.5 80.9) (end 237.5 80.9) (layer Eco2.User) (width 0.2))
   (dimension 50 (width 0.3) (layer Eco1.User)
-    (gr_text "50,000 mm" (at 253.85 75 270) (layer Eco1.User) (tstamp 58A75FB3)
+    (gr_text "50,000 mm" (at 253.85 75 270) (layer Eco1.User) (tstamp 58A81E92)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
     )
     (feature1 (pts (xy 250 100) (xy 255.2 100)))
@@ -10600,7 +10615,7 @@
     (arrow2b (pts (xy 252.5 50) (xy 253.086421 51.126504)))
   )
   (dimension 82.5 (width 0.3) (layer Eco1.User)
-    (gr_text "82,500 mm" (at 126.25 46.15) (layer Eco1.User) (tstamp 58A75FB4)
+    (gr_text "82,500 mm" (at 126.25 46.15) (layer Eco1.User) (tstamp 58A81E93)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
     )
     (feature1 (pts (xy 167.5 50) (xy 167.5 44.8)))
@@ -10612,7 +10627,7 @@
     (arrow2b (pts (xy 85 47.5) (xy 86.126504 46.913579)))
   )
   (dimension 165 (width 0.3) (layer Eco1.User)
-    (gr_text "165,000 mm" (at 167.5 42.65) (layer Eco1.User) (tstamp 58A75FB5)
+    (gr_text "165,000 mm" (at 167.5 42.65) (layer Eco1.User) (tstamp 58A81E94)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
     )
     (feature1 (pts (xy 250 50) (xy 250 41.3)))
@@ -10624,7 +10639,7 @@
     (arrow2b (pts (xy 85 44) (xy 86.126504 43.413579)))
   )
   (dimension 100 (width 0.3) (layer Eco1.User)
-    (gr_text "100,000 mm" (at 257.35 100 270) (layer Eco1.User) (tstamp 58A75FB6)
+    (gr_text "100,000 mm" (at 257.35 100 270) (layer Eco1.User) (tstamp 58A81E95)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
     )
     (feature1 (pts (xy 250 150) (xy 258.7 150)))
@@ -10640,6 +10655,7 @@
   (gr_line (start 250 50) (end 250 150) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 85 50) (end 250 50) (layer Edge.Cuts) (width 0.15))
 
+  (segment (start 137.93 117.38) (end 137.9 117.35) (width 0.3) (layer B.Cu) (net 0))
   (segment (start 191.5 92.35006) (end 189.59994 92.35006) (width 0.3) (layer F.Cu) (net 1))
   (segment (start 189.59994 92.35006) (end 189.35 92.6) (width 0.3) (layer F.Cu) (net 1))
   (segment (start 189.35 92.95) (end 189.35 92.6) (width 0.3) (layer F.Cu) (net 1))
@@ -12255,7 +12271,6 @@
   (segment (start 244.725 129.24) (end 243.55 130.415) (width 0.5) (layer F.Cu) (net 201))
   (segment (start 243.55 130.415) (end 243.55 131.675) (width 0.5) (layer F.Cu) (net 201))
   (segment (start 243.55 131.675) (end 243.55 132.8) (width 0.5) (layer F.Cu) (net 201))
-  (segment (start 137.93 117.38) (end 137.9 117.35) (width 0.3) (layer B.Cu) (net 206))
   (segment (start 219.1 51.2) (end 215.1 51.2) (width 0.3) (layer B.Cu) (net 217))
   (segment (start 215.1 51.2) (end 214.4 51.9) (width 0.3) (layer B.Cu) (net 217))
   (segment (start 223.9 52.6) (end 219.45 52.6) (width 0.3) (layer B.Cu) (net 217))
