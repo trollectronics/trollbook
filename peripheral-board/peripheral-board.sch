@@ -647,9 +647,9 @@ Text Label 4950 2900 0    60   ~ 0
 AUD_CS_L
 Text Label 4950 2800 0    60   ~ 0
 AUD_CS_R
-Text Label 4950 4300 0    60   ~ 0
-EXT_DET
 Text Label 4950 4200 0    60   ~ 0
+EXT_DET
+Text Label 4950 4300 0    60   ~ 0
 EXT_AN
 Wire Wire Line
 	5450 4300 4950 4300
@@ -687,14 +687,14 @@ Wire Wire Line
 	4950 5650 5450 5650
 Wire Wire Line
 	4950 5550 5450 5550
-Text Label 4950 3850 0    60   ~ 0
+Text Label 4950 3950 0    60   ~ 0
 PWRON_RESET
-Text Label 4950 5450 0    60   ~ 0
+Text Label 4950 3850 0    60   ~ 0
 CPURST
 Wire Wire Line
-	4950 3850 5450 3850
+	4950 3950 5450 3950
 Wire Wire Line
-	4950 5450 5450 5450
+	4950 3850 5450 3850
 NoConn ~ 1400 1800
 NoConn ~ 1400 2100
 Text Label 950  1800 0    60   ~ 0
@@ -715,7 +715,7 @@ Text Label 7500 1000 0    60   ~ 0
 SD_WP
 Text Label 7500 1100 0    60   ~ 0
 SD_DET
-Text Label 4950 3950 0    60   ~ 0
+Text Label 4950 5450 0    60   ~ 0
 SD_DET
 Wire Wire Line
 	4950 4100 5450 4100
@@ -740,7 +740,7 @@ Wire Wire Line
 Wire Wire Line
 	4950 4400 5450 4400
 Wire Wire Line
-	4950 3950 5450 3950
+	4950 5450 5450 5450
 $Comp
 L LED D1001
 U 1 1 58A4D1EF
@@ -1060,4 +1060,5 @@ F 3 "" H 50  0   50  0001 C CNN
 	1    2750 3100
 	0    1    1    0   
 $EndComp
+NoConn ~ 7900 1000
 $EndSCHEMATC
