@@ -41,7 +41,7 @@ EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 4 10
+Sheet 4 8
 Title ""
 Date ""
 Rev ""
@@ -400,15 +400,6 @@ F 3 "" H -900 -650 50  0001 C CNN
 	1    7150 2350
 	1    0    0    -1  
 $EndComp
-$Sheet
-S 8150 2300 900  950 
-U 589AAD6E
-F0 "Battery pack" 60
-F1 "battery.sch" 60
-F2 "B+" U L 8150 2400 60 
-F3 "B-" U L 8150 3150 60 
-F4 "NTC" U L 8150 3050 60 
-$EndSheet
 $Comp
 L D_Schottky D4001
 U 1 1 589B3608
@@ -809,8 +800,6 @@ Wire Wire Line
 	6700 2400 6700 2350
 Wire Wire Line
 	7150 2350 7150 2600
-Wire Wire Line
-	7100 2400 8150 2400
 Connection ~ 6700 2400
 Connection ~ 7150 2400
 Wire Wire Line
@@ -990,4 +979,6 @@ Wire Wire Line
 Wire Wire Line
 	8100 3150 8100 3250
 Connection ~ 8050 3250
+Wire Wire Line
+	7100 2400 8150 2400
 $EndSCHEMATC

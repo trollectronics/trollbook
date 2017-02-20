@@ -41,7 +41,7 @@ EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 10
+Sheet 1 8
 Title ""
 Date ""
 Rev ""
@@ -327,12 +327,6 @@ F12 "SDA" B L 9050 5650 60
 F13 "SCL" I L 9050 5750 60 
 F14 "DETECT" U R 10350 4750 60 
 F15 "AN" O R 10350 5750 60 
-$EndSheet
-$Sheet
-S 10050 850  950  800 
-U 581F8966
-F0 "VGA" 60
-F1 "vga.sch" 60
 $EndSheet
 $Comp
 L R R1001

@@ -41,7 +41,7 @@ EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 10
+Sheet 2 8
 Title ""
 Date ""
 Rev ""
@@ -1776,8 +1776,6 @@ Text Label 2900 2750 0    60   ~ 0
 COL7
 Text Label 6100 2450 0    60   ~ 0
 COL8
-Text Label 10300 2700 1    60   ~ 0
-COL16
 Text Label 9950 2450 2    60   ~ 0
 COL16
 Text Label 7200 2750 2    60   ~ 0
