@@ -1990,8 +1990,6 @@ Wire Wire Line
 	6050 800  6050 1300
 Wire Wire Line
 	7150 1300 7150 1600
-Wire Wire Line
-	6050 1300 7150 1300
 Connection ~ 4300 850 
 Wire Wire Line
 	4300 850  4300 950 
@@ -2425,4 +2423,19 @@ Wire Wire Line
 	2200 5400 2200 5200
 Wire Wire Line
 	2400 5350 2400 5700
+$Comp
+L R R2001
+U 1 1 58AA3942
+P 6550 1300
+F 0 "R2001" V 6450 1300 50  0000 C CNN
+F 1 "0R" V 6550 1300 50  0000 C CNN
+F 2 "Resistors_SMD:R_1206" V -70 50  50  0001 C CNN
+F 3 "" H 0   50  50  0001 C CNN
+	1    6550 1300
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7150 1300 6700 1300
+Wire Wire Line
+	6050 1300 6400 1300
 $EndSCHEMATC
