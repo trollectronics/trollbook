@@ -387,7 +387,7 @@ Text Notes 3650 1200 0    60   ~ 0
 Change value to set dropout voltage\n
 Text Notes 2000 2750 0    60   ~ 0
 Add shutdown input\n
-Text Label 7450 3050 0    60   ~ 0
+Text Label 6800 3050 0    60   ~ 0
 BATTERY_NTC
 $Comp
 L PWR_FLAG #FLG045
@@ -752,6 +752,44 @@ F 3 "" H -1900 1050 50  0001 C CNN
 	1    4000 2050
 	1    0    0    -1  
 $EndComp
+Text Label 6000 2000 0    60   ~ 0
+CHRG_SW
+Text Label 6000 2400 0    60   ~ 0
+CHRG_SENSE
+NoConn ~ 1800 1650
+$Comp
+L PWR_FLAG #FLG061
+U 1 1 58A9FA40
+P 5350 1000
+F 0 "#FLG061" H -1000 225 50  0001 C CNN
+F 1 "PWR_FLAG" H 5350 1174 50  0000 C CNN
+F 2 "" H -1000 150 50  0001 C CNN
+F 3 "" H -1000 150 50  0001 C CNN
+	1    5350 1000
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG062
+U 1 1 58A9FB2F
+P 5250 1550
+F 0 "#FLG062" H -1100 775 50  0001 C CNN
+F 1 "PWR_FLAG" H 5250 1724 50  0000 C CNN
+F 2 "" H -1100 700 50  0001 C CNN
+F 3 "" H -1100 700 50  0001 C CNN
+	1    5250 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X05 J4001
+U 1 1 58AB7B70
+P 7850 1900
+F 0 "J4001" V 7815 1612 50  0000 R CNN
+F 1 "53047-0510" V 7724 1612 50  0000 R CNN
+F 2 "Connectors_Molex:Connector_Molex_PicoBlade_53047-0510" H -2350 -250 50  0001 C CNN
+F 3 "" H -2350 -250 50  0001 C CNN
+	1    7850 1900
+	0    -1   -1   0   
+$EndComp
 Wire Wire Line
 	6700 2900 7200 2900
 Connection ~ 7150 2900
@@ -832,11 +870,7 @@ Wire Wire Line
 Wire Wire Line
 	6050 3050 6050 2800
 Wire Wire Line
-	4550 3250 8000 3250
-Wire Wire Line
-	8000 3250 8000 3150
-Wire Wire Line
-	8000 3150 8150 3150
+	4550 3250 8100 3250
 Connection ~ 5300 3250
 Wire Wire Line
 	5300 3300 5300 3250
@@ -936,32 +970,24 @@ Wire Wire Line
 Wire Wire Line
 	2950 4450 3450 4450
 Connection ~ 3000 4450
-Text Label 6000 2000 0    60   ~ 0
-CHRG_SW
-Text Label 6000 2400 0    60   ~ 0
-CHRG_SENSE
 Connection ~ 10350 1650
-NoConn ~ 1800 1650
-$Comp
-L PWR_FLAG #FLG061
-U 1 1 58A9FA40
-P 5350 1000
-F 0 "#FLG061" H -1000 225 50  0001 C CNN
-F 1 "PWR_FLAG" H 5350 1174 50  0000 C CNN
-F 2 "" H -1000 150 50  0001 C CNN
-F 3 "" H -1000 150 50  0001 C CNN
-	1    5350 1000
-	1    0    0    -1  
-$EndComp
-$Comp
-L PWR_FLAG #FLG062
-U 1 1 58A9FB2F
-P 5250 1550
-F 0 "#FLG062" H -1100 775 50  0001 C CNN
-F 1 "PWR_FLAG" H 5250 1724 50  0000 C CNN
-F 2 "" H -1100 700 50  0001 C CNN
-F 3 "" H -1100 700 50  0001 C CNN
-	1    5250 1550
-	1    0    0    -1  
-$EndComp
+Wire Wire Line
+	7650 2100 7650 3250
+Connection ~ 7650 3250
+Wire Wire Line
+	7750 2100 7750 2400
+Connection ~ 7750 2400
+Wire Wire Line
+	7850 2100 7850 2400
+Connection ~ 7850 2400
+Wire Wire Line
+	7950 2100 7950 3050
+Connection ~ 7950 3050
+Wire Wire Line
+	8050 3250 8050 2100
+Wire Wire Line
+	8150 3150 8100 3150
+Wire Wire Line
+	8100 3150 8100 3250
+Connection ~ 8050 3250
 $EndSCHEMATC
