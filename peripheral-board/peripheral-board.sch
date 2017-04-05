@@ -94,9 +94,9 @@ Text Label 4950 4500 0    60   ~ 0
 I2C_SDA
 Text Label 4950 4600 0    60   ~ 0
 I2C_SCL
-Text Label 4950 5050 0    60   ~ 0
+Text Label 4950 4400 0    60   ~ 0
 MOUSE_X
-Text Label 4950 4950 0    60   ~ 0
+Text Label 4950 4300 0    60   ~ 0
 MOUSE_Y
 $Sheet
 S 9100 2550 1050 800 
@@ -401,9 +401,9 @@ Wire Wire Line
 Wire Wire Line
 	4950 4600 5450 4600
 Wire Wire Line
-	4950 4950 5450 4950
+	4950 4300 5450 4300
 Wire Wire Line
-	4950 5050 5450 5050
+	4950 4400 5450 4400
 Wire Wire Line
 	3050 5550 3000 5550
 Wire Wire Line
@@ -641,12 +641,12 @@ Text Label 4950 2900 0    60   ~ 0
 AUD_CS_L
 Text Label 4950 2800 0    60   ~ 0
 AUD_CS_R
-Text Label 4950 4200 0    60   ~ 0
+Text Label 4950 4100 0    60   ~ 0
 EXT_DET
-Text Label 4950 4300 0    60   ~ 0
+Text Label 4950 4200 0    60   ~ 0
 EXT_AN
 Wire Wire Line
-	5450 4300 4950 4300
+	5450 4200 4950 4200
 Wire Wire Line
 	5450 5150 4950 5150
 Wire Wire Line
@@ -659,7 +659,7 @@ Text Label 4950 5350 0    60   ~ 0
 KBD_Q1
 Text Label 4950 5250 0    60   ~ 0
 KBD_Q2
-Text Label 4950 4400 0    60   ~ 0
+Text Label 4950 5050 0    60   ~ 0
 KBD_Q3
 Text Label 4950 3350 0    60   ~ 0
 KBD_CLK
@@ -699,7 +699,7 @@ Wire Wire Line
 	9400 1050 9850 1050
 Text Label 9450 1050 0    60   ~ 0
 AUD_DET
-Text Label 4950 4100 0    60   ~ 0
+Text Label 4950 4950 0    60   ~ 0
 AUD_DET
 Wire Wire Line
 	7450 1000 7900 1000
@@ -712,11 +712,11 @@ SD_DET
 Text Label 4950 5450 0    60   ~ 0
 SD_DET
 Wire Wire Line
-	4950 4100 5450 4100
+	4950 4950 5450 4950
 Wire Wire Line
 	4950 4700 6400 4700
 Wire Wire Line
-	4950 4200 5450 4200
+	4950 4100 5450 4100
 Wire Wire Line
 	4950 4800 5450 4800
 Wire Wire Line
@@ -732,7 +732,7 @@ Wire Wire Line
 Wire Wire Line
 	4950 5250 5450 5250
 Wire Wire Line
-	4950 4400 5450 4400
+	4950 5050 5450 5050
 Wire Wire Line
 	4950 5450 5450 5450
 $Comp
