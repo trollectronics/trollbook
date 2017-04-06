@@ -1,0 +1,237 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:er-con40ht-1
+LIBS:displayboard-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L ER-CON40HT-1 P1001
+U 1 1 58E51404
+P 2650 3350
+F 0 "P1001" H 2738 3290 50  0000 L CNN
+F 1 "ER-CON40HT-1" H 2738 3199 50  0000 L CNN
+F 2 "mod:ER-CON40HT-1" H 2650 3350 60  0001 C CNN
+F 3 "" H 2650 3350 60  0000 C CNN
+	1    2650 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L ER-CON40HT-1 P1002
+U 1 1 58E514A1
+P 3850 3350
+F 0 "P1002" H 3938 3290 50  0000 L CNN
+F 1 "ER-CON40HT-1" H 3938 3199 50  0000 L CNN
+F 2 "mod:ER-CON40HT-1" H 3850 3350 60  0001 C CNN
+F 3 "" H 3850 3350 60  0000 C CNN
+	1    3850 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 1400 3650 1400
+Wire Wire Line
+	2450 1500 3650 1500
+Wire Wire Line
+	2450 1600 3650 1600
+Wire Wire Line
+	2450 1700 3650 1700
+Wire Wire Line
+	2450 1800 3650 1800
+Wire Wire Line
+	2450 1900 3650 1900
+Wire Wire Line
+	2450 2000 3650 2000
+Wire Wire Line
+	2450 2100 3650 2100
+Wire Wire Line
+	2450 2200 3650 2200
+Wire Wire Line
+	2450 2300 3650 2300
+Wire Wire Line
+	2450 2400 3650 2400
+Wire Wire Line
+	2450 2500 3650 2500
+Wire Wire Line
+	2450 2600 3650 2600
+Wire Wire Line
+	2450 2700 3650 2700
+Wire Wire Line
+	2450 2800 3650 2800
+Wire Wire Line
+	2450 2900 3650 2900
+Wire Wire Line
+	2450 3000 3650 3000
+Wire Wire Line
+	2450 3100 3650 3100
+Wire Wire Line
+	2450 3200 3650 3200
+Wire Wire Line
+	2450 3300 3650 3300
+Wire Wire Line
+	2450 3400 3650 3400
+Wire Wire Line
+	2450 3500 3650 3500
+Wire Wire Line
+	2450 3600 3650 3600
+Wire Wire Line
+	2450 3700 3650 3700
+Wire Wire Line
+	2450 3800 3650 3800
+Wire Wire Line
+	2450 3900 3650 3900
+Wire Wire Line
+	2450 4000 3650 4000
+Wire Wire Line
+	2450 4100 3650 4100
+Wire Wire Line
+	2450 4200 3650 4200
+Wire Wire Line
+	2450 4300 3650 4300
+Wire Wire Line
+	2450 4400 3650 4400
+Wire Wire Line
+	2450 4500 3650 4500
+Wire Wire Line
+	2450 4600 3650 4600
+Wire Wire Line
+	2450 4700 3650 4700
+Wire Wire Line
+	2450 4800 3650 4800
+Wire Wire Line
+	2450 4900 3650 4900
+Wire Wire Line
+	2450 5000 3650 5000
+Wire Wire Line
+	2450 5100 3650 5100
+Wire Wire Line
+	2450 5200 3650 5200
+Wire Wire Line
+	2450 5300 3650 5300
+Wire Wire Line
+	2650 5550 3850 5550
+$Comp
+L GND #PWR01
+U 1 1 58E51660
+P 3300 5800
+F 0 "#PWR01" H 3300 5550 50  0001 C CNN
+F 1 "GND" H 3305 5627 50  0000 C CNN
+F 2 "" H 3300 5800 50  0001 C CNN
+F 3 "" H 3300 5800 50  0001 C CNN
+	1    3300 5800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 5800 3300 5550
+Connection ~ 3300 5550
+$Comp
+L Speaker LS1001
+U 1 1 58E53370
+P 8100 2400
+F 0 "LS1001" H 8270 2396 50  0000 L CNN
+F 1 "L Speaker" H 8270 2305 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:CP_Radial_D10.0mm_P7.50mm" H 8100 2200 50  0001 C CNN
+F 3 "" H 8090 2350 50  0001 C CNN
+	1    8100 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Speaker LS1002
+U 1 1 58E53424
+P 8100 2900
+F 0 "LS1002" H 8270 2896 50  0000 L CNN
+F 1 "R Speaker" H 8270 2805 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:CP_Radial_D10.0mm_P7.50mm" H 8100 2700 50  0001 C CNN
+F 3 "" H 8090 2850 50  0001 C CNN
+	1    8100 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 J1001
+U 1 1 58E53C2E
+P 6950 2700
+F 0 "J1001" H 6869 2325 50  0000 C CNN
+F 1 "CONN_01X04" H 6869 2416 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x04_Pitch2.54mm" H 6950 2700 50  0001 C CNN
+F 3 "" H 6950 2700 50  0001 C CNN
+	1    6950 2700
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	7150 2550 7400 2550
+Wire Wire Line
+	7400 2550 7400 2400
+Wire Wire Line
+	7400 2400 7900 2400
+Wire Wire Line
+	7900 2500 7550 2500
+Wire Wire Line
+	7550 2500 7550 2650
+Wire Wire Line
+	7550 2650 7150 2650
+Wire Wire Line
+	7150 2750 7800 2750
+Wire Wire Line
+	7800 2750 7800 2900
+Wire Wire Line
+	7800 2900 7900 2900
+Wire Wire Line
+	7150 2850 7650 2850
+Wire Wire Line
+	7650 2850 7650 3000
+Wire Wire Line
+	7650 3000 7900 3000
+$Comp
+L GND #PWR02
+U 1 1 58E53EF5
+P 7400 3050
+F 0 "#PWR02" H 7400 2800 50  0001 C CNN
+F 1 "GND" H 7405 2877 50  0000 C CNN
+F 2 "" H 7400 3050 50  0001 C CNN
+F 3 "" H 7400 3050 50  0001 C CNN
+	1    7400 3050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7400 2650 7400 3050
+Connection ~ 7400 2850
+Connection ~ 7400 2650
+$EndSCHEMATC

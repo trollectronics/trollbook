@@ -1,5 +1,4 @@
 EESchema Schematic File Version 2
-LIBS:peripheral-board-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,19 +28,13 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:amp
-LIBS:card-edge
-LIBS:switchmode
-LIBS:joystick
-LIBS:digital-pot
 LIBS:vref
-LIBS:switches
-LIBS:peripheral-board-cache
+LIBS:battery-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 10
+Sheet 1 1
 Title ""
 Date ""
 Rev ""
@@ -57,7 +50,7 @@ U 1 1 589ABFFA
 P 7000 2800
 F 0 "BT5001" H 7118 2896 50  0000 L CNN
 F 1 "LiPo 2200mAh 51x68x5" H 7118 2805 50  0000 L CNN
-F 2 "" V -3000 810 50  0001 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x02_Pitch1.27mm" V -3000 810 50  0001 C CNN
 F 3 "" V -3000 810 50  0001 C CNN
 	1    7000 2800
 	1    0    0    -1  
@@ -163,7 +156,7 @@ U 1 1 589AC03D
 P 7000 3950
 F 0 "BT5002" H 7118 4046 50  0000 L CNN
 F 1 "LiPo 2200mAh 51x68x5" H 7118 3955 50  0000 L CNN
-F 2 "" V -3000 1960 50  0001 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x02_Pitch1.27mm" V -3000 1960 50  0001 C CNN
 F 3 "" V -3000 1960 50  0001 C CNN
 	1    7000 3950
 	1    0    0    -1  
@@ -346,4 +339,30 @@ Text Notes 7150 4100 0    60   ~ 0
 505168
 Text Notes 3700 3050 0    60   ~ 0
 pot: 3364W-1-503E
+$Comp
+L CONN_01X03 J1001
+U 1 1 58E61493
+P 2200 3250
+F 0 "J1001" H 2119 2925 50  0000 C CNN
+F 1 "CONN_01X03" H 2119 3016 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x03_Pitch2.54mm" H 2200 3250 50  0001 C CNN
+F 3 "" H 2200 3250 50  0001 C CNN
+	1    2200 3250
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2400 3150 3500 3150
+Wire Wire Line
+	3500 3150 3500 2150
+Connection ~ 3500 2150
+Wire Wire Line
+	2400 3250 3700 3250
+Wire Wire Line
+	3700 3250 3700 4050
+Connection ~ 3700 4050
+Wire Wire Line
+	2400 3350 3450 3350
+Wire Wire Line
+	3450 3350 3450 4450
+Connection ~ 3450 4450
 $EndSCHEMATC

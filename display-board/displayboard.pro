@@ -1,4 +1,4 @@
-update=tor  6 apr 2017 12:38:13
+update=ons  5 apr 2017 21:27:49
 version=1
 last_client=kicad
 [pcbnew]
@@ -56,6 +56,6 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
-LibName30=lib/vref
+LibName30=lib/er-con40ht-1
 [general]
 version=1
