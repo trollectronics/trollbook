@@ -4,39 +4,70 @@
 #include <avr/sleep.h>
 #include "sleep.h"
 
-#define ABS(a) ((a) > 0 ? (a) : (-a))
+#define PWRON_RESET_DEASSERT() (PORTB |= (1 << 7))
+#define PWR_SHUTDOWN_24_DEASSERT() (PORTD |= (1 << 6))
+#define PWR_SHUTDOWN_3_ASSERT() (PORTD |= (1 << 7))
 
+#define PWRON_RESET_ASSERT() (PORTB &= ~(1 << 7))
+#define PWR_SHUTDOWN_24_ASSERT() (PORTD &= ~(1 << 6))
+#define PWR_SHUTDOWN_3_DEASSERT() (PORTD &= ~(1 << 7))
 
-void init_spi_slave() {
-	USICR = (1 << USIWM0) | (1 << USICS1);
+typedef enum PowerState PowerState;
+enum PowerState {
+	POWER_STATE_OFF,
+	POWER_STATE_ON,
+};
+
+PowerState power_state = POWER_STATE_OFF;
+
+void power_off() {
+	PWRON_RESET_ASSERT();
+	msleep(100);
+	PWR_SHUTDOWN_24_ASSERT();
+	msleep(50);
+	PWR_SHUTDOWN_3_ASSERT();
+	
+	power_state = POWER_STATE_OFF;
 }
 
-void do_transfer(uint8_t data) {
-	USIDR = data;
-	DDRA |= (1 << 5);
-	USISR = (1 << USIOIF);
-	while (!(USISR & (1 << USIOIF)));
-	DDRA &= ~(1 << 5);
-
-	return;
+void power_on() {
+	PWR_SHUTDOWN_3_DEASSERT();
+	msleep(100);
+	PWR_SHUTDOWN_24_DEASSERT();
+	msleep(500);
+	PWRON_RESET_DEASSERT();
+	
+	power_state = POWER_STATE_ON;
 }
-
 
 int main() {
-	uint8_t keys = 0xFF;
-
-	init_spi_slave();
+	PWRON_RESET_ASSERT();
+	PWR_SHUTDOWN_24_ASSERT();
+	PWR_SHUTDOWN_3_ASSERT();
+	DDRD &= ~(1 << 2); //Power button input
+	DDRD |= (1 << 6); //PWR_SHUTDOWN_24 output
+	DDRD |= (1 << 7); //PWR_SHUTDOWN_3 output
+	DDRB |= (1 << 7); //PWRON_RESET output
+	
+	bool power_button = 1, power_button_old = 1;
 	
 	for(;;) {
-		// TODO: Replace this with actual chip select pin //
-		if (!(PINB & 0x4)) {
-			do_transfer(keys);
-			while (!(PINB & 0x4));
+		if(!power_button_old && power_button) {
+			switch(power_state) {
+				case POWER_STATE_OFF:
+					power_on();
+					
+					break;
+				case POWER_STATE_ON:
+					power_off();
+					
+					break;
+			}
 		}
-
-		keys = PINA & 0xF;
-		keys |= ((PINB & 0x3) << 4);
+		
+		power_button_old = power_button;
+		power_button = (PIND >> 2) & 1;
+		
+		msleep(10);
 	}
-	
-	return 0;
 }

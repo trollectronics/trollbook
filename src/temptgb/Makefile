@@ -1,5 +1,5 @@
 # Device number
-DEVICE		= attiny48
+DEVICE		= attiny24
 
 # Settings for programmer
 AVRISP		= usbasp
