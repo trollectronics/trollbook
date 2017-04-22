@@ -36,8 +36,9 @@ df = $(DEPDIR)/$(*F)
 all: $(HEXFILE)
 
 clean:
-	$(RM) $(HEXFILE) $(ELFFILE) $(OBJFILES)
-	$(RM) -R $(DEPDIR)
+	@echo "[ RM ] $(HEXFILE) $(ELFFILE) $(OBJFILES)"
+	@$(RM) $(HEXFILE) $(ELFFILE) $(OBJFILES)
+	@$(RM) -R $(DEPDIR)
 
 install:
 	avrdude -p $(shell echo "$(DEVICE)" | sed -E 's/^at(t|m)(iny|ega)([0-9]*)/\1\3/') -c $(AVRISP) -U "flash:w:$(HEXFILE)"
@@ -46,27 +47,32 @@ fuses:
 	avrdude -p $(shell echo "$(DEVICE)" | sed -E 's/^at(t|m)(iny|ega)([0-9]*)/\1\3/') -c $(AVRISP) -U lfuse:w:0xe2:m
 
 $(ELFFILE): $(OBJFILES)
-	avr-gcc $(CFLAGS) -o $@ $(OBJFILES) $(LDFLAGS)
+	@echo "[ LD ] $(ELFFILE)"
+	@avr-gcc $(CFLAGS) -o $@ $(OBJFILES) $(LDFLAGS)
 
 $(HEXFILE): $(ELFFILE)
-	avr-objcopy -j .text -j .data -O ihex $< $@
+	@echo "[OCPY] $(HEXFILE)"
+	@avr-objcopy -j .text -j .data -O ihex $< $@
 
 $(DEPDIR):
 	@mkdir -p $@
 
 # Compile C files
 %.c.o: %.c | $(DEPDIR)
-	avr-gcc $(CFLAGS) -c -MD -o $@ $<
+	@echo "[ CC ] $@"
+	@avr-gcc $(CFLAGS) -c -MD -o $@ $<
 	@cp $*.c.d $(df).c.P; sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' -e '/^$$/ d' -e 's/$$/ :/' < $*.c.d >> $(df).c.P; $(RM) $*.c.d
 
 # Compile ASM files with C pre-processor directives
 %.S.o: %.S | $(DEPDIR)
-	avr-gcc $(CFLAGS) $(ASFLAGS) -c -MD -o $@ $<
+	@echo "[ AS ] $@"
+	@avr-gcc $(CFLAGS) $(ASFLAGS) -c -MD -o $@ $<
 	@cp $*.S.d $(df).S.P; sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' -e '/^$$/ d' -e 's/$$/ :/' < $*.S.d >> $(df).S.P; $(RM) $*.S.d
 
 # Link symbol lists to object files
 %.syms.o: %.syms
-	avr-ld -o $@ -r --just-symbols=$<
+	@echo "[ LD ] $@"
+	@avr-ld -o $@ -r --just-symbols=$<
 
 # Check dependencies
 -include $(CFILES:%.c=$(DEPDIR)/%.c.P)
