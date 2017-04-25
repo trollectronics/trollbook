@@ -16,6 +16,7 @@ struct InputButtons {
 
 InputButtons input_poll_uart();
 InputButtons input_poll_temp_spi();
+void input_test_keyboard(void *arg);
 
 #define input_poll input_poll_temp_spi
 

@@ -3,6 +3,32 @@
 #include "spi.h"
 #include "delay.h"
 #include "input.h"
+#include "../tgb/protocol.h"
+
+void input_test_keyboard(void *arg) {
+	uint8_t reg;
+	StatusRegister status;
+	terminal_clear();
+	spi_set_clockdiv(165);
+	
+	for(;;) {
+		spi_select_slave(SPI_SLAVE_KBD);
+		dumbdelay(1000);
+		
+		spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		*((uint8_t *) &status) = spi_send_recv(0xFF);
+		
+		if(status.keyboard_if) {
+			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
+			
+			while((reg = spi_send_recv(0xFF)) != 0xFF) {
+				printf("kbd ev %x\n", (int) reg);
+			}
+		}
+		spi_select_slave(SPI_SLAVE_NONE);
+		dumbdelay(100000);
+	}
+}
 
 InputButtons input_poll_uart() {
 	char c;

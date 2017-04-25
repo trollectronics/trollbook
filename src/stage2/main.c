@@ -36,18 +36,6 @@ static const char *fat_type_name[] = {
 	[FAT_TYPE_FAT32] = "FAT32",
 };
 
-Menu menu_sub= {
-	clear_and_print,
-	"Sub menu test\n----------------------------------------\n",
-	true,
-	0,
-	2,
-	{
-		{"HEHEUHEHAHEAHUEH", NULL, NULL},
-		{"HEYEAYEAYEA!", NULL, NULL},
-	},
-};
-
 Menu menu_main = {
 	clear_and_print,
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
@@ -56,7 +44,7 @@ Menu menu_main = {
 	8,
 	{
 		{"Boot kernel.elf", autoboot, NULL},
-		{"Sub menu test", menu_execute, &menu_sub},
+		{"Test keyboard", input_test_keyboard, NULL},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
 		{"Serial file transfer to SD", serial_transfer_recv, NULL},
 		{"Test SPI ROM", test_spi_rom, NULL},
