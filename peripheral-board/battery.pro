@@ -1,4 +1,4 @@
-update=tor  6 apr 2017 12:38:13
+update=mån 24 apr 2017 13:14:44
 version=1
 last_client=kicad
 [pcbnew]
@@ -57,5 +57,6 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=lib/vref
+LibName31=references
 [general]
 version=1
