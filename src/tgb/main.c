@@ -8,13 +8,30 @@
 #include "protocol.h"
 #include "spi.h"
 #include "keyboard.h"
+#include "interrupt.h"
 
 StatusRegister reg_status;
-ControlRegister reg_control;
+ControlRegister reg_control = {
+	.keyboard_ie = true,
+};
 
 ISR(TIMER0_COMPA_vect) {
 	keyboard_tick();
-	//power_tick();
+	interrupt_assert();
+}
+
+void timer_init() {
+	TCCR0A = 0xD; //Clear on compare, clk/1024
+	TCNT0 = 0;
+	OCR0A = 24;
+	TIMSK0 = 0x2; //Interrupt on compare A
+	
+}
+
+void timer_deinit() {
+	TCCR0A = 0x0;
+	TIMSK0 = 0x0;
+	TCNT0 = 0;
 }
 
 int main() {

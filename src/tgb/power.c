@@ -7,6 +7,11 @@
 #include "power.h"
 #include "spi.h"
 #include "protocol.h"
+#include "keyboard.h"
+#include "interrupt.h"
+#include "main.h"
+
+#define POWER_BUTTON_KILL_TIMER 3000
 
 #define PWRON_RESET_DEASSERT() (PORTB |= (1 << 7))
 #define PWR_SHUTDOWN_24_DEASSERT() (PORTD |= (1 << 6))
@@ -28,19 +33,22 @@ ISR(INT0_vect) {
 	uint16_t counter;
 	for(counter = 0; !((PIND >> 2) & 1); counter++) {
 		msleep(1);
+		
+		if(counter == POWER_BUTTON_KILL_TIMER && power_state == POWER_STATE_ON) {
+			power_off();
+		}
 	}
 	msleep(1);
+	
+	if(counter >= POWER_BUTTON_KILL_TIMER)
+		return;
 	
 	switch(power_state) {
 		case POWER_STATE_OFF:
 			power_on();
 			break;
 		case POWER_STATE_ON:
-			if(counter > 4000) {
-				power_off();
-			} else {
-				reg_status.powerbutton_if = 1;
-			}
+			reg_status.powerbutton_if = 1;
 			break;
 	}
 }
@@ -56,10 +64,13 @@ void power_init() {
 	
 	EICRA = 0x0; //Low level on pin is interrupt
 	EIMSK = 0x1; //Enable interrupt for power button
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 }
 
 void power_off() {
-	//TODO: shut down keyboard timer
+	interrupt_deinit();
+	timer_deinit();
+	keyboard_deinit();
 	spi_deinit();
 	protocol_reset();
 	PWRON_RESET_ASSERT();
@@ -82,7 +93,9 @@ void power_on() {
 	
 	power_state = POWER_STATE_ON;
 	spi_init();
-	//TODO: turn on keyboard timer
+	keyboard_init();
+	timer_init();
+	interrupt_init();
 	
 	set_sleep_mode(SLEEP_MODE_IDLE);
 }

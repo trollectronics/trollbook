@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include <avr/io.h>
 #include "protocol.h"
+#include "interrupt.h"
 
 #define KBD_RESET_DEASSERT() (PORTB |= (1 << 0))
 #define KBD_RESET_ASSERT() (PORTB &= ~(1 << 0))
@@ -9,10 +11,10 @@
 #define KBD_CLK_ASSERT() (PORTB |= (1 << 1))
 #define KBD_CLK_DEASSERT() (PORTB &= ~(1 << 1))
 
-#define KBD_Q0 ((PORTA >> 2) & 1)
-#define KBD_Q1 ((PORTD >> 4) & 1)
-#define KBD_Q2 ((PORTD >> 3) & 1)
-#define KBD_Q3 ((PORTD >> 2) & 1)
+#define KBD_Q0 ((PINA >> 2) & 1)
+#define KBD_Q1 ((PIND >> 4) & 1)
+#define KBD_Q2 ((PIND >> 3) & 1)
+#define KBD_Q3 ((PIND >> 1) & 1)
 
 #define COLUMNS 17
 
@@ -32,14 +34,25 @@ struct {
 } keyboard;
 
 void keyboard_init() {
-	KBD_RESET_ASSERT();
-	KBD_CLK_DEASSERT();
 	DDRB |= (1 << 0); //KBD_RESET output
 	DDRB |= (1 << 1); //KBD_CLK output
-	DDRA &= (1 << 2); //KBD_Q0 input
-	DDRD &= (1 << 4); //KBD_Q1 input
-	DDRD &= (1 << 3); //KBD_Q2 input
-	DDRD &= (1 << 1); //KBD_Q3 input
+	DDRA &= ~(1 << 2); //KBD_Q0 input
+	DDRD &= ~(1 << 4); //KBD_Q1 input
+	DDRD &= ~(1 << 3); //KBD_Q2 input
+	DDRD &= ~(1 << 1); //KBD_Q3 input
+	KBD_CLK_DEASSERT();
+	KBD_RESET_ASSERT();
+	
+	memset(&keyboard, 0, sizeof(keyboard));
+}
+
+void keyboard_deinit() {
+	DDRB &= ~(1 << 0); //KBD_RESET input
+	DDRB &= ~(1 << 1); //KBD_CLK input
+	DDRA &= ~(1 << 2); //KBD_Q0 input
+	DDRD &= ~(1 << 4); //KBD_Q1 input
+	DDRD &= ~(1 << 3); //KBD_Q2 input
+	DDRD &= ~(1 << 1); //KBD_Q3 input
 }
 
 void keyboard_event_push(uint8_t ev) {
@@ -70,6 +83,8 @@ uint8_t keyboard_events() {
 
 void keyboard_tick() {
 	uint8_t row;
+	uint8_t oldrow;
+	uint8_t i;
 	
 	switch(keyboard.state) {
 		case KEYBOARD_STATE_RESET:
@@ -82,13 +97,24 @@ void keyboard_tick() {
 			keyboard.state = KEYBOARD_STATE_CLK_HIGH;
 			break;
 		case KEYBOARD_STATE_CLK_HIGH:
-			row = KBD_Q0 | (KBD_Q1 << 1) | (KBD_Q3 << 2) | (KBD_Q3 << 3);
+			row = KBD_Q0 | (KBD_Q1 << 1) | (KBD_Q2 << 2) | (KBD_Q3 << 3);
 			if(keyboard.column & 1) {
+				oldrow = keyboard.keystate[keyboard.column >> 1] >> 4;
 				keyboard.keystate[keyboard.column >> 1] &= 0x0F;
 				keyboard.keystate[keyboard.column >> 1] |= row << 4;
 			} else {
+				oldrow = keyboard.keystate[keyboard.column >> 1] & 0xF;
 				keyboard.keystate[keyboard.column >> 1] &= 0xF0;
 				keyboard.keystate[keyboard.column >> 1] |= row;
+			}
+			
+			for(i = 0; oldrow != row; i++) {
+				if((oldrow & 1) ^ (row & 1)) {
+					keyboard_event_push(((oldrow & 1) << 7) | ((keyboard.column << 2) | i));
+				}
+				
+				oldrow >>= 1;
+				row >>= 1;
 			}
 			
 			if(++keyboard.column == COLUMNS)

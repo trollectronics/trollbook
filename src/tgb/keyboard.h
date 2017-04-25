@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 void keyboard_init();
+void keyboard_deinit();
 void keyboard_event_push(uint8_t ev);
 int16_t keyboard_event_pop();
 uint8_t keyboard_events();

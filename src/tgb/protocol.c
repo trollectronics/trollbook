@@ -2,6 +2,7 @@
 #include "protocol.h"
 #include "keyboard.h"
 #include "power.h"
+#include "interrupt.h"
 
 struct {
 	ProtocolCommand cmd;
@@ -22,6 +23,7 @@ void protocol_tick() {
 		case PROTOCOL_COMMAND_STATUS:
 			spi_send(*((uint8_t*) &reg_status));
 			protocol.cmd = PROTOCOL_COMMAND_NONE;
+			interrupt_deassert();
 			break;
 		
 		case PROTOCOL_COMMAND_CONTROL:
@@ -33,6 +35,7 @@ void protocol_tick() {
 			dat = keyboard_event_pop();
 			if(dat < 0) {
 				protocol.cmd = PROTOCOL_COMMAND_NONE;
+				spi_send(0xFF);
 			} else {
 				spi_send(dat);
 			}

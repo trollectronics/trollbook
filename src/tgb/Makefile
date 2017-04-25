@@ -2,10 +2,13 @@
 DEVICE		= attiny48
 
 # Settings for programmer
-AVRISP		= usbasp
+AVRISP		= buspirate -P /dev/ttyUSB0
 
 # Name of the project
 PROGNAME	= outfile
+
+# AVR Fuses
+FUSES		= -U lfuse:w:0xee:m -U hfuse:w:0xdd:m
 
 # Compiler and linker flags
 CFLAGS		= -Wall -Os -mmcu=$(DEVICE) -std=c99 -ffreestanding -fshort-enums -fpack-struct
@@ -44,7 +47,7 @@ install:
 	avrdude -p $(shell echo "$(DEVICE)" | sed -E 's/^at(t|m)(iny|ega)([0-9]*)/\1\3/') -c $(AVRISP) -U "flash:w:$(HEXFILE)"
 
 fuses:
-	avrdude -p $(shell echo "$(DEVICE)" | sed -E 's/^at(t|m)(iny|ega)([0-9]*)/\1\3/') -c $(AVRISP) -U lfuse:w:0xe2:m
+	avrdude -p $(shell echo "$(DEVICE)" | sed -E 's/^at(t|m)(iny|ega)([0-9]*)/\1\3/') -c $(AVRISP) $(FUSES)
 
 $(ELFFILE): $(OBJFILES)
 	@echo "[ LD ] $(ELFFILE)"
