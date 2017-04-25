@@ -196,6 +196,7 @@ int main() {
 	fat_get_label(label);
 	printf(" - Volume label: %s\n\n", label);
 	
+	input_test_keyboard(NULL);
 	menu_execute(&menu_main);
 	
 	for(;;);

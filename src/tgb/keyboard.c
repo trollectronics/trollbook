@@ -55,6 +55,7 @@ void keyboard_deinit() {
 	DDRD &= ~(1 << 1); //KBD_Q3 input
 }
 
+//TODO: make this circle buffer instead of stack
 void keyboard_event_push(uint8_t ev) {
 	reg_status.keyboard_if = true;
 	if(keyboard.events == 7)
@@ -70,7 +71,7 @@ int16_t keyboard_event_pop() {
 		reg_status.keyboard_if = false;
 		return -1;
 	}
-	ret = keyboard.event[keyboard.events--];
+	ret = keyboard.event[--keyboard.events];
 	if(keyboard.events == 0)
 		reg_status.keyboard_if = false;
 	

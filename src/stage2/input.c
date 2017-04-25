@@ -6,23 +6,29 @@
 #include "../tgb/protocol.h"
 
 void input_test_keyboard(void *arg) {
+	int i;
 	uint8_t reg;
 	StatusRegister status;
 	terminal_clear();
 	spi_set_clockdiv(165);
+	printf("Testing keyboard\n");
 	
-	for(;;) {
+	for(i= 0;;) {
 		spi_select_slave(SPI_SLAVE_KBD);
 		dumbdelay(1000);
 		
 		spi_send_recv(PROTOCOL_COMMAND_STATUS);
-		*((uint8_t *) &status) = spi_send_recv(0xFF);
-		
-		if(status.keyboard_if) {
+		reg = spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
-			while((reg = spi_send_recv(0xFF)) != 0xFF) {
-				printf("kbd ev %x\n", (int) reg);
+			while((reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
+				if(i++ > 25) {
+					i = 0;
+					terminal_clear();
+					printf("Testing keyboard\n");
+				}
+				printf("kbd ev %02x\n", (int) reg);
 			}
 		}
 		spi_select_slave(SPI_SLAVE_NONE);

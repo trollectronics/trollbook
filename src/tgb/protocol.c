@@ -48,6 +48,7 @@ void protocol_tick() {
 			
 		default:
 			spi_send(0xFF);
+			protocol.cmd = PROTOCOL_COMMAND_NONE;
 			break;
 	}
 }
