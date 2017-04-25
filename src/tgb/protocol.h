@@ -3,6 +3,7 @@
 
 typedef enum ProtocolCommand ProtocolCommand;
 enum ProtocolCommand {
+	PROTOCOL_COMMAND_NONE = -1,
 	PROTOCOL_COMMAND_STATUS,
 	PROTOCOL_COMMAND_CONTROL,
 	PROTOCOL_COMMAND_KEYBOARD_EVENT,
@@ -36,5 +37,8 @@ struct ControlRegister {
 
 extern StatusRegister reg_status;
 extern ControlRegister reg_control;
+
+void protocol_reset();
+void protocol_tick();
 
 #endif

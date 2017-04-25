@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <avr/io.h>
+#include "protocol.h"
 
 #define KBD_RESET_DEASSERT() (PORTB |= (1 << 0))
 #define KBD_RESET_ASSERT() (PORTB &= ~(1 << 0))
@@ -42,17 +43,25 @@ void keyboard_init() {
 }
 
 void keyboard_event_push(uint8_t ev) {
-	if(keyboard.events == 8)
+	reg_status.keyboard_if = true;
+	if(keyboard.events == 7)
 		return;
 	
 	keyboard.event[keyboard.events++] = ev;
 }
 
-uint8_t keyboard_event_pop() {
-	if(keyboard.events == 0)
-		return 0;
+int16_t keyboard_event_pop() {
+	uint8_t ret;
 	
-	return keyboard.event[keyboard.events--];
+	if(keyboard.events == 0) {
+		reg_status.keyboard_if = false;
+		return -1;
+	}
+	ret = keyboard.event[keyboard.events--];
+	if(keyboard.events == 0)
+		reg_status.keyboard_if = false;
+	
+	return ret;
 }
 
 uint8_t keyboard_events() {

@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include "protocol.h"
 
 void spi_init() {
@@ -10,6 +11,7 @@ void spi_init() {
 	DDRB &= ~(1 << 5); //SCK input
 	
 	(void) SPDR;
+	SPDR = 0xFF;
 	SPCR = 0xC0;
 }
 
@@ -26,6 +28,6 @@ uint8_t spi_recv() {
 	return SPDR;
 }
 
-void spi_interrupt() {
-	
+ISR(SPI_STC_vect) {
+	protocol_tick();
 }

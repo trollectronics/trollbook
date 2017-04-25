@@ -1,7 +1,12 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include <avr/interrupt.h>
 #include <avr/io.h>
+#include <avr/sleep.h>
 #include "sleep.h"
+#include "power.h"
+#include "spi.h"
+#include "protocol.h"
 
 #define PWRON_RESET_DEASSERT() (PORTB |= (1 << 7))
 #define PWR_SHUTDOWN_24_DEASSERT() (PORTD |= (1 << 6))
@@ -19,6 +24,27 @@ enum PowerState {
 
 PowerState power_state = POWER_STATE_OFF;
 
+ISR(INT0_vect) {
+	uint16_t counter;
+	for(counter = 0; !((PIND >> 2) & 1); counter++) {
+		msleep(1);
+	}
+	msleep(1);
+	
+	switch(power_state) {
+		case POWER_STATE_OFF:
+			power_on();
+			break;
+		case POWER_STATE_ON:
+			if(counter > 4000) {
+				power_off();
+			} else {
+				reg_status.powerbutton_if = 1;
+			}
+			break;
+	}
+}
+
 void power_init() {
 	PWRON_RESET_ASSERT();
 	PWR_SHUTDOWN_24_ASSERT();
@@ -27,9 +53,15 @@ void power_init() {
 	DDRD |= (1 << 6); //PWR_SHUTDOWN_24 output
 	DDRD |= (1 << 7); //PWR_SHUTDOWN_3 output
 	DDRB |= (1 << 7); //PWRON_RESET output
+	
+	EICRA = 0x0; //Low level on pin is interrupt
+	EIMSK = 0x1; //Enable interrupt for power button
 }
 
 void power_off() {
+	//TODO: shut down keyboard timer
+	spi_deinit();
+	protocol_reset();
 	PWRON_RESET_ASSERT();
 	msleep(100);
 	PWR_SHUTDOWN_24_ASSERT();
@@ -37,6 +69,8 @@ void power_off() {
 	PWR_SHUTDOWN_3_ASSERT();
 	
 	power_state = POWER_STATE_OFF;
+	
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 }
 
 void power_on() {
@@ -47,6 +81,10 @@ void power_on() {
 	PWRON_RESET_DEASSERT();
 	
 	power_state = POWER_STATE_ON;
+	spi_init();
+	//TODO: turn on keyboard timer
+	
+	set_sleep_mode(SLEEP_MODE_IDLE);
 }
 
 bool power_button = 1, power_button_old = 1;
@@ -68,3 +106,4 @@ void power_tick() {
 	power_button_old = power_button;
 	power_button = (PIND >> 2) & 1;
 }
+

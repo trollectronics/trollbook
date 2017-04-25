@@ -3,5 +3,7 @@
 
 void power_init();
 void power_tick();
+void power_on();
+void power_off();
 
 #endif
