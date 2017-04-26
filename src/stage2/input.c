@@ -103,7 +103,9 @@ InputButtons input_poll_temp_spi() {
 InputButtons input_poll_keyboard(void *arg) {
 	uint8_t reg;
 	InputButtons btn = {};
+	uint16_t clockdiv;
 	
+	clockdiv = spi_get_clockdiv();
 	spi_set_clockdiv(165);
 	do {
 		spi_select_slave(SPI_SLAVE_KBD);
@@ -140,6 +142,8 @@ InputButtons input_poll_keyboard(void *arg) {
 		spi_select_slave(SPI_SLAVE_NONE);
 		dumbdelay(10000);
 	} while(!(btn.up || btn.down || btn.left || btn.right || btn.enter || btn.back));
+	
+	spi_set_clockdiv(clockdiv);
 	
 	return btn;
 }
