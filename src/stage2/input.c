@@ -1,19 +1,35 @@
 #include <stdint.h>
+#include <stdbool.h>
+#include "terminal.h"
+#include "printf.h"
 #include "uart.h"
 #include "spi.h"
 #include "delay.h"
 #include "input.h"
 #include "../tgb/protocol.h"
 
+static const char matrix_key[4][17] = {
+	{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '\'', 'B', 'T', 'A', 'U', 'C', },
+	{'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', '.', 'R', 'G', '<', 'R', ']', },
+	{'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'o', 'a', '\'', 'E', 'T', '$', 'D', '|', },
+	{'S', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', 'S', 'F', ' ', 'F', 'L', '[', },
+};
+
+static bool matrix[4][17];
+
+//int matrix_cols[17] = {5, 1, 0, 2, 6, 7, 3, 4, 8, 14, 10, 13, 9, 15, 11, 12, 16};
+//static const int matrix_cols[17] = {1, 3, 6, 7, 0, 4, 5, 8, 12, 10, 14, 15, 11, 9, 13, 16, 2};
+static const int matrix_cols[17] = {2, 1, 3, 6, 7, 0, 4, 5, 8, 12, 10, 14, 15, 11, 9, 13, 16};
+//static const int matrix_cols[17] = {0, 1, 2, 3, 4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
 void input_test_keyboard(void *arg) {
-	int i;
+	int i, j;
 	uint8_t reg;
-	StatusRegister status;
-	terminal_clear();
 	spi_set_clockdiv(165);
-	printf("Testing keyboard\n");
+	bool change;
 	
-	for(i= 0;;) {
+	for(;;) {
+		change = false;
 		spi_select_slave(SPI_SLAVE_KBD);
 		dumbdelay(1000);
 		
@@ -23,16 +39,32 @@ void input_test_keyboard(void *arg) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
 			while((reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
-				if(i++ > 25) {
-					i = 0;
-					terminal_clear();
-					printf("Testing keyboard\n");
+				change = true;
+				if(reg & 0x80) {
+					matrix[reg & 0x3][matrix_cols[(reg & 0x7F) >> 2]] = false;
+				} else {
+					matrix[reg & 0x3][matrix_cols[reg >> 2]] = true;
 				}
-				printf("kbd ev %02x\n", (int) reg);
 			}
 		}
 		spi_select_slave(SPI_SLAVE_NONE);
-		dumbdelay(100000);
+		
+		if(change) {
+			terminal_clear();
+			for(i = 0; i < 4; i++) {
+				for(j = 0; j < 17; j++) {
+					if(matrix[i][j])
+						terminal_set_bg(TERMINAL_COLOR_GREEN);
+					else
+						terminal_set_bg(TERMINAL_COLOR_BLACK);
+					
+					printf("%c ", matrix_key[i][j]);
+				}
+				printf("\n");
+			}
+		} else {
+			dumbdelay(100000);
+		}
 	}
 }
 
@@ -117,26 +149,26 @@ InputButtons input_poll_keyboard(void *arg) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
 			while((reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
-					switch(reg) {
-				case 0xAC:
-					btn.up = 1;
-					break;
-				case 0xAF:
-					btn.left = 1;
-					break;
-				case 0xAE:
-					btn.down = 1;
-					break;
-				case 0xAD:
-					btn.right = 1;
-					break;
-				case 0xA1:
-					btn.enter = 1;
-					break;
-				case 0xA0:
-					btn.back = 1;
-					break;
-			}
+				switch(reg) {
+					case 0xB0:
+						btn.up = 1;
+						break;
+					case 0xB3:
+						btn.left = 1;
+						break;
+					case 0xB2:
+						btn.down = 1;
+						break;
+					case 0xB1:
+						btn.right = 1;
+						break;
+					case 0xA5:
+						btn.enter = 1;
+						break;
+					case 0xA4:
+						btn.back = 1;
+						break;
+				}
 			}
 		}
 		spi_select_slave(SPI_SLAVE_NONE);

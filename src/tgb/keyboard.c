@@ -30,7 +30,8 @@ struct {
 	uint8_t column;
 	KeyboardState state;
 	uint8_t event[8];
-	uint8_t events;
+	uint8_t event_first;
+	uint8_t event_last;
 } keyboard;
 
 void keyboard_init() {
@@ -57,29 +58,34 @@ void keyboard_deinit() {
 
 //TODO: make this circle buffer instead of stack
 void keyboard_event_push(uint8_t ev) {
+	uint8_t last;
 	reg_status.keyboard_if = true;
-	if(keyboard.events == 7)
-		return;
 	
-	keyboard.event[keyboard.events++] = ev;
+	last = keyboard.event_last;
+	keyboard.event[keyboard.event_last++] = ev;
+	if(keyboard.event_last == 8)
+		keyboard.event_last = 0;
+	
+	if(keyboard.event_last == keyboard.event_first)
+		keyboard.event_last = last;
 }
 
 int16_t keyboard_event_pop() {
 	uint8_t ret;
 	
-	if(keyboard.events == 0) {
+	if(keyboard.event_first == keyboard.event_last) {
 		reg_status.keyboard_if = false;
 		return -1;
 	}
-	ret = keyboard.event[--keyboard.events];
-	if(keyboard.events == 0)
+	
+	ret = keyboard.event[keyboard.event_first++];
+	if(keyboard.event_first == 8)
+		keyboard.event_first = 0;
+	
+	if(keyboard.event_first == keyboard.event_last)
 		reg_status.keyboard_if = false;
 	
 	return ret;
-}
-
-uint8_t keyboard_events() {
-	return keyboard.events;
 }
 
 void keyboard_tick() {
@@ -94,10 +100,6 @@ void keyboard_tick() {
 			keyboard.state = KEYBOARD_STATE_CLK_LOW;
 			break;
 		case KEYBOARD_STATE_CLK_LOW:
-			KBD_CLK_ASSERT();
-			keyboard.state = KEYBOARD_STATE_CLK_HIGH;
-			break;
-		case KEYBOARD_STATE_CLK_HIGH:
 			row = KBD_Q0 | (KBD_Q1 << 1) | (KBD_Q2 << 2) | (KBD_Q3 << 3);
 			if(keyboard.column & 1) {
 				oldrow = keyboard.keystate[keyboard.column >> 1] >> 4;
@@ -118,6 +120,10 @@ void keyboard_tick() {
 				row >>= 1;
 			}
 			
+			KBD_CLK_ASSERT();
+			keyboard.state = KEYBOARD_STATE_CLK_HIGH;
+			break;
+		case KEYBOARD_STATE_CLK_HIGH:
 			if(++keyboard.column == COLUMNS)
 				keyboard.column = 0;
 			KBD_CLK_DEASSERT();
