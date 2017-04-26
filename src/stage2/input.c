@@ -99,3 +99,47 @@ InputButtons input_poll_temp_spi() {
 	spi_set_clockdiv(clockdiv);
 	return btn;
 }
+
+InputButtons input_poll_keyboard(void *arg) {
+	uint8_t reg;
+	InputButtons btn = {};
+	
+	spi_set_clockdiv(165);
+	do {
+		spi_select_slave(SPI_SLAVE_KBD);
+		dumbdelay(1000);
+		
+		spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		reg = spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		if(reg != 0xFF && reg & 0x1) {
+			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
+			
+			while((reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
+					switch(reg) {
+				case 0xAC:
+					btn.up = 1;
+					break;
+				case 0xAF:
+					btn.left = 1;
+					break;
+				case 0xAE:
+					btn.down = 1;
+					break;
+				case 0xAD:
+					btn.right = 1;
+					break;
+				case 0xA1:
+					btn.enter = 1;
+					break;
+				case 0xA0:
+					btn.back = 1;
+					break;
+			}
+			}
+		}
+		spi_select_slave(SPI_SLAVE_NONE);
+		dumbdelay(10000);
+	} while(!(btn.up || btn.down || btn.left || btn.right || btn.enter || btn.back));
+	
+	return btn;
+}
