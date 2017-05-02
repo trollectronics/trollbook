@@ -4,7 +4,7 @@
 #include "interrupt.h"
 #include "protocol.h"
 
-void interrupt_init() {
+void interrupt_init(bool interrupt) {
 	//DDRA &= ~(1 << 3);
 	DDRA |= (1 << 3);
 	PORTA |= (1 << 3);
@@ -12,6 +12,9 @@ void interrupt_init() {
 	*((uint8_t *) &reg_status) = 0x0;
 	*((uint8_t *) &reg_control) = 0x0;
 	reg_control.keyboard_ie = true;
+	
+	if(interrupt)
+		PORTA &= ~(1 << 3);
 }
 
 void interrupt_deinit() {

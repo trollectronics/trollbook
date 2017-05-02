@@ -85,19 +85,21 @@ void power_off() {
 }
 
 void power_on() {
+	uint8_t key;
+	
 	PWR_SHUTDOWN_3_DEASSERT();
 	msleep(100);
 	PWR_SHUTDOWN_24_DEASSERT();
-	msleep(500);
-	PWRON_RESET_DEASSERT();
 	
 	power_state = POWER_STATE_ON;
-	spi_init();
-	keyboard_init();
-	timer_init();
-	interrupt_init();
+	key = keyboard_init();
+	interrupt_init(!!(key & 0x8));
 	
 	set_sleep_mode(SLEEP_MODE_IDLE);
+	msleep(500);
+	PWRON_RESET_DEASSERT();
+	spi_init();
+	timer_init();
 }
 
 bool power_button = 1, power_button_old = 1;
