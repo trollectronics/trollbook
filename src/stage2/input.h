@@ -19,6 +19,6 @@ InputButtons input_poll_temp_spi();
 InputButtons input_poll_keyboard();
 void input_test_keyboard(void *arg);
 
-#define input_poll input_poll_keyboard
+#define input_poll input_poll_temp_spi
 
 #endif

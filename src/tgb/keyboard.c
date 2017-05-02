@@ -34,7 +34,8 @@ struct {
 	uint8_t event_last;
 } keyboard;
 
-void keyboard_init() {
+uint8_t keyboard_init() {
+	uint8_t row;
 	DDRB |= (1 << 0); //KBD_RESET output
 	DDRB |= (1 << 1); //KBD_CLK output
 	DDRA &= ~(1 << 2); //KBD_Q0 input
@@ -45,6 +46,9 @@ void keyboard_init() {
 	KBD_RESET_ASSERT();
 	
 	memset(&keyboard, 0, sizeof(keyboard));
+	row = KBD_Q0 | (KBD_Q1 << 1) | (KBD_Q2 << 2) | (KBD_Q3 << 3);
+	
+	return row;
 }
 
 void keyboard_deinit() {
@@ -56,7 +60,6 @@ void keyboard_deinit() {
 	DDRD &= ~(1 << 1); //KBD_Q3 input
 }
 
-//TODO: make this circle buffer instead of stack
 void keyboard_event_push(uint8_t ev) {
 	uint8_t last;
 	reg_status.keyboard_if = true;

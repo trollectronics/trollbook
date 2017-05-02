@@ -124,6 +124,9 @@ architecture arch of trollbook is
 	signal chipset_int : std_logic_vector(15 downto 0);
 	
 	signal cpu_interrupt_level : std_logic_vector(2 downto 0);
+	
+	signal spi_mosi_internal : std_logic;
+	signal spi_clk_internal : std_logic;
 begin
 	u_cpu: entity work.cpu port map(reset => internal_reset, clk => clk33,
 		a => a, d => d, q => cpu_q, oe => cpu_oe,
@@ -197,7 +200,7 @@ begin
 	
 	u_spi: entity work.spi generic map(peripheral_id => 8)
 		port map(reset => internal_reset, clk => clk33,
-		miso => spi_miso, mosi => spi_mosi, sck => spi_clk, ss => spi_ss,
+		miso => spi_miso, mosi => spi_mosi_internal, sck => spi_clk_internal, ss => spi_ss,
 		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
 		bus_rw => bus_rw, bus_siz => bus_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
@@ -225,6 +228,9 @@ begin
 		mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
 	
 	-- *** Output drivers *** --
+	
+	spi_mosi <= 'Z' when pwron_reset = '0' else spi_mosi_internal;
+	spi_clk<= 'Z' when pwron_reset = '0' else spi_clk_internal;
 	
 	chipset_ack <= (others => '0');
 	chipset_nack <= (others => '0');

@@ -34,11 +34,11 @@ void input_test_keyboard(void *arg) {
 		dumbdelay(1000);
 		
 		spi_send_recv(PROTOCOL_COMMAND_STATUS);
-		reg = spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		reg = spi_send_recv(0xFF);
 		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
-			while((reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
+			while(dumbdelay(10), (reg = spi_send_recv(0xFF)) != 0xFF) {
 				change = true;
 				if(reg & 0x80) {
 					matrix[reg & 0x3][matrix_cols[(reg & 0x7F) >> 2]] = false;
@@ -144,11 +144,11 @@ InputButtons input_poll_keyboard(void *arg) {
 		dumbdelay(1000);
 		
 		spi_send_recv(PROTOCOL_COMMAND_STATUS);
-		reg = spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		reg = spi_send_recv(0xFF);
 		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
-			while(dumbdelay(10), (reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
+			while(dumbdelay(10), (reg = spi_send_recv(0xFF)) != 0xFF) {
 				switch(reg) {
 					case 0xB0:
 						btn.up = 1;
