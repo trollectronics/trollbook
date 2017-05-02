@@ -2,7 +2,8 @@
 DEVICE		= attiny48
 
 # Settings for programmer
-AVRISP		= buspirate -P /dev/ttyUSB0
+#AVRISP		= buspirate -P /dev/ttyUSB0
+AVRISP		= usbasp
 
 # Name of the project
 PROGNAME	= outfile

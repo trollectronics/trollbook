@@ -148,7 +148,7 @@ InputButtons input_poll_keyboard(void *arg) {
 		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
-			while((reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
+			while(dumbdelay(10), (reg = spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT)) != 0xFF) {
 				switch(reg) {
 					case 0xB0:
 						btn.up = 1;
