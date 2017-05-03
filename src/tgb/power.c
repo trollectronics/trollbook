@@ -88,7 +88,7 @@ void power_on() {
 	uint8_t key;
 	
 	PWR_SHUTDOWN_3_DEASSERT();
-	msleep(100);
+	msleep(500);
 	PWR_SHUTDOWN_24_DEASSERT();
 	
 	power_state = POWER_STATE_ON;
@@ -96,7 +96,7 @@ void power_on() {
 	interrupt_init(!!(key & 0x8));
 	
 	set_sleep_mode(SLEEP_MODE_IDLE);
-	msleep(500);
+	msleep(100);
 	PWRON_RESET_DEASSERT();
 	spi_init();
 	timer_init();

@@ -264,8 +264,6 @@ static void execute_elf(void *arg) {
 	}
 	printf("ELF load successful, entry is 0x%X, press any key\n", entry);
 	input_poll();
-	printf("Jumping..\n");
-	input_poll();
 	//printf("Here we have 0x%X\n", *((uint32_t *) entry));
 	//input_poll();
 	mmu_disable();
