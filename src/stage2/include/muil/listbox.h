@@ -24,7 +24,7 @@ struct MuilListboxProperties {
 	struct MuilListboxList *list;
 	struct MuilListboxList *offset;
 	DrawLineSet *border;
-	DrawLineSet *scrollbar;
+	DrawRectSet *scrollbar;
 	int size;
 	int scroll;
 	int scroll_max;

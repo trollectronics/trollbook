@@ -1,3 +1,5 @@
+#include <stddef.h>
+#include <mem.h>
 #include <draw/text.h>
 #include <draw/screen.h>
 #include <peripheral.h>
@@ -45,7 +47,6 @@ void draw_text_surface_draw(DrawTextSurface *surface) {
 	int glyph_h = surface->font->glyph_height;
 	
 	DrawColor fg = draw_color;
-	DrawColor bg = 0;
 	
 	//col = pos_x * surface->font->glyph_w;
 	//row = pos_y * surface->font->glyph_h;
@@ -62,7 +63,8 @@ void draw_text_surface_draw(DrawTextSurface *surface) {
 		for (i = 0; i < glyph_h; i++) {
 			data = surface->font->mem[c * glyph_h + i];
 			for (j = 0; j < glyph_w; j++) {
-				draw_framebuffer[(row + i) * DRAW_SCREEN_W + col + j] = (data & 1) ? fg : bg;
+				if(data & 1)
+					draw_framebuffer[(row + i) * DRAW_SCREEN_W + col + j] = fg;
 				data >>= 1;
 			}
 		}

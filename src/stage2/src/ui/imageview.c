@@ -9,7 +9,7 @@
 
 #include <muil/muil.h>
 
-MuilWidget *muil_widget_create_imageview() {
+MuilWidget *muil_widget_create_imageview(DrawBitmap *bitmap) {
 	MuilWidget *widget;
 	if((widget = malloc(sizeof(MuilWidget))) == NULL)
 		return NULL;
@@ -41,26 +41,41 @@ MuilWidget *muil_widget_create_imageview() {
 	widget->render =muil_imageview_render;
 	widget->x = widget->y = widget->w = widget->h = 0;
 	widget->enabled = 1;
-
+	
+	MuilPropertyValue v = {.p = (void *) bitmap};
+	widget->set_prop(widget, MUIL_IMAGEVIEW_PROP_BITMAP, v);
+	
 	return widget;
 }
 
 void *muil_widget_destroy_imageview(MuilWidget *widget) {
+	if(!widget)
+		return NULL;
+	
 	struct MuilImageviewProperties *p = widget->properties;
-	draw_bitmap_free(p->bitmap);
+	
+	//draw_bitmap_free(p->bitmap);
 	draw_line_set_free(p->border);
 	return muil_widget_destroy(widget);
 }
 
 MuilWidget *muil_widget_create_imageview_raw(int w, int h) {
-	MuilWidget *widget;
-	widget = muil_widget_create_imageview();
-	struct MuilImageviewProperties *p = widget->properties;
+	MuilWidget *widget = NULL;
+	DrawBitmap *bitmap = NULL;
 	
-	p->bitmap = draw_bitmap_new(w, h);
-	p->image_w = w;
-	p->image_h = h;
+	if(!(bitmap = draw_bitmap_new_raw(w, h)))
+		goto fail;
+	
+	if(!(widget = muil_widget_create_imageview(bitmap)))
+		goto fail;
+	
 	return widget;
+	
+	fail:
+	draw_bitmap_free(bitmap);
+	muil_widget_destroy_imageview(widget);
+	
+	return NULL;
 }
 
 //~ MuilWidget *muil_widget_create_imageview_file(const char *filename, int w, int h, int pixel_format) {
@@ -92,6 +107,18 @@ MuilPropertyValue muil_imageview_get_prop(MuilWidget *widget, int prop) {
 }
 
 void muil_imageview_set_prop(MuilWidget *widget, int prop, MuilPropertyValue value) {
+	struct MuilImageviewProperties *p = widget->properties;
+	
+	switch(prop) {
+		case MUIL_IMAGEVIEW_PROP_BITMAP:
+			p->bitmap = value.p;
+			p->image_w = p->bitmap->w;
+			p->image_h = p->bitmap->h;
+			
+			widget->resize(widget, widget->x, widget->y, p->image_w, p->image_h);
+			break;
+	}
+	
 	return;
 }
 

@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <mem.h>
 #include <draw/line.h>
+#include <draw/pixel.h>
 
 #define MIN(a, b) (((a) < (b) ? (a) : (b)))
 #define ABS(a) ((a) < 0 ? -(a) : (a))
@@ -58,7 +59,6 @@ void draw_line_set_get(DrawLineSet *set, size_t line, int *x1, int *y1, int *x2,
 
 void draw_line_set_draw(DrawLineSet *set, size_t lines) {
 	size_t i;
-	int dx, dy, d, x, y;
 	
 	if(!set)
 		return;

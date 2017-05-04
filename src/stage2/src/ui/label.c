@@ -105,5 +105,6 @@ void muil_label_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_label_render(MuilWidget *widget) {
 	struct MuilLabelProperties *p = widget->properties;
 	
+	draw_set_color(muil_color.text);
 	draw_text_surface_draw(p->surface);
 }

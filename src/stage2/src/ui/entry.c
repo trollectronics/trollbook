@@ -180,11 +180,15 @@ void muil_entry_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_entry_render(MuilWidget *widget) {
 	static int blink_semaphore = 0;
 	struct MuilEntryProperties *p = widget->properties;
+	
+	draw_set_color(muil_color.widget_border);
 	draw_line_set_draw(p->border, 4);
-
+	
+	draw_set_color(muil_color.text);
 	draw_text_surface_draw(p->surface);
+	draw_set_color(muil_color.widget_border);
 
-	if(widget ==muil_selected_widget) {
+	if(widget == muil_selected_widget) {
 		if(blink_semaphore > 60)
 			blink_semaphore = 0;
 		else if(blink_semaphore > 30)

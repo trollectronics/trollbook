@@ -188,6 +188,7 @@ void muil_button_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_button_render(MuilWidget *widget) {
 	struct MuilButtonProperties *p = widget->properties;
 	p->child->render(p->child);
+	draw_set_color(muil_color.widget_border);
 	draw_line_set_draw(p->border, 8);
 	if(p->activated)
 		draw_line_set_draw(p->active_border, 4);

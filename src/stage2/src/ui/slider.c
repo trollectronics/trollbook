@@ -135,6 +135,8 @@ void muil_slider_request_size(MuilWidget *widget, int *w, int *h) {
 
 void muil_slider_render(MuilWidget *widget) {
 	struct MuilSliderProperties *p = widget->properties;
+	draw_set_color(muil_color.widget_border);
 	draw_line_set_draw(p->line, 1 + p->steps);
+	draw_set_color(muil_color.selected);
 	draw_rect_set_draw(p->handle, 1);
 }

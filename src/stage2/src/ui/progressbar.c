@@ -131,7 +131,9 @@ void muil_progressbar_render(MuilWidget *widget) {
 	draw_line_set_draw(p->border, 4);
 
 	//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_XOR);
+	draw_set_color(muil_color.selected);
 	draw_rect_set_draw(p->bar, 1);
 	//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_NONE);
+	draw_set_color(muil_color.text);
 	draw_text_surface_draw(p->surface);
 }

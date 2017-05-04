@@ -299,6 +299,7 @@ void muil_listbox_request_size(MuilWidget *widget, int *w, int *h) {
 
 void muil_listbox_render(MuilWidget *widget) {
 	struct MuilListboxProperties *p = widget->properties;
+	draw_set_color(muil_color.widget_border);
 	draw_line_set_draw(p->border, 4);
 	if(!p->offset)
 		return;
@@ -308,13 +309,16 @@ void muil_listbox_render(MuilWidget *widget) {
 	for(l = p->offset; l; l = l->next, i++) {
 		if(!l->surface)
 			break;
+		draw_set_color(muil_color.text);
 		draw_text_surface_draw(l->surface);
 	}
 	
 	if(p->selected >= p->scroll && p->selected < i) {
 		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_XOR);
+		draw_set_color(muil_color.selected);
 		draw_rect_set_draw(p->selected_rect, 1);
 		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_NONE);
 	}
+	draw_set_color(muil_color.widget_border);
 	draw_rect_set_draw(p->scrollbar, 1);
 }

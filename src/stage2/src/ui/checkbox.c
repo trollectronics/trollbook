@@ -151,6 +151,7 @@ void muil_checkbox_request_size(MuilWidget *widget, int *w, int *h) {
 
 void muil_checkbox_render(MuilWidget *widget) {
 	struct MuilCheckboxProperties *p = widget->properties;
+	draw_set_color(muil_color.widget_border);
 	draw_line_set_draw(p->border, 4);
 	if(p->activated)
 		draw_line_set_draw(p->active_border, 2);

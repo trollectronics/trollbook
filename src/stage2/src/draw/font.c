@@ -2,7 +2,7 @@
 #include <mem.h>
 #include <draw/font.h>
 
-DrawFont *draw_font_new(DrawColor *mem, unsigned int glyph_width, unsigned int glyph_height) {
+DrawFont *draw_font_new(void *mem, unsigned int glyph_width, unsigned int glyph_height) {
 	DrawFont *font = NULL;
 	
 	if(!(font = malloc(sizeof(DrawFont))))
@@ -23,7 +23,6 @@ void draw_font_free(DrawFont *font) {
 }
 
 int draw_font_string_geometrics(DrawFont *font, char *s, int max_line_w, int *text_w, int *text_h) {
-	int w, h;
 	int lines;
 	
 	if(!font || !s)
@@ -43,6 +42,8 @@ int draw_font_string_geometrics(DrawFont *font, char *s, int max_line_w, int *te
 	if(text_h) {
 		*text_h = font->glyph_height * lines;
 	}
+	
+	return 0;
 }
 
 int draw_font_glyph_h(DrawFont *font) {

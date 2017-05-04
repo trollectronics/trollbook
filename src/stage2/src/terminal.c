@@ -2,7 +2,7 @@
 #include "util.h"
 #include "bios.h"
 #include "terminal.h"
-#include "vgafont.h"
+#include "font.h"
 
 #define TERM_W		100
 #define	TERM_H		30

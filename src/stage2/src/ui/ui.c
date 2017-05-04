@@ -14,10 +14,12 @@ MuilWidget *muil_selected_widget;
 struct MuilPaneList muil_panelist_dialogue;
 
 MuilColor muil_color = {
-	.window_border = 15,
-	.window_background = 0,
-	.widget_border = 15,
-	.widget_background = 0,
+	.window_border = 8,
+	.window_background = 7,
+	.widget_border = 8,
+	.widget_background = 15,
+	.text = 0,
+	.selected = 1,
 };
 
 void muil_init(int padding) {
