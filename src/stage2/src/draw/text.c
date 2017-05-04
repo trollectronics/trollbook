@@ -1,6 +1,6 @@
 #include <draw/text.h>
 #include <draw/screen.h>
-#include "../peripheral.h"
+#include <peripheral.h>
 
 DrawTextSurface *draw_text_surface_new(DrawFont *font, size_t bufsiz, unsigned int linelen, int x, int y) {
 	DrawTextSurface *surface = NULL;

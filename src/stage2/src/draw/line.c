@@ -1,3 +1,5 @@
+#include <stddef.h>
+#include <mem.h>
 #include <draw/line.h>
 
 #define MIN(a, b) (((a) < (b) ? (a) : (b)))

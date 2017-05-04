@@ -6,7 +6,7 @@
 #include "spi.h"
 #include "delay.h"
 #include "input.h"
-#include "../tgb/protocol.h"
+#include "../../tgb/protocol.h"
 
 static const char matrix_key[4][17] = {
 	{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '\'', 'B', 'T', 'A', 'U', 'C', },

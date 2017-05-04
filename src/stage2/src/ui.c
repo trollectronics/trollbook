@@ -1,5 +1,5 @@
-#include "include/muil/muil.h"
-#include "include/draw/font.h"
+#include <muil/muil.h>
+#include <draw/font.h>
 #include "vgafont.h"
 
 void ui() {

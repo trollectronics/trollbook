@@ -271,7 +271,8 @@ void muil_listbox_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	int item_y = y + 2;
 	int i = p->scroll;
 	while(l) {
-		l->surface = draw_text_surface_free(l->surface);
+		draw_text_surface_free(l->surface);
+		l->surface = NULL;
 		int item_h;
 		draw_font_string_geometrics(p->font, l->text, w -muil_padding * 5, NULL, &item_h);
 		if(item_y + item_h > y + h - 2)

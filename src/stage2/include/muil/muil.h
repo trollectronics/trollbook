@@ -19,6 +19,8 @@
 #include <draw/color.h>
 #include <draw/utf8.h>
 
+#include <mem.h>
+
 #define MUIL_PADDING_DEFAULT 4
 extern int muil_padding;
 
