@@ -15,7 +15,7 @@ LD	= m68k-elf-ld
 AR	= m68k-elf-ar
 
 # Compiler and linker flags
-CFLAGS		= -Wall -Os -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040
+CFLAGS		= -Wall -Os -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040 -Iinclude
 ASFLAGS		= -msoft-float
 LDFLAGS		= -T $(LINKSCRIPT) -lgcc
 
@@ -52,7 +52,7 @@ clean:
 	$(RM) -R $(DEPDIR)
 
 $(ELFFILE): $(OBJFILES)
-	$(CC) $(CFLAGS) -o $@ $(OBJFILES) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $(OBJFILES) ui/*.c draw/*.c $(LDFLAGS)
 
 $(HEXFILE): $(ELFFILE)
 	m68k-elf-objcopy -O ihex $< $@
