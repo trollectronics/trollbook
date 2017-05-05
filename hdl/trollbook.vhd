@@ -214,8 +214,8 @@ begin
 	
 	u_vga: entity work.vga generic map(peripheral_id => 10,
 		depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
-		line_front_porch => 800, line_hsync => 800 + 40, line_back_porch => 800 + 40 + 48, line_end => 928, --for LCD
-		frame_front_porch => 480, frame_vsync => 480 + 13, frame_back_porch => 480 + 13 + 3, frame_end => 525, --for LCD
+		line_front_porch => 800, line_hsync => 824, line_back_porch => 904, line_end => 1008, --for LCD
+		frame_front_porch => 480, frame_vsync => 481, frame_back_porch => 484, frame_end => 499, --for LCD
 		ll_a_start => 0, ll_a_end => 800*480, ll_a_length => 18)
 		port map(reset => internal_reset, clk => clk33, r => vga_r, g => vga_g, b => vga_b,
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,

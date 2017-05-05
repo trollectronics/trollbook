@@ -66,6 +66,7 @@ architecture arch of vga is
 	signal vsync_internal : std_logic;
 	signal vsync_old : std_logic;
 	signal den_internal : std_logic_vector(1 downto 0);
+	signal den_out : std_logic;
 	
 	signal rgb : std_logic_vector((depth_r + depth_g + depth_b) - 1 downto 0);
 	signal palette_a : std_logic_vector(7 downto 0);
@@ -109,6 +110,7 @@ begin
 				if pixel_counter = line_hsync - 1 then
 					hstate_next <= sync;
 					hsync_next <= '0';
+					new_line <= '1';
 				end if;
 			when sync =>
 				if pixel_counter = line_back_porch - 1 then
@@ -119,7 +121,7 @@ begin
 				if pixel_counter = line_end - 1 then
 					hstate_next <= visible;
 					pixel_counter_next <= 0;
-					new_line <= '1';
+					
 					hvisible_next <= '1';
 				end if;
 		end case;
@@ -172,7 +174,7 @@ begin
 			ll_ce_internal <= '0';
 			second_pixel <= (others => '0');
 			den_internal <= "00";
-			den <= '0';
+			den_out <= '0';
 		else
 			if falling_edge(clk) then
 				
@@ -192,7 +194,7 @@ begin
 				
 				den_internal(1) <= hvisible and vvisible;
 				den_internal(0) <= den_internal(1);
-				den <= den_internal(0);
+				den_out <= den_internal(0);
 				
 				if new_line = '1' then
 					vstate <= vstate_next;
@@ -239,10 +241,12 @@ begin
 	palette_a <= ll_d(15 downto 8) when pixel_counter mod 2 = 0 else second_pixel;
 	second_pixel_next <= ll_d(7 downto 0) when pixel_counter mod 2 = 0 else second_pixel;
 	
-	b <= rgb(depth_b - 1 downto 0);
-	g <= rgb(depth_b + depth_g - 1 downto depth_b);
-	r <= rgb(rgb'length - 1 downto depth_b + depth_g);
+	b <= rgb(depth_b - 1 downto 0) when den_out = '1' else (others => '0');
+	g <= rgb(depth_b + depth_g - 1 downto depth_b) when den_out= '1' else (others => '0');
+	r <= rgb(rgb'length - 1 downto depth_b + depth_g) when den_out = '1' else (others => '0');
 	
-	hsync <= hsync_internal;
+	den <= den_out;
+	
+	hsync <= not hsync_internal;
 	vsync <= vsync_internal;
 end arch;
