@@ -48,7 +48,6 @@ entity vga is
 		chipset_ce : in std_logic_vector(15 downto 0);
 		chipset_ack : out wor_logic_vector(15 downto 0);
 		chipset_nack : out wor_logic_vector(15 downto 0);
-		
 		chipset_int : out std_logic_vector(15 downto 0)
 	);
 end vga;

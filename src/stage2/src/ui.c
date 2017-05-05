@@ -27,7 +27,8 @@ void ui() {
 	muil_events(&panelist, true);
 	
 	for(;;) {
-		muil_events(&panelist, false);
+		//muil_events(&panelist, false);
+		cursor_test();
 	}
 }
 
@@ -37,7 +38,7 @@ void cursor_test() {
 		*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x24)) = 0x3;
 	
 	InputButtons buttons;
-	int mouse_x = 18, mouse_y = 67;
+	int mouse_x = 0, mouse_y = 0;
 	
 	
 	
@@ -48,15 +49,15 @@ void cursor_test() {
 		buttons = input_poll();
 		
 		if(buttons.up)
-			mouse_y--;
+			mouse_y -= 10;
 		
 		if(buttons.down)
-			mouse_y++;
+			mouse_y += 10;
 		
 		if(buttons.left)
-			mouse_x--;
+			mouse_x -= 10;
 		
 		if(buttons.right)
-			mouse_x++;
+			mouse_x += 10;
 	}
 }

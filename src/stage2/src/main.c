@@ -197,7 +197,6 @@ int main() {
 	printf(" - Volume label: %s\n\n", label);
 	
 	//ui();
-	cursor_test();
 	menu_execute(&menu_main);
 	
 	for(;;);

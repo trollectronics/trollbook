@@ -35,7 +35,8 @@ entity llram is
 		
 		snd_a : in std_logic_vector(addr_width - 1 downto 0);
 		snd_q : out std_logic_vector(data_width - 1 downto 0);
-		snd_ce : in std_logic
+		snd_ce : in std_logic;
+		snd_ack : out std_logic
 	);
 end llram;
 
@@ -64,6 +65,7 @@ begin
 			we_internal <= "11";
 			oe <= '1';
 			cpu_ack <= '0';
+			snd_ack <= '0';
 			a <= (others => '1');
 			q <= (others => '1');
 			ub <= '0';
@@ -77,7 +79,7 @@ begin
 			lb <= lb_next;
 			
 			cpu_ack <= cpu_ack_next;
-			--snd_ack <= cpu_ack_next;
+			snd_ack <= snd_ack_next;
 		elsif falling_edge(clk) then
 			we_internal(1) <= we_next(1);
 		end if;
@@ -105,7 +107,7 @@ begin
 			a_next <= snd_a;
 			lb_next <= '0';
 			ub_next <= '0';
-			--snd_ack_next <= '1';
+			snd_ack_next <= '1';
 		elsif cpu_ce = '1' then
 			oe_next <= cpu_rw;
 			we_next(0) <= not cpu_rw;

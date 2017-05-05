@@ -89,6 +89,11 @@ architecture arch of trollbook is
 	signal ll_vga_q : std_logic_vector(15 downto 0);
 	signal ll_vga_ce : std_logic;
 	
+	signal ll_sound_a : std_logic_vector(17 downto 0);
+	signal ll_sound_q : std_logic_vector(15 downto 0);
+	signal ll_sound_ce : std_logic;
+	signal ll_sound_ack : std_logic;
+	
 	signal ll_cpu_a : std_logic_vector(17 downto 0);
 	signal ll_cpu_d : std_logic_vector(15 downto 0);
 	signal ll_cpu_q : std_logic_vector(15 downto 0);
@@ -156,7 +161,7 @@ begin
 		vga_a => ll_vga_a, vga_q => ll_vga_q, vga_ce => ll_vga_ce,
 		cpu_a => ll_cpu_a, cpu_d => ll_cpu_q, cpu_q => ll_cpu_d, cpu_rw => ll_cpu_rw, cpu_lb => ll_cpu_lb, cpu_ub => ll_cpu_ub,
 		cpu_ce => ll_cpu_ce, cpu_ack => ll_cpu_ack,
-		snd_a => (others => '1'), snd_q => open, snd_ce => '0');
+		snd_a => ll_sound_a, snd_q => ll_sound_q, snd_ce => ll_sound_ce, snd_ack => ll_sound_ack);
 	
 	u_reset: entity work.reset port map(clk => clk33, pwron_reset => pwron_reset, reset => internal_reset);
 	
@@ -229,7 +234,14 @@ begin
 	
 	u_sound: entity work.sound generic map(peripheral_id => 11)
 		port map(reset => internal_reset, clk => clk33, clk_snd => clk12,
-		mosi => open, sck => snd_clk, ss => snd_ss, sync => snd_sync);
+		mosi => snd_mosi, sck => snd_clk, ss => snd_ss, sync => snd_sync,
+		
+		ll_a => ll_sound_a, ll_d => ll_sound_q, ll_ce => ll_sound_ce, ll_ack => ll_sound_ack,
+		
+		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
+		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
+		--chipset_int => chipset_int);
 	
 	-- *** Output drivers *** --
 	
@@ -248,8 +260,6 @@ begin
 	
 	ll_d <= (others => 'Z') when ll_oe_internal <= '0' else ll_q;
 	d <= (others => 'Z') when cpu_oe = '0' else cpu_q;
-	
-	snd_mosi <= cpu_siz(1);
 	
 	--spi_mosi <= ll_cpu_ce;
 	--spi_clk <= ll_cpu_ack;
