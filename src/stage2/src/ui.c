@@ -1,6 +1,8 @@
 #include <muil/muil.h>
 #include <draw/font.h>
 #include "font.h"
+#include "input.h"
+#include "peripheral.h"
 
 void ui() {
 	struct MuilPaneList panelist;
@@ -26,5 +28,35 @@ void ui() {
 	
 	for(;;) {
 		muil_events(&panelist, false);
+	}
+}
+
+void cursor_test() {
+	*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x20)) = 0x0;
+	for(int i = 0; i < 8*16; i++)
+		*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x24)) = 0x3;
+	
+	InputButtons buttons;
+	int mouse_x = 18, mouse_y = 67;
+	
+	
+	
+	for(;;) {
+		*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x28)) = mouse_x;
+		*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x2C)) = mouse_y;
+		
+		buttons = input_poll();
+		
+		if(buttons.up)
+			mouse_y--;
+		
+		if(buttons.down)
+			mouse_y++;
+		
+		if(buttons.left)
+			mouse_x--;
+		
+		if(buttons.right)
+			mouse_x++;
 	}
 }

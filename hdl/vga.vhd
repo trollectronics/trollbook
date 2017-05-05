@@ -40,11 +40,23 @@ entity vga is
 		ll_d : in std_logic_vector(15 downto 0);
 		ll_ce : out std_logic;
 		
+		chipset_a : in std_logic_vector(7 downto 0);
+		bus_d : in std_logic_vector(31 downto 0);
+		bus_q : out std_logic_vector(31 downto 0);
+		bus_rw : in std_logic;
+		bus_siz : in std_logic_vector(1 downto 0);
+		chipset_ce : in std_logic_vector(15 downto 0);
+		chipset_ack : out wor_logic_vector(15 downto 0);
+		chipset_nack : out wor_logic_vector(15 downto 0);
+		
 		chipset_int : out std_logic_vector(15 downto 0)
 	);
 end vga;
 
 architecture arch of vga is
+	constant CURSOR_W : integer := 8;
+	constant CURSOR_H : integer := 16;
+	
 	type state_type is (visible, front, sync, back);
 	
 	signal hstate, hstate_next : state_type;
@@ -82,6 +94,20 @@ architecture arch of vga is
 	signal ll_ce_next : std_logic;
 	
 	signal palette_clk : std_logic;
+	
+	signal cursor_x : std_logic_vector(9 downto 0);
+	signal cursor_y : std_logic_vector(8 downto 0);
+	
+	signal cursor_x_count : unsigned(2 downto 0);
+	signal cursor_y_count : unsigned(3 downto 0);
+	
+	signal cursor_a : std_logic_vector(6 downto 0);
+	signal cursor_q : std_logic_vector(1 downto 0);
+	
+	type cursor_state is (idle, drawing);
+	
+	signal cursor_x_state : cursor_state;
+	signal cursor_y_state : cursor_state;
 begin
 	u_palette: entity work.palette port map(
 		data => (others => '0'),
@@ -89,6 +115,14 @@ begin
 		inclock => palette_clk,
 		we => '0',
 		q => rgb
+	);
+	
+	u_cursor: entity work.cursor port map(
+		data => (others => '0'),
+		address => cursor_a,
+		inclock=> clk,
+		we => '0',
+		q => cursor_q
 	);
 	
 	palette_clk <= clk;
@@ -236,14 +270,117 @@ begin
 		end if;
 	end process;
 	
+	
+	process(clk, reset) begin
+		if reset = '1' then
+			cursor_x_state <= idle;
+			cursor_y_state <= idle;
+			cursor_x_count <= (others => '0');
+			cursor_y_count <= (others => '0');
+			cursor_a <= (others => '0');
+		elsif rising_edge(clk) then
+			if std_logic_vector(to_unsigned(pixel_counter_next, cursor_x'length)) = cursor_x then
+				cursor_x_state <= drawing;
+			end if;
+			
+			if std_logic_vector(to_unsigned(line_counter, cursor_y'length)) = cursor_y then
+				cursor_y_state <= drawing;
+			end if;
+			
+			if cursor_x_state = drawing then
+				cursor_x_count <= cursor_x_count + 1;
+				
+				if cursor_x_count = (CURSOR_W - 1) then
+					cursor_x_state <= idle;
+				end if;
+			end if;
+			
+			if cursor_y_state = drawing and pixel_counter = line_front_porch - 1 then
+				cursor_y_count <= cursor_y_count + 1;
+				
+				if cursor_y_count = (CURSOR_H - 1) then
+					cursor_y_state <= idle;
+				end if;
+			end if;
+			
+			if cursor_x_state = drawing and cursor_y_state = drawing then
+				cursor_a <= std_logic_vector(unsigned(cursor_a) + 1);
+			end if;
+		end if;
+	end process;
+	
 	ll_ce <= ll_ce_internal;
 	
 	palette_a <= ll_d(15 downto 8) when pixel_counter mod 2 = 0 else second_pixel;
 	second_pixel_next <= ll_d(7 downto 0) when pixel_counter mod 2 = 0 else second_pixel;
 	
-	b <= rgb(depth_b - 1 downto 0) when den_out = '1' else (others => '0');
-	g <= rgb(depth_b + depth_g - 1 downto depth_b) when den_out= '1' else (others => '0');
-	r <= rgb(rgb'length - 1 downto depth_b + depth_g) when den_out = '1' else (others => '0');
+	process(den_out, rgb, cursor_q, cursor_x_state, cursor_y_state) begin
+		b <= rgb(depth_b - 1 downto 0);
+		g <= rgb(depth_b + depth_g - 1 downto depth_b);
+		r <= rgb(rgb'length - 1 downto depth_b + depth_g);
+		
+		if cursor_x_state = drawing and cursor_y_state = drawing then
+			if cursor_q(1) = '1' then
+				b <= (others => cursor_q(0));
+				g <= (others => cursor_q(0));
+				r <= (others => cursor_q(0));
+			end if;
+		end if;
+		
+		if den_out = '0' then
+			b <= (others => '0');
+			g <= (others => '0');
+			r <= (others => '0');
+		end if;
+	end process;
+	
+	process(reset, clk) is
+		variable check : std_logic_vector(1 downto 0);
+	begin
+		if reset = '1' then
+			cursor_x <= std_logic_vector(to_unsigned(58, cursor_x'length));
+			cursor_y <= std_logic_vector(to_unsigned(46, cursor_y'length));
+		elsif falling_edge(clk) then
+			check := chipset_ce(peripheral_id) & bus_rw;
+			
+			case check is
+				when "11" =>
+					case chipset_a is
+						when x"28" =>
+							cursor_x <= bus_d(9 downto 0);
+						when x"2C" =>
+							cursor_y <= bus_d(8 downto 0);
+						when others =>
+						
+					end case;
+					
+				when others =>
+			end case;
+			
+		end if;
+	end process;
+	
+	process(reset, clk) begin
+		if reset = '1' then
+			bus_q <= (others => 'Z');
+		elsif falling_edge(clk) then
+			if chipset_ce(peripheral_id) = '1' then
+				case chipset_a is
+					when x"28" =>
+						bus_q <= x"0000" & "000000" & cursor_x;
+					when x"2C" =>
+						bus_q <= x"0000" & "0000000" & cursor_y;
+					when others =>
+						bus_q <= (others => 'Z');
+				end case;
+			else
+				bus_q <= (others => 'Z');
+			end if;
+		end if;
+	end process;
+	
+	chipset_ack <= (peripheral_id => '1', others => '0');
+	chipset_nack <= (peripheral_id => '0', others => '0');
 	
 	den <= den_out;
 	

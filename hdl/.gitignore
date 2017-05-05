@@ -20,3 +20,4 @@
 *.wlf
 !pal565.hex
 !bootrom.hex
+!cursor.hex

@@ -221,6 +221,10 @@ begin
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce,
 		
+		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
+		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
+		
 		chipset_int => chipset_int);
 	
 	u_sound: entity work.sound generic map(peripheral_id => 11)
