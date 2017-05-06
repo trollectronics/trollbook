@@ -409,15 +409,18 @@ void select_file_action(void *arg) {
 			fd = fat_open(path, O_RDONLY);
 			size = fat_fsize(fd);
 			tmp = (volatile uint8_t *) SDRAM_BASE;
-	
+			
+			printf("0/%u kB", size >> 10);
+		
 			for(j = 0; j < size; j += 512) {
 				fat_read_sect(fd);
 				for(i = 0; i < 512; i++) {
 					*tmp++ = fat_buf[i];
 				}
+				printf("\r%u/%u kB", j >> 10, size >> 10);
 			}
 			fat_close(fd);
-			printf("Playing\n");
+			printf("\n");
 			wav_play((uint8_t *) SDRAM_BASE);
 			printf("Press any key\n");
 			input_poll();
