@@ -240,8 +240,8 @@ begin
 		
 		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
 		bus_rw => bus_rw, bus_siz => bus_siz,
-		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
-		--chipset_int => chipset_int);
+		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
+		chipset_int => chipset_int);
 	
 	-- *** Output drivers *** --
 	

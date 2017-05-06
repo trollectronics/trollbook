@@ -29,8 +29,8 @@ entity sound is
 		bus_siz : in std_logic_vector(1 downto 0);
 		chipset_ce : in std_logic_vector(15 downto 0);
 		chipset_ack : out wor_logic_vector(15 downto 0);
-		chipset_nack : out wor_logic_vector(15 downto 0)
-		--chipset_int : out std_logic_vector(15 downto 0)
+		chipset_nack : out wor_logic_vector(15 downto 0);
+		chipset_int : out std_logic_vector(15 downto 0)
 	);
 end sound;
 
@@ -72,7 +72,9 @@ architecture arch of sound is
 	signal need_more_33 : std_logic;
 	signal ack_more_33, ack_more_33_next : std_logic;
 	
-	signal current_buffer : std_logic;
+	signal current_buffer, prev_buffer : std_logic;
+	
+	signal interrupt : std_logic;
 	
 	-- 24 MHz domain
 	signal sample_counter, sample_counter_next, sample_compare : unsigned(11 downto 0);
@@ -386,6 +388,19 @@ begin
 	
 	process(reset, clk) begin
 		if reset = '1' then
+			interrupt <= '0';
+			prev_buffer <= '1';
+		elsif falling_edge(clk) then
+			interrupt <= '0';
+			if enabled = '1' and current_buffer = prev_buffer then
+				prev_buffer <= not prev_buffer;
+				interrupt <= '1';
+			end if;
+		end if;
+	end process;
+	
+	process(reset, clk) begin
+		if reset = '1' then
 			bus_q <= (others => 'Z');
 		elsif falling_edge(clk) then
 			if chipset_ce(peripheral_id) = '1' then
@@ -412,7 +427,7 @@ begin
 		end if;
 	end process;
 	
+	chipset_int <= (peripheral_id => interrupt, others => 'Z');
 	chipset_ack <= (peripheral_id => '1', others => '0');
 	chipset_nack <= (peripheral_id => '0', others => '0');
-	--chipset_int <= (peripheral_id => '0', others => '0');
 end arch;

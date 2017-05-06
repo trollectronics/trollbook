@@ -107,6 +107,8 @@ architecture arch of vga is
 	
 	signal cursor_x_state : cursor_state;
 	signal cursor_y_state : cursor_state;
+	
+	signal interrupt : std_logic;
 begin
 	u_palette: entity work.palette port map(
 		data => (others => '0'),
@@ -258,11 +260,11 @@ begin
 	process(clk, reset) begin
 		if reset = '1' then
 			vsync_old <= '1';
-			chipset_int(peripheral_id) <= '0';
+			interrupt <= '0';
 		elsif rising_edge(clk) then
-			chipset_int(peripheral_id) <= '0';
+			interrupt <= '0';
 			if vsync_old = '1' and vsync_internal = '0' then
-				chipset_int(peripheral_id) <= '1';
+				interrupt <= '1';
 			end if;
 			
 			vsync_old <= vsync_internal;
@@ -294,7 +296,7 @@ begin
 				end if;
 			end if;
 			
-			if cursor_y_state = drawing and pixel_counter = line_front_porch - 1 then
+			if cursor_y_state = drawing and pixel_counter = line_front_porch - 1 then --line len -1 ?
 				cursor_y_count <= cursor_y_count + 1;
 				
 				if cursor_y_count = (CURSOR_H - 1) then
@@ -378,6 +380,8 @@ begin
 		end if;
 	end process;
 	
+	
+	chipset_int <= (peripheral_id => interrupt, others => 'Z');
 	chipset_ack <= (peripheral_id => '1', others => '0');
 	chipset_nack <= (peripheral_id => '0', others => '0');
 	
