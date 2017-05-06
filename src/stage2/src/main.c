@@ -177,7 +177,7 @@ static void test_sound(void *arg) {
 	unsigned int i;
 	
 	for(i = 0; i < 1024; i++) {
-		buf[i] = ((~(i & 0xFF)) << 8) | (i & 0xFF);
+		buf[i] = 0;
 	}
 	
 	sound_hw[2] = 0x0;
@@ -187,8 +187,22 @@ static void test_sound(void *arg) {
 	sound_hw[0] = 0x1;
 	
 	for(;;) {
-		while((sound_hw[1] & 0x1) == buffer);
-		buffer = sound_hw[1] & 0x1;
+		sound_wait();
+		for(i = 0; i < 256; i++) {
+			buf[i] = 0xFFFF;
+		}
+		sound_wait();
+		for(i = 512; i < 768; i++) {
+			buf[i] = 0xFFFF;
+		}
+		sound_wait();
+		for(i = 0; i < 256; i++) {
+			buf[i] = 0x0;
+		}
+		sound_wait();
+		for(i = 512; i < 768; i++) {
+			buf[i] = 0x0;
+		}
 	}
 }
 

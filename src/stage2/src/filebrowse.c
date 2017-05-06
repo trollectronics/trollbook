@@ -60,7 +60,7 @@ Menu menu_file= {
 	"----------------------------------------\n",
 	true,
 	0,
-	6,
+	7,
 	{
 		{"Read as text", select_file_action, &menu_file.selected},
 		{"Read as hex", select_file_action, &menu_file.selected},
@@ -68,6 +68,7 @@ Menu menu_file= {
 		{"Execute ELF", execute_elf, &menu_file.selected},
 		{"Display on screen", select_file_action, &menu_file.selected},
 		{"Flash to boot ROM", select_file_action, &menu_file.selected},
+		{"Play WAV file", select_file_action, &menu_file.selected},
 	},
 };
 
@@ -400,6 +401,27 @@ void select_file_action(void *arg) {
 			input_poll();
 			
 			break;
+		
+		case 6:
+			terminal_clear();
+			printf("Loading WAV to RAM\n");
+			
+			fd = fat_open(path, O_RDONLY);
+			size = fat_fsize(fd);
+			tmp = (volatile uint8_t *) SDRAM_BASE;
+	
+			for(j = 0; j < size; j += 512) {
+				fat_read_sect(fd);
+				for(i = 0; i < 512; i++) {
+					*tmp++ = fat_buf[i];
+				}
+			}
+			fat_close(fd);
+			printf("Playing\n");
+			wav_play((uint8_t *) SDRAM_BASE);
+			printf("Press any key\n");
+			input_poll();
+			terminal_clear();
 	}
 }
 
