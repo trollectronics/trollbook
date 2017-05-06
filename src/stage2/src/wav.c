@@ -31,10 +31,16 @@ void sound_start() {
 	interrupt_hw[32 + 11] = 0x0;
 }
 
+void sound_stop() {
+	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
+	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
+	sound_hw[0] = 0x0;
+	interrupt_hw[32 + 11] = 0x0;
+}
+
 int sound_wait() {
 	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
 	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
-	static int buffer = 0;
 	
 	while(!interrupt_hw[32 + 11]);
 	interrupt_hw[32 + 11] = 0x0;
@@ -156,7 +162,7 @@ void wav_play(void *data) {
 		}
 	}
 	
-	
+	sound_stop();
 	return;
 	
 	parsefail:
