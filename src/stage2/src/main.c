@@ -22,6 +22,8 @@ static void test_spi_rom(void *arg);
 static void test_sdram(void *arg);
 static void autoboot(void *arg);
 void color_demo(void *arg);
+static void test_sound(void *arg);
+void ui(void *arg);
 
 uint8_t fat_buf[512];
 
@@ -41,13 +43,15 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
 	false,
 	0,
-	8,
+	10,
 	{
 		{"Boot kernel.elf", autoboot, NULL},
-		{"Test keyboard", input_test_keyboard, NULL},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
 		{"Serial file transfer to SD", serial_transfer_recv, NULL},
 		{"Test SPI ROM", test_spi_rom, NULL},
+		{"Test Sound", test_sound, NULL},
+		{"Test keyboard", input_test_keyboard, NULL},
+		{"Test UI", ui, NULL},
 		{"SDRAM Memtest", test_sdram, NULL},
 		{"Color demo", color_demo, NULL},
 		{"Reboot", reboot, NULL},
@@ -164,6 +168,28 @@ void color_demo(void *arg) {
 
 static void autoboot(void *arg) {
 	execute_elf_path("/KERNEL.ELF");
+}
+
+static void test_sound(void *arg) {
+	volatile uint16_t *buf= (volatile uint16_t *) LLRAM_BASE;
+	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
+	int buffer;
+	unsigned int i;
+	
+	for(i = 0; i < 1024; i++) {
+		buf[i] = ((~(i & 0xFF)) << 8) | (i & 0xFF);
+	}
+	
+	sound_hw[2] = 0x0;
+	sound_hw[3] = 3;
+	sound_hw[4] = 512;
+	buffer = sound_hw[1] & 0x1;
+	sound_hw[0] = 0x1;
+	
+	for(;;) {
+		while((sound_hw[1] & 0x1) == buffer);
+		buffer = sound_hw[1] & 0x1;
+	}
 }
 
 int main() {

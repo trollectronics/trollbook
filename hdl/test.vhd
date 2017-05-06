@@ -112,7 +112,7 @@ architecture tb_trollbook of test is
 	signal ram_cke : std_logic;
 begin
 	clk33 <= not clk33 after 15 ns;
-	clk12 <= not clk12 after 41 ns;
+	clk12 <= not clk12 after 20 ns;
 	
 	pwron_reset <= '0', '1' after 100 ns;
 	

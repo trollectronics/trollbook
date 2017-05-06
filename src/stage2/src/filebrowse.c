@@ -199,7 +199,7 @@ void load_hex_to_rom(const char *path) {
 		printf("done.\n");
 		terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
 		
-		printf("Writing to ROM... \n");
+		printf("Writing to ROM... ");
 		terminal_get_pos(&x, &y);
 		
 		fd = fat_open(path, O_RDONLY);
@@ -224,8 +224,9 @@ void load_hex_to_rom(const char *path) {
 		
 		terminal_set_pos(x, y);
 		terminal_set_fg(TERMINAL_COLOR_LIGHT_GREEN);
-		printf("Done");
+		printf("done.\n");
 		terminal_set_fg(TERMINAL_COLOR_LIGHT_GRAY);
+		printf("Press any key...");
 }
 
 static void execute_elf(void *arg) {

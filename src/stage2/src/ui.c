@@ -4,7 +4,7 @@
 #include "input.h"
 #include "peripheral.h"
 
-void ui() {
+void ui(void *arg) {
 	struct MuilPaneList panelist;
 	MuilWidget *vbox;
 	MuilWidget *button;

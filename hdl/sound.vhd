@@ -72,8 +72,10 @@ architecture arch of sound is
 	signal need_more_33 : std_logic;
 	signal ack_more_33, ack_more_33_next : std_logic;
 	
+	signal current_buffer : std_logic;
+	
 	-- 24 MHz domain
-	signal sample_counter, sample_counter_next, sample_compare : unsigned(10 downto 0);
+	signal sample_counter, sample_counter_next, sample_compare : unsigned(11 downto 0);
 	signal need_more_24, need_more_24_next : std_logic;
 	signal ack_more_24 : std_logic;
 	signal enabled : std_logic;
@@ -105,11 +107,11 @@ begin
 						when "00" =>
 							ll_a_next <= ll_a_base(10 downto 0) & std_logic_vector(address_counter(6 downto 0));
 						when "01" =>
-							ll_a_next <= ll_a_base(9 downto 0) & std_logic_vector(address_counter(7 downto 0));
+							ll_a_next <= ll_a_base(10 downto 1) & std_logic_vector(address_counter(7 downto 0));
 						when "10" =>
-							ll_a_next <= ll_a_base(8 downto 0) & std_logic_vector(address_counter(8 downto 0));
+							ll_a_next <= ll_a_base(10 downto 2) & std_logic_vector(address_counter(8 downto 0));
 						when others =>
-							ll_a_next <= ll_a_base(7 downto 0) & std_logic_vector(address_counter(9 downto 0));
+							ll_a_next <= ll_a_base(10 downto 3) & std_logic_vector(address_counter(9 downto 0));
 							
 					end case;
 					
@@ -162,16 +164,18 @@ begin
 		
 		if enabled = '0' then
 			sample_counter_next <= (others => '0');
-		elsif sample_counter + 1 = sample_compare then
-			sample_counter_next <= (others => '0');
-			sync_next <= '0';
 		else
-			sample_counter_next <= sample_counter + 1;
-		end if;
-		
-		if sample_counter = to_unsigned(0, sample_counter'length) then
-			sync_next <= '0';
-			need_more_24_next <= '1';
+			if sample_counter + 1 = sample_compare then
+				sample_counter_next <= (others => '0');
+				sync_next <= '0';
+			else
+				sample_counter_next <= sample_counter + 1;
+			end if;
+			
+			if sample_counter = to_unsigned(0, sample_counter'length) then
+				sync_next <= '0';
+				need_more_24_next <= '1';
+			end if;
 		end if;
 		
 		if ack_more_24 = '1' then
@@ -344,10 +348,10 @@ begin
 		variable check : std_logic_vector(1 downto 0);
 	begin
 		if reset = '1' then
-			sample_compare <= to_unsigned(256, sample_compare'length);
-			enabled <= '1';
+			sample_compare <= to_unsigned(512, sample_compare'length);
+			enabled <= '0';
 			buffer_size <= "11";
-			ll_a_base <= x"A5" & "010";
+			ll_a_base <= x"00" & "000";
 		elsif falling_edge(clk) then
 			check := chipset_ce(peripheral_id) & bus_rw;
 			
@@ -373,9 +377,14 @@ begin
 		end if;
 	end process;
 	
-	process(reset, clk) is
-		variable current_buffer : std_logic_vector(address_counter'range);
+	process(address_counter, buffer_size) is
+		variable current_buffer_temp : std_logic_vector(address_counter'range);
 	begin
+		current_buffer_temp := std_logic_vector(address_counter srl (6 + to_integer(unsigned(buffer_size))));
+		current_buffer <= current_buffer_temp(0);
+	end process;
+	
+	process(reset, clk) begin
 		if reset = '1' then
 			bus_q <= (others => 'Z');
 		elsif falling_edge(clk) then
@@ -384,8 +393,7 @@ begin
 					when "000" => -- Control
 							bus_q <= x"0000000" & "000" & enabled;
 						when "001" => -- Status
-							current_buffer := std_logic_vector(address_counter srl (3 + to_integer(unsigned(buffer_size))));
-							bus_q <= x"0000000" & "000" & current_buffer(0);
+							bus_q <= x"0000000" & "000" & current_buffer;
 						when "010" => -- Base address
 							bus_q <= (others => '0');
 							bus_q(18 downto 8) <= ll_a_base;
