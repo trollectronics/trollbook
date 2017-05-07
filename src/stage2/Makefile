@@ -1,7 +1,11 @@
 TOPDIR	=	.
 include config.mk
 
-SUBDIRS		= src
+SRCDIR		= src
+SUBDIRS		= $(SRCDIR) $(MODULESDIR)
+
+MODULESLIBS	= $(addsuffix .a,$(MODULES))
+
 
 .PHONY: all clean install
 .PHONY: $(SUBDIRS)
@@ -25,7 +29,7 @@ clean: $(SUBDIRS)
 
 $(ELFFILE): $(SUBDIRS)
 	@echo " [ LD ] $@"
-	@$(CC) -o $@ $(CFLAGS) -Wl,--whole-archive $(addsuffix /out.a,$(SUBDIRS)) -Wl,--no-whole-archive $(LDFLAGS)
+	@$(CC) -o $@ $(CFLAGS) -Wl,--whole-archive $(addsuffix /out.a,$(SRCDIR)) $(MODULESLIBS) -Wl,--no-whole-archive $(LDFLAGS)
 
 $(HEXFILE): $(ELFFILE)
 	@echo " [OCPY] $@"

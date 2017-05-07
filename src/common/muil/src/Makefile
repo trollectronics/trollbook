@@ -24,6 +24,7 @@ df = $(DEPDIR)/$(*F)
 .PHONY: $(SUBDIRS)
 
 all: $(OUTFILE)
+	@echo " [DONE] $(CURRENTPATH)"
 
 clean: $(SUBDIRS)
 	@echo " [ RM ] $(OBJFILES) $(OUTFILE)"

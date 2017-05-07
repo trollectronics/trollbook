@@ -1,8 +1,11 @@
-#ifndef _MEM_H__
-#define _MEM_H__
+#ifndef MEM_H_
+#define MEM_H_
 
 #include <stdint.h>
 #include <stddef.h>
+
+#define PAGE_SIZE 4096UL
+#define PAGE_MASK (PAGE_SIZE - 1)
 
 void *memset(void *pointer, int c, size_t n);
 void *memcpy(void *dest, void *src, size_t n);

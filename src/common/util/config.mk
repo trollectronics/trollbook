@@ -1,12 +1,7 @@
-# UART settings for programmer
-TTYDEV		?=/dev/ttyUSB0
-TTYBAUD		?=115200
-
 # Name of the output file
-NAME		= stage2
+NAME		= util
 
-# Linkscript
-LINKSCRIPT	= link.ld
+AFILE		= $(NAME).a
 
 # Tools
 TARGET		= m68k-elf-
@@ -28,12 +23,6 @@ INCLUDES	= $(addprefix -I,$(INCLUDEDIRS))
 
 CFLAGS		= -Wall -Os -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040 $(INCLUDES)
 ASFLAGS		= -msoft-float
-LDFLAGS		= -T $(LINKSCRIPT) -lgcc
-
-# Filenames
-ELFFILE		= $(NAME).elf
-HEXFILE		= $(NAME).hex
-BINFILE		= $(NAME).bin
 
 # Makefile configurations
 MAKEFLAGS	+=	--no-print-directory

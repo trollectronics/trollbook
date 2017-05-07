@@ -1,7 +1,7 @@
 #include <stdint.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include "mem.h"
-#include "mmu040.h"
 
 void *memset(void *pointer, int c, size_t n) {
 	uint8_t *p1 = pointer;
@@ -127,7 +127,7 @@ void *sbrk(intptr_t increment) {
 
 void *calloc(size_t nmemb, size_t size) {
 	void *ret;
-	if(ret = malloc(nmemb*size))
+	if((ret = malloc(nmemb*size)))
 		memset(ret, 0, nmemb*size);
 	
 	return ret;
