@@ -226,6 +226,8 @@ begin
 		hsync => vga_hsync, vsync => vga_vsync, den => vga_den,
 		ll_a => ll_vga_a, ll_d => ll_vga_q, ll_ce => ll_vga_ce,
 		
+		power_on => vga_pwr, backlight_pwm => vga_pwm,
+		
 		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
 		bus_rw => bus_rw, bus_siz => bus_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
@@ -254,9 +256,6 @@ begin
 	
 	bus_nack_llram <= '0';
 	bus_nack_sdram <= '0';
-	
-	vga_pwr <= internal_reset;
-	vga_pwm <= not internal_reset;
 	
 	ll_d <= (others => 'Z') when ll_oe_internal <= '0' else ll_q;
 	d <= (others => 'Z') when cpu_oe = '0' else cpu_q;

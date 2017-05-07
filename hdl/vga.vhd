@@ -36,6 +36,9 @@ entity vga is
 		
 		den : out std_logic := '1';
 		
+		power_on : out std_logic;
+		backlight_pwm : out std_logic;
+		
 		ll_a : out std_logic_vector(ll_a_length - 1 downto 0);
 		ll_d : in std_logic_vector(15 downto 0);
 		ll_ce : out std_logic;
@@ -109,6 +112,14 @@ architecture arch of vga is
 	signal cursor_y_state : cursor_state;
 	
 	signal interrupt : std_logic;
+	
+	
+	signal enabled : std_logic;
+	signal mode : std_logic;
+	signal current_buffer : std_logic;
+	
+	signal backlight_compare : std_logic_vector(7 downto 0);
+	signal backlight_counter : unsigned(16 downto 0);
 begin
 	u_palette: entity work.palette port map(
 		data => (others => '0'),
@@ -127,6 +138,22 @@ begin
 	);
 	
 	palette_clk <= clk;
+	
+	process(reset, clk) begin
+		if reset = '1' then
+			backlight_counter <= (others => '0');
+			backlight_pwm <= '0';
+		elsif falling_edge(clk) then
+			
+			if std_logic_vector(backlight_counter(15 downto 8)) = backlight_compare then
+				backlight_pwm <= '1';
+			elsif std_logic_vector(backlight_counter(15 downto 8)) = x"00" then
+				backlight_pwm <= '0';
+			end if;
+			
+			backlight_counter <= backlight_counter + 1;
+		end if;
+	end process;
 	
 	hlogic: process(hstate, pixel_counter, hsync_internal, hvisible) begin
 		hstate_next <= hstate;
@@ -339,6 +366,11 @@ begin
 		variable check : std_logic_vector(1 downto 0);
 	begin
 		if reset = '1' then
+			enabled <= '1';
+			mode <= '0';
+			
+			backlight_compare <= x"00";
+			
 			cursor_x <= std_logic_vector(to_unsigned(58, cursor_x'length));
 			cursor_y <= std_logic_vector(to_unsigned(46, cursor_y'length));
 		elsif falling_edge(clk) then
@@ -347,6 +379,11 @@ begin
 			case check is
 				when "11" =>
 					case chipset_a is
+						--when x"00" =>
+						--	enabled <= bus_d(0);
+						--	mode <= bus_d(1);
+						--when x"04" =>
+						--	backlight_compare <= bus_d(7 downto 0);
 						when x"28" =>
 							cursor_x <= bus_d(9 downto 0);
 						when x"2C" =>
@@ -367,6 +404,10 @@ begin
 		elsif falling_edge(clk) then
 			if chipset_ce(peripheral_id) = '1' then
 				case chipset_a is
+					--when x"00" =>
+					--	bus_q <= x"0000000" & "00" & mode & enabled;
+					--when x"04" =>
+					--	bus_q <= x"000000" & backlight_compare;
 					when x"28" =>
 						bus_q <= x"0000" & "000000" & cursor_x;
 					when x"2C" =>
@@ -386,6 +427,8 @@ begin
 	chipset_nack <= (peripheral_id => '0', others => '0');
 	
 	den <= den_out;
+	
+	power_on <= not enabled;
 	
 	hsync <= not hsync_internal;
 	vsync <= vsync_internal;
