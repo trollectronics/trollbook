@@ -1,7 +1,4 @@
 #include <stdint.h>
-#include "printf.h"
-#include "terminal.h"
-#include "input.h"
 #include "spi.h"
 #include "rom.h"
 
