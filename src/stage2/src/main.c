@@ -20,6 +20,7 @@
 static void clear_and_print(void *arg);
 static void test_spi_rom(void *arg);
 static void test_sdram(void *arg);
+static void test_lowres(void *arg);
 static void autoboot(void *arg);
 void color_demo(void *arg);
 static void test_sound(void *arg);
@@ -43,7 +44,7 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
 	false,
 	0,
-	10,
+	11,
 	{
 		{"Boot kernel.elf", autoboot, NULL},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
@@ -52,6 +53,7 @@ Menu menu_main = {
 		{"Test Sound", test_sound, NULL},
 		{"Test keyboard", input_test_keyboard, NULL},
 		{"Test UI", ui, NULL},
+		{"Test Low-res video mode", test_lowres, NULL},
 		{"SDRAM Memtest", test_sdram, NULL},
 		{"Color demo", color_demo, NULL},
 		{"Reboot", reboot, NULL},
@@ -204,6 +206,29 @@ static void test_sound(void *arg) {
 			buf[i] = 0x0;
 		}
 	}
+}
+
+static void test_lowres(void *arg) {
+	volatile uint8_t *buf= (volatile uint8_t *) LLRAM_BASE;
+	volatile uint32_t *vga_hw = (volatile uint32_t *) PERIPHERAL_VGA_BASE;
+	int i;
+	
+	for(i = 0; i < 400*240; i++) {
+		buf[i] = 0x1;
+	}
+	
+	for(i = 0; i < 400*240; i++) {
+		buf[i + 128*1024] = 0x2;
+	}
+	
+	input_poll();
+	
+	vga_hw[0] = 0x3;
+	input_poll();
+	vga_hw[0] = 0x7;
+	input_poll();
+	
+	vga_hw[0] = 0x1;
 }
 
 int main() {
