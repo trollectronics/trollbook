@@ -85,9 +85,11 @@ architecture arch of vga is
 	signal rgb : std_logic_vector((depth_r + depth_g + depth_b) - 1 downto 0);
 	signal palette_a : std_logic_vector(7 downto 0);
 	
-	signal second_pixel : std_logic_vector(7 downto 0);
-	signal second_pixel_next : std_logic_vector(7 downto 0);
+	signal second_pixel : std_logic_vector(15 downto 0);
+	signal second_pixel_next : std_logic_vector(15 downto 0);
 	
+	signal visible_counter_save : integer;
+	signal visible_counter_save_next : integer;
 	signal visible_counter : integer ;--range 0 to ll_a_end - ll_a_start;
 	signal visible_counter_next : integer;-- range 0 to ll_a_end - ll_a_start;
 	
@@ -115,8 +117,8 @@ architecture arch of vga is
 	
 	
 	signal enabled : std_logic;
-	signal mode : std_logic;
-	signal current_buffer : std_logic;
+	signal mode, mode_next, mode_staging : std_logic;
+	signal current_buffer, current_buffer_staging : std_logic;
 	
 	signal backlight_compare : std_logic_vector(7 downto 0);
 	signal backlight_counter : unsigned(16 downto 0);
@@ -189,11 +191,12 @@ begin
 		end case;
 	end process;
 
-	vlogic: process(vstate, line_counter, vsync_internal, vvisible) begin
+	vlogic: process(vstate, line_counter, vsync_internal, vvisible, mode_staging, mode) begin
 		vstate_next <= vstate;
 		line_counter_next <= line_counter + 1;
 		vsync_next <= vsync_internal;
 		vvisible_next <= vvisible;
+		mode_next <= mode;
 		
 		case vstate is
 			when visible =>
@@ -217,6 +220,7 @@ begin
 					vstate_next <= visible;
 					line_counter_next <= 0;
 					vvisible_next <= '1';
+					mode_next <= mode_staging;
 				end if;
 		end case;
 	end process;
@@ -232,11 +236,15 @@ begin
 			pixel_counter <= line_end - 10;
 			line_counter <= frame_end - 1;
 			visible_counter <= 0;
+			visible_counter_save <= 0;
 			ll_a <= (others => '0');
 			ll_ce_internal <= '0';
 			second_pixel <= (others => '0');
 			den_internal <= "00";
 			den_out <= '0';
+			
+			current_buffer <= '0';
+			mode <= '0';
 		else
 			if falling_edge(clk) then
 				
@@ -245,6 +253,7 @@ begin
 				--set up llram adress
 				
 				visible_counter <= visible_counter_next;
+				visible_counter_save <= visible_counter_save_next;
 				ll_a <= ll_a_next;
 				ll_ce_internal <= ll_ce_next;
 				
@@ -263,24 +272,48 @@ begin
 					line_counter <= line_counter_next;
 					vvisible <= vvisible_next;
 					vsync_internal <= vsync_next;
+					current_buffer <= current_buffer_staging;
+					mode <= mode_next;
 				end if;
 			end if;
 		end if;
 	end process;
 	
-	process(visible_counter, vstate, second_pixel, hstate, pixel_counter) begin
+	process(visible_counter, vstate, second_pixel, hstate, pixel_counter, mode, visible_counter_save, current_buffer, line_counter) begin
 		ll_a_next <= (others => '1');
 		ll_ce_next <= '0';
+		visible_counter_save_next <= visible_counter_save;
 		
-		if hstate = visible and vstate = visible and pixel_counter mod 2 = 0 then
-			visible_counter_next <= visible_counter + 1;
-			ll_a_next <= std_logic_vector(to_unsigned(ll_a_start + visible_counter, ll_a_length));
-			ll_ce_next <= '1';
+		if mode = '1' then
+			-- Half mode
+			if pixel_counter = 0 then
+				visible_counter_save_next <= visible_counter;
+			end if;
 			
-		elsif vstate = sync then
-			visible_counter_next <= 0;
+			if hstate = visible and vstate = visible and pixel_counter mod 4 = 0 then
+				visible_counter_next <= visible_counter + 1;
+				ll_a_next <= std_logic_vector(to_unsigned(ll_a_start + visible_counter, ll_a_length)) or ( "0" & current_buffer & x"0000");
+				ll_ce_next <= '1';
+				
+			elsif hstate = sync and (line_counter mod 2 = 1) then
+				visible_counter_next <= visible_counter_save;
+			elsif vstate = sync then
+				visible_counter_next <= 0;
+			else
+				visible_counter_next <= visible_counter;
+			end if;
 		else
-			visible_counter_next <= visible_counter;
+			-- Normal mode
+			if hstate = visible and vstate = visible and pixel_counter mod 2 = 0 then
+				visible_counter_next <= visible_counter + 1;
+				ll_a_next <= std_logic_vector(to_unsigned(ll_a_start + visible_counter, ll_a_length));
+				ll_ce_next <= '1';
+				
+			elsif vstate = sync then
+				visible_counter_next <= 0;
+			else
+				visible_counter_next <= visible_counter;
+			end if;
 		end if;
 	end process;
 	
@@ -297,7 +330,6 @@ begin
 			vsync_old <= vsync_internal;
 		end if;
 	end process;
-	
 	
 	process(clk, reset) begin
 		if reset = '1' then
@@ -339,8 +371,33 @@ begin
 	
 	ll_ce <= ll_ce_internal;
 	
-	palette_a <= ll_d(15 downto 8) when pixel_counter mod 2 = 0 else second_pixel;
-	second_pixel_next <= ll_d(7 downto 0) when pixel_counter mod 2 = 0 else second_pixel;
+	process(pixel_counter, second_pixel, ll_d, mode) begin
+		second_pixel_next <= second_pixel;
+		palette_a <= (others => '1');
+		
+		if mode = '1' then
+			--Half mode
+			if pixel_counter mod 4 = 2 then
+				palette_a <= ll_d(15 downto 8);
+				second_pixel_next <= ll_d;
+			elsif pixel_counter mod 4 = 3 then
+				palette_a <= second_pixel(15 downto 8);
+			elsif pixel_counter mod 4 = 0 then
+				palette_a <= second_pixel(7 downto 0);
+			elsif pixel_counter mod 4 = 1 then
+				palette_a <= second_pixel(7 downto 0);
+			end if;
+		else
+			--Normal mode
+			if pixel_counter mod 2 = 0 then
+				palette_a <= ll_d(15 downto 8);
+				second_pixel_next <= ll_d;
+			else
+				palette_a <= second_pixel(7 downto 0);
+				second_pixel_next <= second_pixel;
+			end if;
+		end if;
+	end process;
 	
 	process(den_out, rgb, cursor_q, cursor_x_state, cursor_y_state) begin
 		b <= rgb(depth_b - 1 downto 0);
@@ -367,7 +424,8 @@ begin
 	begin
 		if reset = '1' then
 			enabled <= '1';
-			mode <= '0';
+			mode_staging <= '0';
+			current_buffer_staging <= '1';
 			
 			backlight_compare <= x"00";
 			
@@ -378,15 +436,16 @@ begin
 			
 			case check is
 				when "11" =>
-					case chipset_a is
-						--when x"00" =>
-						--	enabled <= bus_d(0);
-						--	mode <= bus_d(1);
-						--when x"04" =>
-						--	backlight_compare <= bus_d(7 downto 0);
-						when x"28" =>
+					case chipset_a(5 downto 2) is
+						when "0000" =>
+							enabled <= bus_d(0);
+							mode_staging <= bus_d(1);
+							current_buffer_staging <= bus_d(2);
+						when "0001" =>
+							backlight_compare <= bus_d(7 downto 0);
+						when "1010" =>
 							cursor_x <= bus_d(9 downto 0);
-						when x"2C" =>
+						when "1011" =>
 							cursor_y <= bus_d(8 downto 0);
 						when others =>
 						
@@ -403,14 +462,14 @@ begin
 			bus_q <= (others => 'Z');
 		elsif falling_edge(clk) then
 			if chipset_ce(peripheral_id) = '1' then
-				case chipset_a is
-					--when x"00" =>
-					--	bus_q <= x"0000000" & "00" & mode & enabled;
-					--when x"04" =>
-					--	bus_q <= x"000000" & backlight_compare;
-					when x"28" =>
+				case chipset_a(5 downto 2) is
+					when "0000" =>
+						bus_q <= x"0000000" & "0" & current_buffer & mode & enabled;
+					when "0001" =>
+						bus_q <= x"000000" & backlight_compare;
+					when "1010" =>
 						bus_q <= x"0000" & "000000" & cursor_x;
-					when x"2C" =>
+					when "1011" =>
 						bus_q <= x"0000" & "0000000" & cursor_y;
 					when others =>
 						bus_q <= (others => 'Z');

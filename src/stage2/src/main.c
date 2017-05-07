@@ -213,13 +213,15 @@ static void test_lowres(void *arg) {
 	volatile uint32_t *vga_hw = (volatile uint32_t *) PERIPHERAL_VGA_BASE;
 	int i;
 	
-	for(i = 0; i < 400*240; i++) {
-		buf[i] = 0x1;
-	}
+	//~ for(i = 0; i < 400*240/2; i++) {
+		//~ buf[i] = 0x1;
+		//~ buf[i + 400] = 0x2;
+	//~ }
 	
-	for(i = 0; i < 400*240; i++) {
-		buf[i + 128*1024] = 0x2;
-	}
+	//~ for(i = 0; i < 400*240/2; i++) {
+		//~ buf[i + 128*1024] = 0x4;
+		//~ buf[i + 400 + 128*1024] = 0x5;
+	//~ }
 	
 	input_poll();
 	
