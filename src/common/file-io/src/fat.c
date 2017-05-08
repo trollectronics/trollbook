@@ -26,7 +26,6 @@ freely, subject to the following restrictions:
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "printf.h"
 #include "fat.h"
 
 #define	MAX_FD_OPEN		4
@@ -143,7 +142,7 @@ int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_fun
 		return err;
 	
 	if (READ_WORD(data, 11) != 512) {
-		printf("Only 512 bytes per sector is supported\n");
+		//printf("Only 512 bytes per sector is supported\n");
 		return -1;
 	}
 	fat_state.cluster_size = data[13];
@@ -152,8 +151,8 @@ int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_fun
 
 	u8 = &data[16];
 	if (*u8 != 2) {
-		printf("Unsupported FAT: %i FAT:s in filesystem, only 2 supported\n", *u8);
-		return -1;
+		//printf("Unsupported FAT: %i FAT:s in filesystem, only 2 supported\n", *u8);
+		return -2;
 	}
 	
 	if (READ_WORD(data, 19)) {
@@ -175,8 +174,8 @@ int fat_init(int (* read_func)(uint32_t sector, uint8_t *data), int (* write_fun
 	else
 		tu8 = data[66];
 	if (tu8 != 0x28 && tu8 != 0x29) {
-		printf("FAT signature check failed\n");
-		return -1;
+		//printf("FAT signature check failed\n");
+		return -3;
 	}
 
 	if (fat_state.type <= FAT_TYPE_FAT16) {

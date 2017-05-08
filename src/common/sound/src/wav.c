@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "peripheral.h"
-#include "printf.h"
 
 #define HEADER_TEST(data, string) (data[0] == string[0] && data[1] == string[1] && data[2] == string[2] && data[3] == string[3])
 
@@ -67,7 +66,7 @@ void wav_play(void *data) {
 	int buffer = 0;
 	
 	if(!HEADER_TEST(wav_data, "RIFF")) {
-		printf("Missing RIFF header\n");
+		//printf("Missing RIFF header\n");
 		goto parsefail;
 	}
 	wav_data += 4;
@@ -77,13 +76,13 @@ void wav_play(void *data) {
 	wav_end = wav_data  + total_size;
 	
 	if(!HEADER_TEST(wav_data, "WAVE")) {
-		printf("Missing WAVE header\n");
+		//printf("Missing WAVE header\n");
 		goto parsefail;
 	}
 	wav_data += 4;
 	
 	if(!HEADER_TEST(wav_data, "fmt ")) {
-		printf("Missing fmt  header\n");
+		//printf("Missing fmt  header\n");
 		goto parsefail;
 	}
 	wav_data += 4;
@@ -93,19 +92,19 @@ void wav_play(void *data) {
 	data = wav_data + chunk_size;
 	
 	if(PARSE_16(wav_data) != 0x1) {
-		printf("Not a PCM file\n");
+		//printf("Not a PCM file\n");
 		goto fail;
 	}
 	wav_data += 2;
 	
 	if((tmp = PARSE_16(wav_data)) != 2) {
-		printf("Must have 2 channels (has %u)\n", tmp);
+		//printf("Must have 2 channels (has %u)\n", tmp);
 		goto fail;
 	}
 	wav_data += 2;
 	
 	if((tmp = PARSE_32(wav_data)) != 48000) {
-		printf("Must be 48 kHz (is %u kHz)\n", tmp/1000);
+		//printf("Must be 48 kHz (is %u kHz)\n", tmp/1000);
 		goto fail;
 	}
 	wav_data += 4;
@@ -113,12 +112,12 @@ void wav_play(void *data) {
 	wav_data += 6;
 	
 	if((tmp = PARSE_16(wav_data)) != 8) {
-		printf("Must be 8 bits per sample (is %u)\n", tmp);
+		//printf("Must be 8 bits per sample (is %u)\n", tmp);
 		goto fail;
 	}
 	wav_data += 2;
 	
-	printf("Found conformant WAV file, will play\n");
+	//printf("Found conformant WAV file, will play\n");
 	
 	while(data < (void *) wav_end) {
 		wav_data = data;
@@ -145,7 +144,7 @@ void wav_play(void *data) {
 			}
 		}
 		
-		printf("Starting playback\n");
+		//printf("Starting playback\n");
 		sound_start();
 		
 		while(i < (chunk_size >> 1)) {
@@ -166,7 +165,7 @@ void wav_play(void *data) {
 	return;
 	
 	parsefail:
-	printf("Failed to parse wave file\n");
+	//printf("Failed to parse wave file\n");
 	
 	fail:
 	return;
