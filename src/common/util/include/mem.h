@@ -20,6 +20,7 @@ char *strcpy(char *dest, const char *src);
 int strcmp(const char *s1, const char *s2);
 int strncmp(const char *s1, const char *s2, size_t n);
 char *strchr(char *str, char chr);
+int memcmp(const void *s1, const void *s2, size_t n);
 
 
 void *calloc(size_t nmemb, size_t size);
