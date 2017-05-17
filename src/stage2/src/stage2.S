@@ -11,8 +11,14 @@ _start:
 	
 2:
 	cinva %bc
-	move.l #0x00008000, %d0
+	move.l #0x80008000, %d0
 	movec %d0, %cacr
+	
+	move.l #0x0000A040, %d0
+	movec.l %d0, %dtt0
+	
+	move.l #0x0000A000, %d0
+	movec.l %d0, %itt0
 	
 	jsr main
 	

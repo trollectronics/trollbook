@@ -93,7 +93,7 @@ begin
 	
 	ipl_next <= not interrupt_level;
 	
-	process(a, bus_ack_chipset, bus_nack_chipset, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_sdram, siz, tt) begin
+	process(a, bus_ack_chipset, bus_nack_chipset, bus_ack_llram, bootrom_q, bus_d, tip, bus_ack_sdram, siz, tt, rw) begin
 		q_next <= (others => '0');
 		tbi_next <= '0';
 		
@@ -131,8 +131,10 @@ begin
 					q_next <= x"DEADBEEF";
 					ce_next <= "1000";
 					ack <= bus_ack_sdram;
-					bus_siz_internal <= not siz;
-					tbi_next <= '1';
+					if rw = '1' then
+						bus_siz_internal <= not siz;
+						tbi_next <= '1';
+					end if;
 				
 				when others =>
 					ce_next <= (others => '0');

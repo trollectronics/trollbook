@@ -199,7 +199,13 @@ begin
 		cpu_interrupt_level => cpu_interrupt_level);
 	
 	-- u_sysinfo
-	-- u_timer
+	-- u_timer: entity work.timer generic map(peripheral_id => 2, timers => 1)
+		-- port map(reset => internal_reset, clk => clk33,
+		
+		-- chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
+		-- bus_rw => bus_rw, bus_siz => bus_siz,
+		-- chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
+		-- chipset_int => chipset_int);
 	
 	-- *** Hardware Peripherals *** --
 	

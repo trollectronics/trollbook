@@ -340,7 +340,7 @@ begin
 			when 380 => --sdram
 				a <= x"80000004";
 				d <= (others => 'Z');
-				cpu_siz <= "00";
+				cpu_siz <= "11";
 				cpu_tt <= "00";
 				cpu_rw <= '1';
 				cpu_ts <= '0';
@@ -351,7 +351,7 @@ begin
 			
 			when 420 => --sdram
 				a <= x"81000004";
-				cpu_siz <= "00";
+				cpu_siz <= "11";
 				cpu_tt <= "00";
 				cpu_rw <= '0';
 				cpu_ts <= '0';

@@ -38,7 +38,7 @@ void input_test_keyboard(void *arg) {
 		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
-			while(dumbdelay(10), (reg = spi_send_recv(0xFF)) != 0xFF) {
+			while(dumbdelay(100), (reg = spi_send_recv(0xFF)) != 0xFF) {
 				change = true;
 				if(reg & 0x80) {
 					matrix[reg & 0x3][matrix_cols[(reg & 0x7F) >> 2]] = false;
@@ -141,14 +141,14 @@ InputButtons input_poll_keyboard(void *arg) {
 	spi_set_clockdiv(165);
 	do {
 		spi_select_slave(SPI_SLAVE_KBD);
-		dumbdelay(1000);
+		dumbdelay(10000);
 		
 		spi_send_recv(PROTOCOL_COMMAND_STATUS);
 		reg = spi_send_recv(0xFF);
 		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
 			
-			while(dumbdelay(10), (reg = spi_send_recv(0xFF)) != 0xFF) {
+			while(dumbdelay(10000), (reg = spi_send_recv(0xFF)) != 0xFF) {
 				switch(reg) {
 					case 0xB0:
 						btn.up = 1;
@@ -172,7 +172,7 @@ InputButtons input_poll_keyboard(void *arg) {
 			}
 		}
 		spi_select_slave(SPI_SLAVE_NONE);
-		dumbdelay(10000);
+		dumbdelay(100000);
 	} while(!(btn.up || btn.down || btn.left || btn.right || btn.enter || btn.back));
 	
 	spi_set_clockdiv(clockdiv);
