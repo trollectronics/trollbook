@@ -353,6 +353,6 @@ LOGFILE_DoubleClick = Edit
 LOGFILE_CustomDoubleClick = 
 UCDB_DoubleClick = Edit
 UCDB_CustomDoubleClick = 
-EditorState = {tabbed horizontal 0}
+EditorState = 
 Project_Major_Version = 6
 Project_Minor_Version = 4

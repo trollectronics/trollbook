@@ -107,16 +107,16 @@ begin
 		if tip = '0' and tt(1) = '0' then --normal read/write
 			case a(31) is
 				when '0' =>
-					case a(24 downto 19) is
-						when "000000" => --bootrom
+					case a(20 downto 19) is
+						when "00" => --bootrom
 							q_next <= bootrom_q;
 							ce_next <= "0001";
 							ack <= '1';
-						when "000001" => --llram
+						when "01" => --llram
 							ce_next <= "0010";
 							q_next <= bus_d;
 							ack <= bus_ack_llram;
-						when "000010" => --chipset
+						when "10" => --chipset
 							q_next <= bus_d;
 							ce_next <= "0100";
 							ack <= bus_ack_chipset;

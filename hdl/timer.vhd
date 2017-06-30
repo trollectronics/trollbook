@@ -102,26 +102,26 @@ begin
 						when "00110" => -- Timer 0 Compare
 							compare(0) <= unsigned(bus_d);
 							
-						-- when "01000" => -- Timer 1 Control
-							-- control(1) <= bus_d(1 downto 0);
-						-- when "01001" => -- Timer 1 Counter
-							-- counter(1) <= unsigned(bus_d);
-						-- when "01010" => -- Timer 1 Compare
-							-- compare(1) <= unsigned(bus_d);
+						 when "01000" => -- Timer 1 Control
+							 control(1) <= bus_d(1 downto 0);
+						 when "01001" => -- Timer 1 Counter
+							 counter(1) <= unsigned(bus_d);
+						 when "01010" => -- Timer 1 Compare
+							 compare(1) <= unsigned(bus_d);
 							
-						-- when "01100" => -- Timer 2 Control
-							-- control(2) <= bus_d(1 downto 0);
-						-- when "01101" => -- Timer 2 Counter
-							-- counter(2) <= unsigned(bus_d);
-						-- when "01110" => -- Timer 2 Compare
-							-- compare(2) <= unsigned(bus_d);
+						 when "01100" => -- Timer 2 Control
+							 control(2) <= bus_d(1 downto 0);
+						 when "01101" => -- Timer 2 Counter
+							 counter(2) <= unsigned(bus_d);
+						 when "01110" => -- Timer 2 Compare
+							 compare(2) <= unsigned(bus_d);
 							
-						-- when "10000" => -- Timer 2 Control
-							-- control(3) <= bus_d(1 downto 0);
-						-- when "10001" => -- Timer 2 Counter
-							-- counter(3) <= unsigned(bus_d);
-						-- when "10010" => -- Timer 2 Compare
-							-- compare(3) <= unsigned(bus_d);
+						 when "10000" => -- Timer 2 Control
+							 control(3) <= bus_d(1 downto 0);
+						 when "10001" => -- Timer 2 Counter
+							 counter(3) <= unsigned(bus_d);
+						 when "10010" => -- Timer 2 Compare
+							 compare(3) <= unsigned(bus_d);
 						
 						when others =>
 						
@@ -133,18 +133,18 @@ begin
 		end if;
 	end process;
 	
-	-- process(reset, clk) begin
-		-- if reset = '1' then
-			-- interrupt <= '0';
-			-- prev_buffer <= '1';
-		-- elsif falling_edge(clk) then
-			-- interrupt <= '0';
-			-- if enabled = '1' and current_buffer = prev_buffer then
-				-- prev_buffer <= not prev_buffer;
-				-- interrupt <= '1';
-			-- end if;
-		-- end if;
-	-- end process;
+	 process(reset, clk) begin
+		 if reset = '1' then
+			interrupt <= '0';
+		 elsif falling_edge(clk) then
+			interrupt <= '0';
+			for i in 0 to timers - 1 loop
+				if interrupt_flag(i) = '1' and interrupt_enable(i) = '1' then
+					interrupt <= '1';
+				end if;
+			end loop;
+		 end if;
+	 end process;
 	
 	process(reset, clk) begin
 		if reset = '1' then
@@ -166,29 +166,29 @@ begin
 					when "00110" => -- Timer 0 Compare
 						bus_q <= std_logic_vector(compare(0));
 					
-					-- when "01000" => -- Timer 1 Control
-						-- bus_q <= x"0000000" & "00" & control(1);
-					-- when "01001" => -- Timer 1 Counter
-						-- bus_q <= std_logic_vector(counter(1));
-					-- when "01010" => -- Timer 1 Compare
-						-- bus_q <= std_logic_vector(compare(1));
+					 when "01000" => -- Timer 1 Control
+						 bus_q <= x"0000000" & "00" & control(1);
+					 when "01001" => -- Timer 1 Counter
+						 bus_q <= std_logic_vector(counter(1));
+					 when "01010" => -- Timer 1 Compare
+						 bus_q <= std_logic_vector(compare(1));
 					
-					-- when "01100" => -- Timer 2 Control
-						-- bus_q <= x"0000000" & "00" & control(2);
-					-- when "01101" => -- Timer 2 Counter
-						-- bus_q <= std_logic_vector(counter(2));
-					-- when "01110" => -- Timer 2 Compare
-						-- bus_q <= std_logic_vector(compare(2));
+					 when "01100" => -- Timer 2 Control
+						 bus_q <= x"0000000" & "00" & control(2);
+					 when "01101" => -- Timer 2 Counter
+						 bus_q <= std_logic_vector(counter(2));
+					 when "01110" => -- Timer 2 Compare
+						 bus_q <= std_logic_vector(compare(2));
 					
-					-- when "10000" => -- Timer 3 Control
-						-- bus_q <= x"0000000" & "00" & control(3);
-					-- when "10001" => -- Timer 3 Counter
-						-- bus_q <= std_logic_vector(counter(3));
-					-- when "10010" => -- Timer 3 Compare
-						-- bus_q <= std_logic_vector(compare(3));
+					 when "10000" => -- Timer 3 Control
+						 bus_q <= x"0000000" & "00" & control(3);
+					 when "10001" => -- Timer 3 Counter
+						 bus_q <= std_logic_vector(counter(3));
+					 when "10010" => -- Timer 3 Compare
+						 bus_q <= std_logic_vector(compare(3));
 					
 					when others =>
-						bus_q <= (others => '1');
+						bus_q <= (others => 'Z');
 				end case;
 			else
 				bus_q <= (others => 'Z');
