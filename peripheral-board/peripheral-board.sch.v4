@@ -35,7 +35,7 @@ F2 "X" O L 7300 5100 60
 F3 "Y" O L 7300 5200 60 
 $EndSheet
 $Comp
-L peripheral-board-rescue:ATTINY48-AU-RESCUE-peripheral-board U1001
+L ATTINY48-AU-RESCUE-peripheral-board U1001
 U 1 1 5819EBDE
 P 4000 4200
 F 0 "U1001" H 3400 4250 50  0000 C CNN
@@ -90,7 +90,7 @@ F6 "~CS_R" I L 8700 1500 60
 F7 "DETECT" O R 9400 1050 60 
 $EndSheet
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR01
+L GND-RESCUE-peripheral-board #PWR01
 U 1 1 581F524B
 P 3000 5700
 F 0 "#PWR01" H 3000 5450 50  0001 C CNN
@@ -101,7 +101,7 @@ F 3 "" H 3000 5700 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:CONN_01X04-RESCUE-peripheral-board P1002
+L CONN_01X04-RESCUE-peripheral-board P1002
 U 1 1 581F57E9
 P 750 4950
 F 0 "P1002" H 750 5300 50  0000 C CNN
@@ -112,7 +112,7 @@ F 3 "" H 750 4950 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L peripheral-board-rescue:CONN_01X29-RESCUE-peripheral-board P1001
+L CONN_01X29-RESCUE-peripheral-board P1001
 U 1 1 581F5A9B
 P 750 3200
 F 0 "P1001" H 669 1575 50  0000 C CNN
@@ -161,7 +161,7 @@ SPI_SS6
 Text Label 950  2200 0    60   ~ 0
 SPI_SS7
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR02
+L GND-RESCUE-peripheral-board #PWR02
 U 1 1 581F752E
 P 1000 1950
 F 0 "#PWR02" H 1000 1700 50  0001 C CNN
@@ -172,7 +172,7 @@ F 3 "" H 1000 1950 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR03
+L GND-RESCUE-peripheral-board #PWR03
 U 1 1 581F7634
 P 1000 2800
 F 0 "#PWR03" H 1000 2550 50  0001 C CNN
@@ -183,7 +183,7 @@ F 3 "" H 1000 2800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR04
+L GND-RESCUE-peripheral-board #PWR04
 U 1 1 581F76B8
 P 1000 3200
 F 0 "#PWR04" H 1000 2950 50  0001 C CNN
@@ -194,7 +194,7 @@ F 3 "" H 1000 3200 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR05
+L GND-RESCUE-peripheral-board #PWR05
 U 1 1 581F7709
 P 1000 3500
 F 0 "#PWR05" H 1000 3250 50  0001 C CNN
@@ -205,7 +205,7 @@ F 3 "" H 1000 3500 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR06
+L GND-RESCUE-peripheral-board #PWR06
 U 1 1 581F7744
 P 1000 4200
 F 0 "#PWR06" H 1000 3950 50  0001 C CNN
@@ -216,7 +216,7 @@ F 3 "" H 1000 4200 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR07
+L GND-RESCUE-peripheral-board #PWR07
 U 1 1 581F77D7
 P 1000 4450
 F 0 "#PWR07" H 1000 4200 50  0001 C CNN
@@ -227,7 +227,7 @@ F 3 "" H 1000 4450 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR08
+L GND-RESCUE-peripheral-board #PWR08
 U 1 1 581F7812
 P 1000 4950
 F 0 "#PWR08" H 1000 4700 50  0001 C CNN
@@ -238,7 +238,7 @@ F 3 "" H 1000 4950 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:+24V-RESCUE-peripheral-board #PWR09
+L +24V-RESCUE-peripheral-board #PWR09
 U 1 1 581F7F97
 P 1000 4800
 F 0 "#PWR09" H 1000 4650 50  0001 C CNN
@@ -249,7 +249,7 @@ F 3 "" H 1000 4800 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR010
+L +3V3-RESCUE-peripheral-board #PWR010
 U 1 1 581F7FED
 P 1000 5100
 F 0 "#PWR010" H 1000 4950 50  0001 C CNN
@@ -292,7 +292,7 @@ F14 "DETECT" U R 10350 4750 60
 F15 "AN" O R 10350 5750 60 
 $EndSheet
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1001
+L R-RESCUE-peripheral-board R1001
 U 1 1 58224307
 P 5600 4600
 F 0 "R1001" V 5550 4350 50  0000 C CNN
@@ -303,7 +303,7 @@ F 3 "" H 5600 4600 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1002
+L R-RESCUE-peripheral-board R1002
 U 1 1 582244B8
 P 5600 4500
 F 0 "R1002" V 5650 4250 50  0000 C CNN
@@ -314,7 +314,7 @@ F 3 "" H 5600 4500 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push-RESCUE-peripheral-board SW1001
+L SW_Push-RESCUE-peripheral-board SW1001
 U 1 1 5823964C
 P 3500 2350
 F 0 "SW1001" H 3500 2605 50  0000 C CNN
@@ -337,7 +337,7 @@ I2C_SDA
 Text Label 8600 5750 0    60   ~ 0
 I2C_SCL
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR011
+L +3V3-RESCUE-peripheral-board #PWR011
 U 1 1 58A469F7
 P 5800 4550
 F 0 "#PWR011" H 5850 4600 50  0001 C CNN
@@ -548,7 +548,7 @@ Wire Wire Line
 Text Label 8450 2750 0    60   ~ 0
 PWR_SHDN_24
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1003
+L R-RESCUE-peripheral-board R1003
 U 1 1 58A574F1
 P 8300 2500
 F 0 "R1003" H 8370 2546 50  0000 L CNN
@@ -559,7 +559,7 @@ F 3 "" H -200 350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1004
+L R-RESCUE-peripheral-board R1004
 U 1 1 58A57622
 P 8300 2900
 F 0 "R1004" H 8370 2946 50  0000 L CNN
@@ -688,7 +688,7 @@ Wire Wire Line
 Wire Wire Line
 	4950 5450 5450 5450
 $Comp
-L peripheral-board-rescue:LED-RESCUE-peripheral-board D1001
+L LED-RESCUE-peripheral-board D1001
 U 1 1 58A4D1EF
 P 3550 900
 F 0 "D1001" V 3588 782 50  0000 R CNN
@@ -699,7 +699,7 @@ F 3 "" H 250 -1150 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1006
+L R-RESCUE-peripheral-board R1006
 U 1 1 58A4D893
 P 3550 1200
 F 0 "R1006" H 3620 1246 50  0000 L CNN
@@ -710,7 +710,7 @@ F 3 "" H 200 -800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR012
+L GND-RESCUE-peripheral-board #PWR012
 U 1 1 58A4D9DD
 P 3550 1350
 F 0 "#PWR012" H 250 -650 50  0001 C CNN
@@ -721,7 +721,7 @@ F 3 "" H 250 -400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR013
+L +3V3-RESCUE-peripheral-board #PWR013
 U 1 1 58A4DB27
 P 3550 750
 F 0 "#PWR013" H 100 -1200 50  0001 C CNN
@@ -732,7 +732,7 @@ F 3 "" H 100 -1050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:MC78L05ACH-RESCUE-peripheral-board U1002
+L MC78L05ACH-RESCUE-peripheral-board U1002
 U 1 1 58A5B00E
 P 2450 3550
 F 0 "U1002" H 2450 3867 50  0000 C CNN
@@ -743,7 +743,7 @@ F 3 "" H -50 1150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:C-RESCUE-peripheral-board C1001
+L C-RESCUE-peripheral-board C1001
 U 1 1 58A5F9BD
 P 2050 3650
 F 0 "C1001" H 1750 3750 50  0000 L CNN
@@ -754,7 +754,7 @@ F 3 "" H -1100 1400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:C-RESCUE-peripheral-board C1002
+L C-RESCUE-peripheral-board C1002
 U 1 1 58A5FB28
 P 2850 3650
 F 0 "C1002" H 2965 3696 50  0000 L CNN
@@ -765,7 +765,7 @@ F 3 "" H -150 1100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR014
+L GND-RESCUE-peripheral-board #PWR014
 U 1 1 58A610B7
 P 2450 3800
 F 0 "#PWR014" H -200 -450 50  0001 C CNN
@@ -776,7 +776,7 @@ F 3 "" H -200 -200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:VAA-RESCUE-peripheral-board #PWR015
+L VAA-RESCUE-peripheral-board #PWR015
 U 1 1 58A6141E
 P 2050 3500
 F 0 "#PWR015" H -350 200 50  0001 C CNN
@@ -789,7 +789,7 @@ $EndComp
 Wire Wire Line
 	3050 3500 2850 3500
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1005
+L R-RESCUE-peripheral-board R1005
 U 1 1 58A61F8B
 P 3550 2450
 F 0 "R1005" V 3650 2450 50  0000 C CNN
@@ -804,7 +804,7 @@ Wire Wire Line
 Wire Wire Line
 	3700 2450 3700 2350
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR016
+L GND-RESCUE-peripheral-board #PWR016
 U 1 1 58A62D39
 P 3300 2350
 F 0 "#PWR016" H -950 -400 50  0001 C CNN
@@ -819,18 +819,18 @@ Wire Wire Line
 Wire Wire Line
 	3050 2450 3400 2450
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR017
+L GND-RESCUE-peripheral-board #PWR017
 U 1 1 58A674BE
 P 8300 3050
 F 0 "#PWR017" H 8350 3100 50  0001 C CNN
-F 1 "peripheral-board-rescue:GND-RESCUE-peripheral-board" H 8305 2877 50  0000 C CNN
+F 1 "GND" H 8305 2877 50  0000 C CNN
 F 2 "" H 50  -50 50  0001 C CNN
 F 3 "" H 50  -50 50  0001 C CNN
 	1    8300 3050
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3.3VP-RESCUE-peripheral-board #PWR018
+L +3.3VP-RESCUE-peripheral-board #PWR018
 U 1 1 58A5F469
 P 3050 2200
 F 0 "#PWR018" H 900 -100 50  0001 C CNN
@@ -842,11 +842,11 @@ F 3 "" H 750 -50 50  0001 C CNN
 $EndComp
 Connection ~ 3050 2450
 $Comp
-L peripheral-board-rescue:+3.3VP-RESCUE-peripheral-board #PWR019
+L +3.3VP-RESCUE-peripheral-board #PWR019
 U 1 1 58A5FC40
 P 8300 2350
 F 0 "#PWR019" H 6150 50  50  0001 C CNN
-F 1 "peripheral-board-rescue:+3.3VP-RESCUE-peripheral-board" H 8320 2493 50  0000 C CNN
+F 1 "+3.3VP" H 8320 2493 50  0000 C CNN
 F 2 "" H 6000 100 50  0001 C CNN
 F 3 "" H 6000 100 50  0001 C CNN
 	1    8300 2350
@@ -855,7 +855,7 @@ $EndComp
 Text GLabel 6400 4700 2    60   Input ~ 0
 RESET
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1007
+L R-RESCUE-peripheral-board R1007
 U 1 1 58A64298
 P 6300 4550
 F 0 "R1007" H 6400 4550 50  0000 C CNN
@@ -866,7 +866,7 @@ F 3 "" H 6300 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3.3VP-RESCUE-peripheral-board #PWR020
+L +3.3VP-RESCUE-peripheral-board #PWR020
 U 1 1 58A6621C
 P 6300 4400
 F 0 "#PWR020" H 4150 2100 50  0001 C CNN
@@ -889,7 +889,7 @@ SPI_MISO
 Text Label 3700 6400 0    60   ~ 0
 SPI_MOSI
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1009
+L R-RESCUE-peripheral-board R1009
 U 1 1 58A68BB9
 P 3450 6250
 F 0 "R1009" H 3520 6296 50  0000 L CNN
@@ -900,7 +900,7 @@ F 3 "" H -2500 100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1008
+L R-RESCUE-peripheral-board R1008
 U 1 1 58A68D48
 P 3200 6250
 F 0 "R1008" H 3270 6296 50  0000 L CNN
@@ -911,7 +911,7 @@ F 3 "" H -100 0   50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R1010
+L R-RESCUE-peripheral-board R1010
 U 1 1 58A68E7F
 P 3500 6850
 F 0 "R1010" H 3570 6896 50  0000 L CNN
@@ -924,7 +924,7 @@ $EndComp
 Wire Wire Line
 	3200 6500 3200 6400
 $Comp
-L peripheral-board-rescue:+3.3VP-RESCUE-peripheral-board #PWR021
+L +3.3VP-RESCUE-peripheral-board #PWR021
 U 1 1 58A69C82
 P 3450 6100
 F 0 "#PWR021" H 1300 3800 50  0001 C CNN
@@ -935,7 +935,7 @@ F 3 "" H 1150 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3.3VP-RESCUE-peripheral-board #PWR022
+L +3.3VP-RESCUE-peripheral-board #PWR022
 U 1 1 58A6A0BF
 P 3200 6100
 F 0 "#PWR022" H 1050 3800 50  0001 C CNN
@@ -946,7 +946,7 @@ F 3 "" H 900 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR023
+L GND-RESCUE-peripheral-board #PWR023
 U 1 1 58A6A217
 P 3500 7000
 F 0 "#PWR023" H 3550 7050 50  0001 C CNN
@@ -957,7 +957,7 @@ F 3 "" H -1650 800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:C-RESCUE-peripheral-board C1003
+L C-RESCUE-peripheral-board C1003
 U 1 1 58A68B7C
 P 2900 2800
 F 0 "C1003" V 2648 2800 50  0000 C CNN
@@ -968,7 +968,7 @@ F 3 "" H 550 100 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:C-RESCUE-peripheral-board C1004
+L C-RESCUE-peripheral-board C1004
 U 1 1 58A68D67
 P 2900 3100
 F 0 "C1004" V 3100 3100 50  0000 C CNN
@@ -979,7 +979,7 @@ F 3 "" H 0   0   50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR024
+L GND-RESCUE-peripheral-board #PWR024
 U 1 1 58A69569
 P 2750 2800
 F 0 "#PWR024" H 450 50  50  0001 C CNN
@@ -990,7 +990,7 @@ F 3 "" H 450 300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR025
+L GND-RESCUE-peripheral-board #PWR025
 U 1 1 58A69716
 P 2750 3100
 F 0 "#PWR025" H 50  -250 50  0001 C CNN

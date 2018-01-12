@@ -1,4 +1,35 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:vref
+LIBS:references
 LIBS:battery-cache
 EELAYER 26 0
 EELAYER END
@@ -15,7 +46,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L device:Battery_Cell BT5001
+L Battery_Cell BT5001
 U 1 1 589ABFFA
 P 7000 2800
 F 0 "BT5001" H 7118 2896 50  0000 L CNN
@@ -26,7 +57,7 @@ F 3 "" V -3000 810 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L references:TL431DBZ U5002
+L TL431DBZ U5002
 U 1 1 589AC001
 P 5550 2800
 F 0 "U5002" V 5600 2450 60  0000 L CNN
@@ -37,7 +68,7 @@ F 3 "" H -4350 1000 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L device:POT RV5001
+L POT RV5001
 U 1 1 589AC008
 P 5000 2800
 F 0 "RV5001" H 4930 2846 50  0000 R CNN
@@ -48,7 +79,7 @@ F 3 "" H -4200 1800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5002
+L R R5002
 U 1 1 589AC00F
 P 5000 2500
 F 0 "R5002" H 5070 2546 50  0000 L CNN
@@ -59,7 +90,7 @@ F 3 "" H -3700 1300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5005
+L R R5005
 U 1 1 589AC016
 P 5000 3100
 F 0 "R5005" H 5070 3146 50  0000 L CNN
@@ -70,7 +101,7 @@ F 3 "" H -3650 650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5001
+L R R5001
 U 1 1 589AC01D
 P 5550 2300
 F 0 "R5001" H 5620 2346 50  0000 L CNN
@@ -81,7 +112,7 @@ F 3 "" H -3650 1100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5003
+L R R5003
 U 1 1 589AC024
 P 6100 2900
 F 0 "R5003" H 6170 2946 50  0000 L CNN
@@ -92,18 +123,18 @@ F 3 "" H -3800 800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5000 3250 5000 3300
+	5000 3250 5000 3500
 Wire Wire Line
-	5000 3300 5550 3300
+	5000 3300 7000 3300
 Wire Wire Line
-	6100 3050 6100 3300
+	6100 3050 6100 3450
 Wire Wire Line
 	6100 2750 6100 2700
 Connection ~ 6100 3300
 Wire Wire Line
 	5000 2350 5000 2150
 Wire Wire Line
-	3350 2150 3500 2150
+	3350 2150 7000 2150
 Wire Wire Line
 	7000 2150 7000 2600
 Connection ~ 5550 2150
@@ -113,7 +144,7 @@ Connection ~ 6100 2150
 Wire Wire Line
 	5800 2500 5550 2500
 Wire Wire Line
-	5550 2450 5550 2500
+	5550 2450 5550 2700
 Connection ~ 5550 2500
 Wire Wire Line
 	5150 2800 5450 2800
@@ -121,7 +152,7 @@ Wire Wire Line
 	5550 2900 5550 3300
 Connection ~ 5550 3300
 $Comp
-L device:Battery_Cell BT5002
+L Battery_Cell BT5002
 U 1 1 589AC03D
 P 7000 3950
 F 0 "BT5002" H 7118 4046 50  0000 L CNN
@@ -132,7 +163,7 @@ F 3 "" V -3000 1960 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L references:TL431DBZ U5003
+L TL431DBZ U5003
 U 1 1 589AC044
 P 5550 3950
 F 0 "U5003" V 5600 3600 60  0000 L CNN
@@ -143,7 +174,7 @@ F 3 "" H -4350 2150 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L device:POT RV5002
+L POT RV5002
 U 1 1 589AC04B
 P 5000 3950
 F 0 "RV5002" H 4930 3996 50  0000 R CNN
@@ -154,7 +185,7 @@ F 3 "" H -4200 2950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5007
+L R R5007
 U 1 1 589AC052
 P 5000 3650
 F 0 "R5007" H 5070 3696 50  0000 L CNN
@@ -165,7 +196,7 @@ F 3 "" H -3700 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5010
+L R R5010
 U 1 1 589AC059
 P 5000 4250
 F 0 "R5010" H 5070 4296 50  0000 L CNN
@@ -176,7 +207,7 @@ F 3 "" H -3650 1800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5006
+L R R5006
 U 1 1 589AC060
 P 5550 3450
 F 0 "R5006" H 5620 3496 50  0000 L CNN
@@ -187,7 +218,7 @@ F 3 "" H -3650 2250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:R R5008
+L R R5008
 U 1 1 589AC067
 P 6100 4050
 F 0 "R5008" H 6170 4096 50  0000 L CNN
@@ -200,7 +231,7 @@ $EndComp
 Wire Wire Line
 	5000 4400 5000 4450
 Wire Wire Line
-	3350 4450 3450 4450
+	3350 4450 7000 4450
 Wire Wire Line
 	6100 4450 6100 4200
 Wire Wire Line
@@ -209,7 +240,7 @@ Connection ~ 6100 4450
 Wire Wire Line
 	5800 3650 5550 3650
 Wire Wire Line
-	5550 3600 5550 3650
+	5550 3600 5550 3850
 Connection ~ 5550 3650
 Wire Wire Line
 	5150 3950 5450 3950
@@ -217,7 +248,7 @@ Wire Wire Line
 	5550 4050 5550 4450
 Connection ~ 5550 4450
 $Comp
-L device:Thermistor_NTC TH5001
+L Thermistor_NTC TH5001
 U 1 1 589AC07A
 P 4150 4250
 F 0 "TH5001" H 4247 4296 50  0000 L CNN
@@ -238,17 +269,17 @@ Connection ~ 5000 2150
 Wire Wire Line
 	4150 4100 4150 4050
 Wire Wire Line
-	4150 4050 3700 4050
+	4150 4050 3350 4050
 Wire Wire Line
 	4150 4400 4150 4450
 Connection ~ 4150 4450
 Wire Wire Line
 	7000 4450 7000 4050
 Wire Wire Line
-	7000 2900 7000 3300
+	7000 2900 7000 3750
 Connection ~ 7000 3300
 $Comp
-L device:R R5004
+L R R5004
 U 1 1 589AEB2B
 P 6400 2900
 F 0 "R5004" H 6470 2946 50  0000 L CNN
@@ -263,7 +294,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 3050 6100 3050
 $Comp
-L device:R R5009
+L R R5009
 U 1 1 589AEC5C
 P 6400 4050
 F 0 "R5009" H 6470 4096 50  0000 L CNN
@@ -282,7 +313,7 @@ Text Notes 6150 3150 0    60   ~ 0
 Text Notes 6150 4300 0    60   ~ 0
 2 × 1/4 W
 $Comp
-L device:Q_PMOS_GSD Q5001
+L Q_PMOS_GSD Q5001
 U 1 1 58A97AA9
 P 6000 2500
 F 0 "Q5001" H 6206 2454 50  0000 L CNN
@@ -293,7 +324,7 @@ F 3 "" H -1050 600 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L device:Q_PMOS_GSD Q5002
+L Q_PMOS_GSD Q5002
 U 1 1 58A97BDE
 P 6000 3650
 F 0 "Q5002" H 6206 3604 50  0000 L CNN
@@ -310,7 +341,7 @@ Text Notes 7150 4100 0    60   ~ 0
 Text Notes 3700 3050 0    60   ~ 0
 pot: 3364W-1-503E
 $Comp
-L battery-rescue:CONN_01X03-RESCUE-battery J1001
+L CONN_01X03 J1001
 U 1 1 58E61493
 P 2200 3250
 F 0 "J1001" H 2119 2925 50  0000 C CNN
@@ -336,38 +367,4 @@ Wire Wire Line
 	3450 3350 3450 4450
 Connection ~ 3450 4450
 Connection ~ 5000 3300
-Wire Wire Line
-	6100 3300 7000 3300
-Wire Wire Line
-	6100 3300 6100 3450
-Wire Wire Line
-	5550 2150 6100 2150
-Wire Wire Line
-	6100 2150 7000 2150
-Wire Wire Line
-	5550 2500 5550 2700
-Wire Wire Line
-	5550 3300 6100 3300
-Wire Wire Line
-	6100 4450 7000 4450
-Wire Wire Line
-	5550 3650 5550 3850
-Wire Wire Line
-	5550 4450 6100 4450
-Wire Wire Line
-	5000 4450 5550 4450
-Wire Wire Line
-	5000 2150 5550 2150
-Wire Wire Line
-	4150 4450 5000 4450
-Wire Wire Line
-	7000 3300 7000 3750
-Wire Wire Line
-	3500 2150 5000 2150
-Wire Wire Line
-	3700 4050 3350 4050
-Wire Wire Line
-	3450 4450 4150 4450
-Wire Wire Line
-	5000 3300 5000 3500
 $EndSCHEMATC

@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L peripheral-board-rescue:PSPNUB-RESCUE-peripheral-board U3001
+L PSPNUB-RESCUE-peripheral-board U3001
 U 1 1 5822698D
 P 5100 2600
 F 0 "U3001" H 4772 2653 60  0000 R CNN
@@ -26,7 +26,7 @@ F 3 "" H 5100 2600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR034
+L +3V3-RESCUE-peripheral-board #PWR034
 U 1 1 582269F3
 P 5100 1800
 F 0 "#PWR034" H 5100 1650 50  0001 C CNN
@@ -37,7 +37,7 @@ F 3 "" H 5100 1800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR035
+L GND-RESCUE-peripheral-board #PWR035
 U 1 1 58226A0A
 P 5100 3400
 F 0 "#PWR035" H 5100 3150 50  0001 C CNN
@@ -56,7 +56,7 @@ Wire Wire Line
 Wire Wire Line
 	5600 2650 6050 2650
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R3001
+L R-RESCUE-peripheral-board R3001
 U 1 1 58E56E4E
 P 5100 1950
 F 0 "R3001" H 5170 1996 50  0000 L CNN
@@ -67,7 +67,7 @@ F 3 "" H 5100 1950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R3002
+L R-RESCUE-peripheral-board R3002
 U 1 1 58E56F28
 P 5100 3250
 F 0 "R3002" H 5170 3296 50  0000 L CNN

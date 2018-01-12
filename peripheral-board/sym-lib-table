@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name battery-rescue)(type Legacy)(uri ${KIPRJMOD}/battery-rescue.lib)(options "")(descr ""))
+  (lib (name vref)(type Legacy)(uri ${KIPRJMOD}/lib/vref.lib)(options "")(descr ""))
+  (lib (name peripheral-board-rescue)(type Legacy)(uri ${KIPRJMOD}/peripheral-board-rescue.lib)(options "")(descr ""))
+)

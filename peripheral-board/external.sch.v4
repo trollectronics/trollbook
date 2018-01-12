@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L peripheral-board-rescue:10056847-XY1LF-RESCUE-peripheral-board CONN9001
+L 10056847-XY1LF-RESCUE-peripheral-board CONN9001
 U 1 1 581F82EF
 P 5550 2150
 F 0 "CONN9001" H 5550 2937 60  0000 C CNN
@@ -52,7 +52,7 @@ SCL
 Text HLabel 4400 1700 0    60   UnSpc ~ 0
 DETECT
 $Comp
-L peripheral-board-rescue:C-RESCUE-peripheral-board C9001
+L C-RESCUE-peripheral-board C9001
 U 1 1 58246CCC
 P 4400 2050
 F 0 "C9001" H 4000 2100 50  0000 L CNN
@@ -63,7 +63,7 @@ F 3 "" H 4400 2050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR097
+L +3V3-RESCUE-peripheral-board #PWR097
 U 1 1 58A3C2FE
 P 4250 1900
 F 0 "#PWR097" H -300 800 50  0001 C CNN
@@ -74,7 +74,7 @@ F 3 "" H -300 950 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR098
+L GND-RESCUE-peripheral-board #PWR098
 U 1 1 58A3C347
 P 4250 2200
 F 0 "#PWR098" H -700 1000 50  0001 C CNN
@@ -85,7 +85,7 @@ F 3 "" H -700 1250 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR099
+L GND-RESCUE-peripheral-board #PWR099
 U 1 1 58A3DB73
 P 6650 1950
 F 0 "#PWR099" H 1700 750 50  0001 C CNN
@@ -96,7 +96,7 @@ F 3 "" H 1700 1000 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR0100
+L GND-RESCUE-peripheral-board #PWR0100
 U 1 1 58A3DB88
 P 6650 2250
 F 0 "#PWR0100" H 1700 1050 50  0001 C CNN
@@ -122,7 +122,7 @@ Wire Wire Line
 	4250 2200 4900 2200
 Connection ~ 4400 2200
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R9001
+L R-RESCUE-peripheral-board R9001
 U 1 1 58A5EC2B
 P 4550 1550
 F 0 "R9001" H 4620 1596 50  0000 L CNN
@@ -133,7 +133,7 @@ F 3 "" H -300 200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR0101
+L +3V3-RESCUE-peripheral-board #PWR0101
 U 1 1 58A5EC6F
 P 4550 1400
 F 0 "#PWR0101" H -400 -200 50  0001 C CNN

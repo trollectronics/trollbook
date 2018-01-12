@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2010
+L SW_Push_45deg-RESCUE-peripheral-board SW2010
 U 1 1 58191A24
 P 6950 3800
 F 0 "SW2010" H 6950 4078 50  0000 C CNN
@@ -26,7 +26,7 @@ F 3 "" H 6950 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:4017-RESCUE-peripheral-board U2002
+L 4017-RESCUE-peripheral-board U2002
 U 1 1 58191AFB
 P 4850 1600
 F 0 "U2002" H 4850 1650 50  0000 C CNN
@@ -37,7 +37,7 @@ F 3 "" H 4850 1600 60  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR026
+L +3V3-RESCUE-peripheral-board #PWR026
 U 1 1 58191BAD
 P 4150 1600
 F 0 "#PWR026" H 4150 1450 50  0001 C CNN
@@ -48,7 +48,7 @@ F 3 "" H 4150 1600 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR027
+L GND-RESCUE-peripheral-board #PWR027
 U 1 1 58191BF8
 P 5550 1600
 F 0 "#PWR027" H 5550 1350 50  0001 C CNN
@@ -59,7 +59,7 @@ F 3 "" H 5550 1600 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2001
+L SW_Push_45deg-RESCUE-peripheral-board SW2001
 U 1 1 58191DB4
 P 2900 3800
 F 0 "SW2001" H 2900 4078 50  0000 C CNN
@@ -70,7 +70,7 @@ F 3 "" H 2900 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2001
+L D_Small-RESCUE-peripheral-board D2001
 U 1 1 58191F16
 P 3000 4050
 F 0 "D2001" V 3050 4200 50  0000 R CNN
@@ -81,7 +81,7 @@ F 3 "" V 3000 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2002
+L D_Small-RESCUE-peripheral-board D2002
 U 1 1 58192010
 P 3450 4050
 F 0 "D2002" V 3500 4200 50  0000 R CNN
@@ -92,7 +92,7 @@ F 3 "" V 3450 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2002
+L SW_Push_45deg-RESCUE-peripheral-board SW2002
 U 1 1 581921EA
 P 3350 3800
 F 0 "SW2002" H 3350 4078 50  0000 C CNN
@@ -103,7 +103,7 @@ F 3 "" H 3350 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2003
+L SW_Push_45deg-RESCUE-peripheral-board SW2003
 U 1 1 581921F0
 P 3800 3800
 F 0 "SW2003" H 3800 4078 50  0000 C CNN
@@ -114,7 +114,7 @@ F 3 "" H 3800 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2003
+L D_Small-RESCUE-peripheral-board D2003
 U 1 1 581921F6
 P 3900 4050
 F 0 "D2003" V 3950 4200 50  0000 R CNN
@@ -125,7 +125,7 @@ F 3 "" V 3900 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2004
+L D_Small-RESCUE-peripheral-board D2004
 U 1 1 581921FC
 P 4350 4050
 F 0 "D2004" V 4400 4200 50  0000 R CNN
@@ -136,7 +136,7 @@ F 3 "" V 4350 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2004
+L SW_Push_45deg-RESCUE-peripheral-board SW2004
 U 1 1 581923FE
 P 4250 3800
 F 0 "SW2004" H 4250 4078 50  0000 C CNN
@@ -147,7 +147,7 @@ F 3 "" H 4250 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2005
+L SW_Push_45deg-RESCUE-peripheral-board SW2005
 U 1 1 58192404
 P 4700 3800
 F 0 "SW2005" H 4700 4078 50  0000 C CNN
@@ -158,7 +158,7 @@ F 3 "" H 4700 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2005
+L D_Small-RESCUE-peripheral-board D2005
 U 1 1 5819240A
 P 4800 4050
 F 0 "D2005" V 4850 4200 50  0000 R CNN
@@ -169,7 +169,7 @@ F 3 "" V 4800 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2006
+L D_Small-RESCUE-peripheral-board D2006
 U 1 1 58192410
 P 5250 4050
 F 0 "D2006" V 5300 4200 50  0000 R CNN
@@ -180,7 +180,7 @@ F 3 "" V 5250 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2006
+L SW_Push_45deg-RESCUE-peripheral-board SW2006
 U 1 1 58192416
 P 5150 3800
 F 0 "SW2006" H 5150 4078 50  0000 C CNN
@@ -191,7 +191,7 @@ F 3 "" H 5150 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2007
+L SW_Push_45deg-RESCUE-peripheral-board SW2007
 U 1 1 5819241C
 P 5600 3800
 F 0 "SW2007" H 5600 4078 50  0000 C CNN
@@ -202,7 +202,7 @@ F 3 "" H 5600 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2007
+L D_Small-RESCUE-peripheral-board D2007
 U 1 1 58192422
 P 5700 4050
 F 0 "D2007" V 5750 4200 50  0000 R CNN
@@ -213,7 +213,7 @@ F 3 "" V 5700 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2008
+L D_Small-RESCUE-peripheral-board D2008
 U 1 1 58192428
 P 6150 4050
 F 0 "D2008" V 6200 4200 50  0000 R CNN
@@ -224,7 +224,7 @@ F 3 "" V 6150 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2008
+L SW_Push_45deg-RESCUE-peripheral-board SW2008
 U 1 1 58192590
 P 6050 3800
 F 0 "SW2008" H 6050 4078 50  0000 C CNN
@@ -235,7 +235,7 @@ F 3 "" H 6050 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2009
+L SW_Push_45deg-RESCUE-peripheral-board SW2009
 U 1 1 58192596
 P 6500 3800
 F 0 "SW2009" H 6500 4078 50  0000 C CNN
@@ -246,7 +246,7 @@ F 3 "" H 6500 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2009
+L D_Small-RESCUE-peripheral-board D2009
 U 1 1 5819259C
 P 6600 4050
 F 0 "D2009" V 6650 4200 50  0000 R CNN
@@ -257,7 +257,7 @@ F 3 "" V 6600 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2010
+L D_Small-RESCUE-peripheral-board D2010
 U 1 1 581925A2
 P 7050 4050
 F 0 "D2010" V 7100 4200 50  0000 R CNN
@@ -268,7 +268,7 @@ F 3 "" V 7050 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2018
+L SW_Push_45deg-RESCUE-peripheral-board SW2018
 U 1 1 58192DFB
 P 2900 4550
 F 0 "SW2018" H 2900 4828 50  0000 C CNN
@@ -279,7 +279,7 @@ F 3 "" H 2900 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2019
+L SW_Push_45deg-RESCUE-peripheral-board SW2019
 U 1 1 58192E01
 P 3350 4550
 F 0 "SW2019" H 3350 4828 50  0000 C CNN
@@ -290,7 +290,7 @@ F 3 "" H 3350 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2018
+L D_Small-RESCUE-peripheral-board D2018
 U 1 1 58192E07
 P 3000 4800
 F 0 "D2018" V 3050 4950 50  0000 R CNN
@@ -301,7 +301,7 @@ F 3 "" V 3000 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2019
+L D_Small-RESCUE-peripheral-board D2019
 U 1 1 58192E0D
 P 3450 4800
 F 0 "D2019" V 3500 4950 50  0000 R CNN
@@ -312,7 +312,7 @@ F 3 "" V 3450 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2020
+L SW_Push_45deg-RESCUE-peripheral-board SW2020
 U 1 1 58192E13
 P 3800 4550
 F 0 "SW2020" H 3800 4828 50  0000 C CNN
@@ -323,7 +323,7 @@ F 3 "" H 3800 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2021
+L SW_Push_45deg-RESCUE-peripheral-board SW2021
 U 1 1 58192E19
 P 4250 4550
 F 0 "SW2021" H 4250 4828 50  0000 C CNN
@@ -334,7 +334,7 @@ F 3 "" H 4250 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2020
+L D_Small-RESCUE-peripheral-board D2020
 U 1 1 58192E1F
 P 3900 4800
 F 0 "D2020" V 3950 4950 50  0000 R CNN
@@ -345,7 +345,7 @@ F 3 "" V 3900 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2021
+L D_Small-RESCUE-peripheral-board D2021
 U 1 1 58192E25
 P 4350 4800
 F 0 "D2021" V 4400 4950 50  0000 R CNN
@@ -356,7 +356,7 @@ F 3 "" V 4350 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2022
+L SW_Push_45deg-RESCUE-peripheral-board SW2022
 U 1 1 58192E2B
 P 4700 4550
 F 0 "SW2022" H 4700 4828 50  0000 C CNN
@@ -367,7 +367,7 @@ F 3 "" H 4700 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2023
+L SW_Push_45deg-RESCUE-peripheral-board SW2023
 U 1 1 58192E31
 P 5150 4550
 F 0 "SW2023" H 5150 4828 50  0000 C CNN
@@ -378,7 +378,7 @@ F 3 "" H 5150 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2022
+L D_Small-RESCUE-peripheral-board D2022
 U 1 1 58192E37
 P 4800 4800
 F 0 "D2022" V 4850 4950 50  0000 R CNN
@@ -389,7 +389,7 @@ F 3 "" V 4800 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2023
+L D_Small-RESCUE-peripheral-board D2023
 U 1 1 58192E3D
 P 5250 4800
 F 0 "D2023" V 5300 4950 50  0000 R CNN
@@ -400,7 +400,7 @@ F 3 "" V 5250 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2024
+L SW_Push_45deg-RESCUE-peripheral-board SW2024
 U 1 1 58192E43
 P 5600 4550
 F 0 "SW2024" H 5600 4828 50  0000 C CNN
@@ -411,7 +411,7 @@ F 3 "" H 5600 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2025
+L SW_Push_45deg-RESCUE-peripheral-board SW2025
 U 1 1 58192E49
 P 6050 4550
 F 0 "SW2025" H 6050 4828 50  0000 C CNN
@@ -422,7 +422,7 @@ F 3 "" H 6050 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2024
+L D_Small-RESCUE-peripheral-board D2024
 U 1 1 58192E4F
 P 5700 4800
 F 0 "D2024" V 5750 4950 50  0000 R CNN
@@ -433,7 +433,7 @@ F 3 "" V 5700 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2025
+L D_Small-RESCUE-peripheral-board D2025
 U 1 1 58192E55
 P 6150 4800
 F 0 "D2025" V 6200 4950 50  0000 R CNN
@@ -444,7 +444,7 @@ F 3 "" V 6150 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2026
+L SW_Push_45deg-RESCUE-peripheral-board SW2026
 U 1 1 58192E5B
 P 6500 4550
 F 0 "SW2026" H 6500 4828 50  0000 C CNN
@@ -455,7 +455,7 @@ F 3 "" H 6500 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2027
+L SW_Push_45deg-RESCUE-peripheral-board SW2027
 U 1 1 58192E61
 P 6950 4550
 F 0 "SW2027" H 6950 4828 50  0000 C CNN
@@ -466,7 +466,7 @@ F 3 "" H 6950 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2026
+L D_Small-RESCUE-peripheral-board D2026
 U 1 1 58192E67
 P 6600 4800
 F 0 "D2026" V 6650 4950 50  0000 R CNN
@@ -477,7 +477,7 @@ F 3 "" V 6600 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2027
+L D_Small-RESCUE-peripheral-board D2027
 U 1 1 58192E6D
 P 7050 4800
 F 0 "D2027" V 7100 4950 50  0000 R CNN
@@ -488,7 +488,7 @@ F 3 "" V 7050 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2035
+L SW_Push_45deg-RESCUE-peripheral-board SW2035
 U 1 1 58193B57
 P 2900 5300
 F 0 "SW2035" H 2900 5578 50  0000 C CNN
@@ -499,7 +499,7 @@ F 3 "" H 2900 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2036
+L SW_Push_45deg-RESCUE-peripheral-board SW2036
 U 1 1 58193B5D
 P 3350 5300
 F 0 "SW2036" H 3350 5578 50  0000 C CNN
@@ -510,7 +510,7 @@ F 3 "" H 3350 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2035
+L D_Small-RESCUE-peripheral-board D2035
 U 1 1 58193B63
 P 3000 5550
 F 0 "D2035" V 3050 5700 50  0000 R CNN
@@ -521,7 +521,7 @@ F 3 "" V 3000 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2036
+L D_Small-RESCUE-peripheral-board D2036
 U 1 1 58193B69
 P 3450 5550
 F 0 "D2036" V 3500 5700 50  0000 R CNN
@@ -532,7 +532,7 @@ F 3 "" V 3450 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2037
+L SW_Push_45deg-RESCUE-peripheral-board SW2037
 U 1 1 58193B6F
 P 3800 5300
 F 0 "SW2037" H 3800 5578 50  0000 C CNN
@@ -543,7 +543,7 @@ F 3 "" H 3800 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2038
+L SW_Push_45deg-RESCUE-peripheral-board SW2038
 U 1 1 58193B75
 P 4250 5300
 F 0 "SW2038" H 4250 5578 50  0000 C CNN
@@ -554,7 +554,7 @@ F 3 "" H 4250 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2037
+L D_Small-RESCUE-peripheral-board D2037
 U 1 1 58193B7B
 P 3900 5550
 F 0 "D2037" V 3950 5700 50  0000 R CNN
@@ -565,7 +565,7 @@ F 3 "" V 3900 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2038
+L D_Small-RESCUE-peripheral-board D2038
 U 1 1 58193B81
 P 4350 5550
 F 0 "D2038" V 4400 5700 50  0000 R CNN
@@ -576,7 +576,7 @@ F 3 "" V 4350 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2039
+L SW_Push_45deg-RESCUE-peripheral-board SW2039
 U 1 1 58193B87
 P 4700 5300
 F 0 "SW2039" H 4700 5578 50  0000 C CNN
@@ -587,7 +587,7 @@ F 3 "" H 4700 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2040
+L SW_Push_45deg-RESCUE-peripheral-board SW2040
 U 1 1 58193B8D
 P 5150 5300
 F 0 "SW2040" H 5150 5578 50  0000 C CNN
@@ -598,7 +598,7 @@ F 3 "" H 5150 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2039
+L D_Small-RESCUE-peripheral-board D2039
 U 1 1 58193B93
 P 4800 5550
 F 0 "D2039" V 4850 5700 50  0000 R CNN
@@ -609,7 +609,7 @@ F 3 "" V 4800 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2040
+L D_Small-RESCUE-peripheral-board D2040
 U 1 1 58193B99
 P 5250 5550
 F 0 "D2040" V 5300 5700 50  0000 R CNN
@@ -620,7 +620,7 @@ F 3 "" V 5250 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2041
+L SW_Push_45deg-RESCUE-peripheral-board SW2041
 U 1 1 58193B9F
 P 5600 5300
 F 0 "SW2041" H 5600 5578 50  0000 C CNN
@@ -631,7 +631,7 @@ F 3 "" H 5600 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2042
+L SW_Push_45deg-RESCUE-peripheral-board SW2042
 U 1 1 58193BA5
 P 6050 5300
 F 0 "SW2042" H 6050 5578 50  0000 C CNN
@@ -642,7 +642,7 @@ F 3 "" H 6050 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2041
+L D_Small-RESCUE-peripheral-board D2041
 U 1 1 58193BAB
 P 5700 5550
 F 0 "D2041" V 5750 5700 50  0000 R CNN
@@ -653,7 +653,7 @@ F 3 "" V 5700 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2042
+L D_Small-RESCUE-peripheral-board D2042
 U 1 1 58193BB1
 P 6150 5550
 F 0 "D2042" V 6200 5700 50  0000 R CNN
@@ -664,7 +664,7 @@ F 3 "" V 6150 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2043
+L SW_Push_45deg-RESCUE-peripheral-board SW2043
 U 1 1 58193BB7
 P 6500 5300
 F 0 "SW2043" H 6500 5578 50  0000 C CNN
@@ -675,7 +675,7 @@ F 3 "" H 6500 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2044
+L SW_Push_45deg-RESCUE-peripheral-board SW2044
 U 1 1 58193BBD
 P 6950 5300
 F 0 "SW2044" H 6950 5578 50  0000 C CNN
@@ -686,7 +686,7 @@ F 3 "" H 6950 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2043
+L D_Small-RESCUE-peripheral-board D2043
 U 1 1 58193BC3
 P 6600 5550
 F 0 "D2043" V 6650 5700 50  0000 R CNN
@@ -697,7 +697,7 @@ F 3 "" V 6600 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2044
+L D_Small-RESCUE-peripheral-board D2044
 U 1 1 58193BC9
 P 7050 5550
 F 0 "D2044" V 7100 5700 50  0000 R CNN
@@ -708,7 +708,7 @@ F 3 "" V 7050 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2053
+L SW_Push_45deg-RESCUE-peripheral-board SW2053
 U 1 1 58193BCF
 P 3350 6050
 F 0 "SW2053" H 3350 6328 50  0000 C CNN
@@ -719,7 +719,7 @@ F 3 "" H 3350 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2054
+L SW_Push_45deg-RESCUE-peripheral-board SW2054
 U 1 1 58193BD5
 P 3800 6050
 F 0 "SW2054" H 3800 6328 50  0000 C CNN
@@ -730,7 +730,7 @@ F 3 "" H 3800 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2059
+L D_Small-RESCUE-peripheral-board D2059
 U 1 1 58193BDB
 P 3000 6300
 F 0 "D2059" V 3050 6450 50  0000 R CNN
@@ -741,7 +741,7 @@ F 3 "" V 3000 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2060
+L D_Small-RESCUE-peripheral-board D2060
 U 1 1 58193BE1
 P 3450 6300
 F 0 "D2060" V 3500 6450 50  0000 R CNN
@@ -752,7 +752,7 @@ F 3 "" V 3450 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2055
+L SW_Push_45deg-RESCUE-peripheral-board SW2055
 U 1 1 58193BE7
 P 4250 6050
 F 0 "SW2055" H 4250 6328 50  0000 C CNN
@@ -763,7 +763,7 @@ F 3 "" H 4250 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2056
+L SW_Push_45deg-RESCUE-peripheral-board SW2056
 U 1 1 58193BED
 P 4700 6050
 F 0 "SW2056" H 4700 6328 50  0000 C CNN
@@ -774,7 +774,7 @@ F 3 "" H 4700 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2061
+L D_Small-RESCUE-peripheral-board D2061
 U 1 1 58193BF3
 P 3900 6300
 F 0 "D2061" V 3950 6450 50  0000 R CNN
@@ -785,7 +785,7 @@ F 3 "" V 3900 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2062
+L D_Small-RESCUE-peripheral-board D2062
 U 1 1 58193BF9
 P 4350 6300
 F 0 "D2062" V 4400 6450 50  0000 R CNN
@@ -796,7 +796,7 @@ F 3 "" V 4350 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2057
+L SW_Push_45deg-RESCUE-peripheral-board SW2057
 U 1 1 58193BFF
 P 5150 6050
 F 0 "SW2057" H 5150 6328 50  0000 C CNN
@@ -807,7 +807,7 @@ F 3 "" H 5150 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2058
+L SW_Push_45deg-RESCUE-peripheral-board SW2058
 U 1 1 58193C05
 P 5600 6050
 F 0 "SW2058" H 5600 6328 50  0000 C CNN
@@ -818,7 +818,7 @@ F 3 "" H 5600 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2063
+L D_Small-RESCUE-peripheral-board D2063
 U 1 1 58193C0B
 P 4800 6300
 F 0 "D2063" V 4850 6450 50  0000 R CNN
@@ -829,7 +829,7 @@ F 3 "" V 4800 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2064
+L D_Small-RESCUE-peripheral-board D2064
 U 1 1 58193C11
 P 5250 6300
 F 0 "D2064" V 5300 6450 50  0000 R CNN
@@ -840,7 +840,7 @@ F 3 "" V 5250 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2059
+L SW_Push_45deg-RESCUE-peripheral-board SW2059
 U 1 1 58193C17
 P 6050 6050
 F 0 "SW2059" H 6050 6328 50  0000 C CNN
@@ -851,7 +851,7 @@ F 3 "" H 6050 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2060
+L SW_Push_45deg-RESCUE-peripheral-board SW2060
 U 1 1 58193C1D
 P 6500 6050
 F 0 "SW2060" H 6500 6328 50  0000 C CNN
@@ -862,7 +862,7 @@ F 3 "" H 6500 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2065
+L D_Small-RESCUE-peripheral-board D2065
 U 1 1 58193C23
 P 5700 6300
 F 0 "D2065" V 5750 6450 50  0000 R CNN
@@ -873,7 +873,7 @@ F 3 "" V 5700 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2066
+L D_Small-RESCUE-peripheral-board D2066
 U 1 1 58193C29
 P 6150 6300
 F 0 "D2066" V 6200 6450 50  0000 R CNN
@@ -884,7 +884,7 @@ F 3 "" V 6150 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2061
+L SW_Push_45deg-RESCUE-peripheral-board SW2061
 U 1 1 58193C2F
 P 6950 6050
 F 0 "SW2061" H 6950 6328 50  0000 C CNN
@@ -895,7 +895,7 @@ F 3 "" H 6950 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2062
+L SW_Push_45deg-RESCUE-peripheral-board SW2062
 U 1 1 58193C35
 P 7400 6050
 F 0 "SW2062" H 7400 6328 50  0000 C CNN
@@ -906,7 +906,7 @@ F 3 "" H 7400 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2067
+L D_Small-RESCUE-peripheral-board D2067
 U 1 1 58193C3B
 P 6600 6300
 F 0 "D2067" V 6650 6450 50  0000 R CNN
@@ -917,7 +917,7 @@ F 3 "" V 6600 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2068
+L D_Small-RESCUE-peripheral-board D2068
 U 1 1 58193C41
 P 7050 6300
 F 0 "D2068" V 7100 6450 50  0000 R CNN
@@ -928,7 +928,7 @@ F 3 "" V 7050 6300 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2052
+L SW_Push_45deg-RESCUE-peripheral-board SW2052
 U 1 1 581A6BF3
 P 2900 6050
 F 0 "SW2052" H 2900 6328 50  0000 C CNN
@@ -939,7 +939,7 @@ F 3 "" H 2900 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2011
+L SW_Push_45deg-RESCUE-peripheral-board SW2011
 U 1 1 581A6BF9
 P 7400 3800
 F 0 "SW2011" H 7400 4078 50  0000 C CNN
@@ -950,7 +950,7 @@ F 3 "" H 7400 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2011
+L D_Small-RESCUE-peripheral-board D2011
 U 1 1 581A6BFF
 P 7500 4050
 F 0 "D2011" V 7550 4200 50  0000 R CNN
@@ -961,7 +961,7 @@ F 3 "" V 7500 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2012
+L D_Small-RESCUE-peripheral-board D2012
 U 1 1 581A6C05
 P 7950 4050
 F 0 "D2012" V 8000 4200 50  0000 R CNN
@@ -972,7 +972,7 @@ F 3 "" V 7950 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2012
+L SW_Push_45deg-RESCUE-peripheral-board SW2012
 U 1 1 581A6C0B
 P 7850 3800
 F 0 "SW2012" H 7850 4078 50  0000 C CNN
@@ -983,7 +983,7 @@ F 3 "" H 7850 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2013
+L SW_Push_45deg-RESCUE-peripheral-board SW2013
 U 1 1 581A6C11
 P 8300 3800
 F 0 "SW2013" H 8300 4078 50  0000 C CNN
@@ -994,7 +994,7 @@ F 3 "" H 8300 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2013
+L D_Small-RESCUE-peripheral-board D2013
 U 1 1 581A6C17
 P 8400 4050
 F 0 "D2013" V 8450 4200 50  0000 R CNN
@@ -1005,7 +1005,7 @@ F 3 "" V 8400 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2014
+L D_Small-RESCUE-peripheral-board D2014
 U 1 1 581A6C1D
 P 8850 4050
 F 0 "D2014" V 8900 4200 50  0000 R CNN
@@ -1016,7 +1016,7 @@ F 3 "" V 8850 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2014
+L SW_Push_45deg-RESCUE-peripheral-board SW2014
 U 1 1 581A6C23
 P 8750 3800
 F 0 "SW2014" H 8750 4078 50  0000 C CNN
@@ -1027,7 +1027,7 @@ F 3 "" H 8750 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2015
+L SW_Push_45deg-RESCUE-peripheral-board SW2015
 U 1 1 581A6C29
 P 9200 5300
 F 0 "SW2015" H 9200 5578 50  0000 C CNN
@@ -1038,7 +1038,7 @@ F 3 "" H 9200 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2015
+L D_Small-RESCUE-peripheral-board D2015
 U 1 1 581A6C2F
 P 9300 5550
 F 0 "D2015" V 9350 5700 50  0000 R CNN
@@ -1049,7 +1049,7 @@ F 3 "" V 9300 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2016
+L D_Small-RESCUE-peripheral-board D2016
 U 1 1 581A6C35
 P 9750 4050
 F 0 "D2016" V 9800 4200 50  0000 R CNN
@@ -1060,7 +1060,7 @@ F 3 "" V 9750 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2016
+L SW_Push_45deg-RESCUE-peripheral-board SW2016
 U 1 1 581A6C3B
 P 9650 3800
 F 0 "SW2016" H 9650 4078 50  0000 C CNN
@@ -1071,7 +1071,7 @@ F 3 "" H 9650 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2017
+L SW_Push_45deg-RESCUE-peripheral-board SW2017
 U 1 1 581A6C41
 P 10100 4550
 F 0 "SW2017" H 10100 4828 50  0000 C CNN
@@ -1082,7 +1082,7 @@ F 3 "" H 10100 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2017
+L D_Small-RESCUE-peripheral-board D2017
 U 1 1 581A6C47
 P 10200 6250
 F 0 "D2017" V 10250 6400 50  0000 R CNN
@@ -1093,7 +1093,7 @@ F 3 "" V 10200 6250 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2028
+L SW_Push_45deg-RESCUE-peripheral-board SW2028
 U 1 1 581A6C6B
 P 7400 4550
 F 0 "SW2028" H 7400 4828 50  0000 C CNN
@@ -1104,7 +1104,7 @@ F 3 "" H 7400 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2029
+L SW_Push_45deg-RESCUE-peripheral-board SW2029
 U 1 1 581A6C71
 P 7850 4550
 F 0 "SW2029" H 7850 4828 50  0000 C CNN
@@ -1115,7 +1115,7 @@ F 3 "" H 7850 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2028
+L D_Small-RESCUE-peripheral-board D2028
 U 1 1 581A6C77
 P 7500 4800
 F 0 "D2028" V 7550 4950 50  0000 R CNN
@@ -1126,7 +1126,7 @@ F 3 "" V 7500 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2029
+L D_Small-RESCUE-peripheral-board D2029
 U 1 1 581A6C7D
 P 7950 4800
 F 0 "D2029" V 8000 4950 50  0000 R CNN
@@ -1137,7 +1137,7 @@ F 3 "" V 7950 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2030
+L SW_Push_45deg-RESCUE-peripheral-board SW2030
 U 1 1 581A6C83
 P 8300 4550
 F 0 "SW2030" H 8300 4828 50  0000 C CNN
@@ -1148,7 +1148,7 @@ F 3 "" H 8300 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2031
+L SW_Push_45deg-RESCUE-peripheral-board SW2031
 U 1 1 581A6C89
 P 8750 4550
 F 0 "SW2031" H 8750 4828 50  0000 C CNN
@@ -1159,7 +1159,7 @@ F 3 "" H 8750 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2030
+L D_Small-RESCUE-peripheral-board D2030
 U 1 1 581A6C8F
 P 8400 4800
 F 0 "D2030" V 8450 4950 50  0000 R CNN
@@ -1170,7 +1170,7 @@ F 3 "" V 8400 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2031
+L D_Small-RESCUE-peripheral-board D2031
 U 1 1 581A6C95
 P 8850 4800
 F 0 "D2031" V 8900 4950 50  0000 R CNN
@@ -1181,7 +1181,7 @@ F 3 "" V 8850 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2032
+L SW_Push_45deg-RESCUE-peripheral-board SW2032
 U 1 1 581A6C9B
 P 9200 4550
 F 0 "SW2032" H 9200 4828 50  0000 C CNN
@@ -1192,7 +1192,7 @@ F 3 "" H 9200 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2033
+L SW_Push_45deg-RESCUE-peripheral-board SW2033
 U 1 1 581A6CA1
 P 9650 6050
 F 0 "SW2033" H 9650 6328 50  0000 C CNN
@@ -1203,7 +1203,7 @@ F 3 "" H 9650 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2032
+L D_Small-RESCUE-peripheral-board D2032
 U 1 1 581A6CA7
 P 9300 4800
 F 0 "D2032" V 9350 4950 50  0000 R CNN
@@ -1214,7 +1214,7 @@ F 3 "" V 9300 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2033
+L D_Small-RESCUE-peripheral-board D2033
 U 1 1 581A6CAD
 P 9750 6250
 F 0 "D2033" V 9800 6400 50  0000 R CNN
@@ -1225,7 +1225,7 @@ F 3 "" V 9750 6250 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2034
+L SW_Push_45deg-RESCUE-peripheral-board SW2034
 U 1 1 581A6CB3
 P 10100 5300
 F 0 "SW2034" H 10100 5578 50  0000 C CNN
@@ -1236,7 +1236,7 @@ F 3 "" H 10100 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2034
+L D_Small-RESCUE-peripheral-board D2034
 U 1 1 581A6CBF
 P 10200 5550
 F 0 "D2034" V 10250 5700 50  0000 R CNN
@@ -1247,7 +1247,7 @@ F 3 "" V 10200 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2045
+L SW_Push_45deg-RESCUE-peripheral-board SW2045
 U 1 1 581A6CE3
 P 7400 5300
 F 0 "SW2045" H 7400 5578 50  0000 C CNN
@@ -1258,7 +1258,7 @@ F 3 "" H 7400 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2046
+L SW_Push_45deg-RESCUE-peripheral-board SW2046
 U 1 1 581A6CE9
 P 7850 5300
 F 0 "SW2046" H 7850 5578 50  0000 C CNN
@@ -1269,7 +1269,7 @@ F 3 "" H 7850 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2045
+L D_Small-RESCUE-peripheral-board D2045
 U 1 1 581A6CEF
 P 7500 5550
 F 0 "D2045" V 7550 5700 50  0000 R CNN
@@ -1280,7 +1280,7 @@ F 3 "" V 7500 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2046
+L D_Small-RESCUE-peripheral-board D2046
 U 1 1 581A6CF5
 P 7950 5550
 F 0 "D2046" V 8000 5700 50  0000 R CNN
@@ -1291,7 +1291,7 @@ F 3 "" V 7950 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2047
+L SW_Push_45deg-RESCUE-peripheral-board SW2047
 U 1 1 581A6CFB
 P 8300 5300
 F 0 "SW2047" H 8300 5578 50  0000 C CNN
@@ -1302,7 +1302,7 @@ F 3 "" H 8300 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2048
+L SW_Push_45deg-RESCUE-peripheral-board SW2048
 U 1 1 581A6D01
 P 8750 5300
 F 0 "SW2048" H 8750 5578 50  0000 C CNN
@@ -1313,7 +1313,7 @@ F 3 "" H 8750 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2047
+L D_Small-RESCUE-peripheral-board D2047
 U 1 1 581A6D07
 P 8400 5550
 F 0 "D2047" V 8450 5700 50  0000 R CNN
@@ -1324,7 +1324,7 @@ F 3 "" V 8400 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2048
+L D_Small-RESCUE-peripheral-board D2048
 U 1 1 581A6D0D
 P 8850 5550
 F 0 "D2048" V 8900 5700 50  0000 R CNN
@@ -1335,7 +1335,7 @@ F 3 "" V 8850 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2049
+L SW_Push_45deg-RESCUE-peripheral-board SW2049
 U 1 1 581A6D13
 P 9200 3800
 F 0 "SW2049" H 9200 4078 50  0000 C CNN
@@ -1346,7 +1346,7 @@ F 3 "" H 9200 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2050
+L SW_Push_45deg-RESCUE-peripheral-board SW2050
 U 1 1 581A6D19
 P 9650 5300
 F 0 "SW2050" H 9650 5578 50  0000 C CNN
@@ -1357,7 +1357,7 @@ F 3 "" H 9650 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2049
+L D_Small-RESCUE-peripheral-board D2049
 U 1 1 581A6D1F
 P 9300 4050
 F 0 "D2049" V 9350 4200 50  0000 R CNN
@@ -1368,7 +1368,7 @@ F 3 "" V 9300 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2050
+L D_Small-RESCUE-peripheral-board D2050
 U 1 1 581A6D25
 P 9750 5550
 F 0 "D2050" V 9800 5700 50  0000 R CNN
@@ -1379,7 +1379,7 @@ F 3 "" V 9750 5550 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2051
+L SW_Push_45deg-RESCUE-peripheral-board SW2051
 U 1 1 581A6D2B
 P 10100 6050
 F 0 "SW2051" H 10100 6328 50  0000 C CNN
@@ -1390,7 +1390,7 @@ F 3 "" H 10100 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2051
+L D_Small-RESCUE-peripheral-board D2051
 U 1 1 581A6D37
 P 10200 4800
 F 0 "D2051" V 10250 4950 50  0000 R CNN
@@ -1401,7 +1401,7 @@ F 3 "" V 10200 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:4017-RESCUE-peripheral-board U2001
+L 4017-RESCUE-peripheral-board U2001
 U 1 1 581A7927
 P 8200 1600
 F 0 "U2001" H 8200 1650 50  0000 C CNN
@@ -1412,7 +1412,7 @@ F 3 "" H 8200 1600 60  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR028
+L +3V3-RESCUE-peripheral-board #PWR028
 U 1 1 581A792D
 P 7500 1600
 F 0 "#PWR028" H 7500 1450 50  0001 C CNN
@@ -1423,7 +1423,7 @@ F 3 "" H 7500 1600 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR029
+L GND-RESCUE-peripheral-board #PWR029
 U 1 1 581A7933
 P 8900 1600
 F 0 "#PWR029" H 8900 1350 50  0001 C CNN
@@ -1434,7 +1434,7 @@ F 3 "" H 8900 1600 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2052
+L D_Small-RESCUE-peripheral-board D2052
 U 1 1 581F68A3
 P 7500 6250
 F 0 "D2052" V 7550 6400 50  0000 R CNN
@@ -1445,7 +1445,7 @@ F 3 "" V 7500 6250 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2063
+L SW_Push_45deg-RESCUE-peripheral-board SW2063
 U 1 1 581F7D1A
 P 7850 6050
 F 0 "SW2063" H 7850 6328 50  0000 C CNN
@@ -1456,7 +1456,7 @@ F 3 "" H 7850 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2053
+L D_Small-RESCUE-peripheral-board D2053
 U 1 1 581F7EF4
 P 7950 6250
 F 0 "D2053" V 8000 6400 50  0000 R CNN
@@ -1467,7 +1467,7 @@ F 3 "" V 7950 6250 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2064
+L SW_Push_45deg-RESCUE-peripheral-board SW2064
 U 1 1 581F9E6E
 P 8300 6050
 F 0 "SW2064" H 8300 6328 50  0000 C CNN
@@ -1478,7 +1478,7 @@ F 3 "" H 8300 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2054
+L D_Small-RESCUE-peripheral-board D2054
 U 1 1 581FA052
 P 8400 6250
 F 0 "D2054" V 8450 6400 50  0000 R CNN
@@ -1489,7 +1489,7 @@ F 3 "" V 8400 6250 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2065
+L SW_Push_45deg-RESCUE-peripheral-board SW2065
 U 1 1 581FB421
 P 8850 6050
 F 0 "SW2065" H 8850 6200 50  0000 C CNN
@@ -1500,7 +1500,7 @@ F 3 "" H 8850 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2055
+L D_Small-RESCUE-peripheral-board D2055
 U 1 1 581FB617
 P 8850 6250
 F 0 "D2055" V 8900 6400 50  0000 R CNN
@@ -1511,7 +1511,7 @@ F 3 "" V 8850 6250 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2066
+L SW_Push_45deg-RESCUE-peripheral-board SW2066
 U 1 1 581FBF18
 P 9200 6050
 F 0 "SW2066" H 9200 6328 50  0000 C CNN
@@ -1522,7 +1522,7 @@ F 3 "" H 9200 6050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2056
+L D_Small-RESCUE-peripheral-board D2056
 U 1 1 581FC10E
 P 9300 6250
 F 0 "D2056" V 9350 6400 50  0000 R CNN
@@ -1533,7 +1533,7 @@ F 3 "" V 9300 6250 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2067
+L SW_Push_45deg-RESCUE-peripheral-board SW2067
 U 1 1 581FCDB9
 P 9650 4550
 F 0 "SW2067" H 9650 4828 50  0000 C CNN
@@ -1544,7 +1544,7 @@ F 3 "" H 9650 4550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2057
+L D_Small-RESCUE-peripheral-board D2057
 U 1 1 581FCFB1
 P 9750 4800
 F 0 "D2057" V 9800 4950 50  0000 R CNN
@@ -1555,7 +1555,7 @@ F 3 "" V 9750 4800 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2068
+L SW_Push_45deg-RESCUE-peripheral-board SW2068
 U 1 1 581FDC7E
 P 10100 3800
 F 0 "SW2068" H 10100 4078 50  0000 C CNN
@@ -1566,7 +1566,7 @@ F 3 "" H 10100 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:D_Small-RESCUE-peripheral-board D2058
+L D_Small-RESCUE-peripheral-board D2058
 U 1 1 581FDE7E
 P 10200 4050
 F 0 "D2058" V 10250 4200 50  0000 R CNN
@@ -1577,7 +1577,7 @@ F 3 "" V 10200 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:R_Pack04-RESCUE-peripheral-board RP2001
+L R_Pack04-RESCUE-peripheral-board RP2001
 U 1 1 58209297
 P 1750 5400
 F 0 "RP2001" V 1950 5400 50  0000 C CNN
@@ -1588,7 +1588,7 @@ F 3 "" H 1750 5400 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR030
+L GND-RESCUE-peripheral-board #PWR030
 U 1 1 5820A281
 P 1500 5950
 F 0 "#PWR030" H 1500 5700 50  0001 C CNN
@@ -1607,7 +1607,7 @@ Q2
 Text HLabel 10650 6450 2    60   Output ~ 0
 Q3
 $Comp
-L peripheral-board-rescue:74HC00-RESCUE-peripheral-board U2003
+L 74HC00-RESCUE-peripheral-board U2003
 U 2 1 5820DE84
 P 6550 1600
 F 0 "U2003" H 6600 1650 50  0000 R CNN
@@ -1618,7 +1618,7 @@ F 3 "" H 6550 1600 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:74HC00-RESCUE-peripheral-board U2003
+L 74HC00-RESCUE-peripheral-board U2003
 U 3 1 5820EADA
 P 6650 900
 F 0 "U2003" H 6650 950 50  0000 C CNN
@@ -1629,7 +1629,7 @@ F 3 "" H 6650 900 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR031
+L GND-RESCUE-peripheral-board #PWR031
 U 1 1 582133B7
 P 7750 900
 F 0 "#PWR031" H 7750 650 50  0001 C CNN
@@ -1647,7 +1647,7 @@ CLK
 Text HLabel 1000 1650 0    60   Input ~ 0
 ~RESET
 $Comp
-L peripheral-board-rescue:74HC00-RESCUE-peripheral-board U2003
+L 74HC00-RESCUE-peripheral-board U2003
 U 1 1 5821A22A
 P 2600 950
 F 0 "U2003" H 2600 1000 50  0000 C CNN
@@ -1658,7 +1658,7 @@ F 3 "" H 2600 950 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:74HC00-RESCUE-peripheral-board U2003
+L 74HC00-RESCUE-peripheral-board U2003
 U 4 1 5821A3BC
 P 1300 850
 F 0 "U2003" H 1300 900 50  0000 C CNN
@@ -1669,7 +1669,7 @@ F 3 "" H 1300 850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:SW_Push_45deg-RESCUE-peripheral-board SW2069
+L SW_Push_45deg-RESCUE-peripheral-board SW2069
 U 1 1 581FB5B7
 P 8650 6050
 F 0 "SW2069" H 8500 6200 50  0000 C CNN
@@ -1756,7 +1756,7 @@ COL13
 Text Label 7200 2650 2    60   ~ 0
 COL14
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR032
+L +3V3-RESCUE-peripheral-board #PWR032
 U 1 1 58245415
 P 2400 700
 F 0 "#PWR032" H 2400 550 50  0001 C CNN
@@ -1767,7 +1767,7 @@ F 3 "" H 2400 700 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR033
+L GND-RESCUE-peripheral-board #PWR033
 U 1 1 58245B36
 P 2400 1200
 F 0 "#PWR033" H 2400 950 50  0001 C CNN
@@ -2385,7 +2385,7 @@ Wire Wire Line
 Wire Wire Line
 	2400 5350 2400 5700
 $Comp
-L peripheral-board-rescue:R-RESCUE-peripheral-board R2001
+L R-RESCUE-peripheral-board R2001
 U 1 1 58AA3942
 P 6550 1300
 F 0 "R2001" V 6450 1300 50  0000 C CNN

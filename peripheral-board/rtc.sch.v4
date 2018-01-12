@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L peripheral-board-rescue:MCP7940N-RESCUE-peripheral-board U5001
+L MCP7940N-RESCUE-peripheral-board U5001
 U 1 1 582217B7
 P 5600 3400
 F 0 "U5001" H 5800 3200 50  0000 C CNN
@@ -26,7 +26,7 @@ F 3 "" H 5600 3400 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:Crystal_Small-RESCUE-peripheral-board Y5001
+L Crystal_Small-RESCUE-peripheral-board Y5001
 U 1 1 582218F8
 P 6150 3400
 F 0 "Y5001" V 6196 3312 50  0000 R CNN
@@ -37,7 +37,7 @@ F 3 "" H 6150 3400 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:C_Small-RESCUE-peripheral-board C5001
+L C_Small-RESCUE-peripheral-board C5001
 U 1 1 582219D3
 P 6250 3200
 F 0 "C5001" V 6021 3200 50  0000 C CNN
@@ -48,7 +48,7 @@ F 3 "" H 6250 3200 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L peripheral-board-rescue:C_Small-RESCUE-peripheral-board C5002
+L C_Small-RESCUE-peripheral-board C5002
 U 1 1 58221AAE
 P 6250 3600
 F 0 "C5002" V 6500 3600 50  0000 C CNN
@@ -67,7 +67,7 @@ Wire Wire Line
 Wire Wire Line
 	6150 3500 6150 3600
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR063
+L GND-RESCUE-peripheral-board #PWR063
 U 1 1 58221B92
 P 6400 3200
 F 0 "#PWR063" H 6400 2950 50  0001 C CNN
@@ -78,7 +78,7 @@ F 3 "" H 6400 3200 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR064
+L GND-RESCUE-peripheral-board #PWR064
 U 1 1 58221BBA
 P 6400 3600
 F 0 "#PWR064" H 6400 3350 50  0001 C CNN
@@ -94,7 +94,7 @@ Wire Wire Line
 	6400 3600 6350 3600
 NoConn ~ 5200 3500
 $Comp
-L peripheral-board-rescue:GND-RESCUE-peripheral-board #PWR065
+L GND-RESCUE-peripheral-board #PWR065
 U 1 1 58221C3E
 P 5600 3800
 F 0 "#PWR065" H 5600 3550 50  0001 C CNN
@@ -105,7 +105,7 @@ F 3 "" H 5600 3800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L peripheral-board-rescue:+3V3-RESCUE-peripheral-board #PWR066
+L +3V3-RESCUE-peripheral-board #PWR066
 U 1 1 58221C5A
 P 5600 3000
 F 0 "#PWR066" H 5600 2850 50  0001 C CNN
@@ -124,7 +124,7 @@ Wire Wire Line
 Wire Wire Line
 	5200 3300 4800 3300
 $Comp
-L peripheral-board-rescue:+3.3VP-RESCUE-peripheral-board #PWR067
+L +3.3VP-RESCUE-peripheral-board #PWR067
 U 1 1 58A61230
 P 5700 3000
 F 0 "#PWR067" H -50 250 50  0001 C CNN
