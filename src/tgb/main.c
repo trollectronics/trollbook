@@ -8,6 +8,7 @@
 #include "protocol.h"
 #include "spi.h"
 #include "keyboard.h"
+#include "mouse.h"
 #include "interrupt.h"
 
 StatusRegister reg_status;
@@ -17,6 +18,7 @@ ControlRegister reg_control = {
 
 ISR(TIMER0_COMPA_vect) {
 	keyboard_tick();
+	mouse_tick();
 	interrupt_assert();
 }
 

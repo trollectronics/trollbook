@@ -8,6 +8,7 @@
 #include "spi.h"
 #include "protocol.h"
 #include "keyboard.h"
+#include "mouse.h"
 #include "interrupt.h"
 #include "main.h"
 
@@ -71,6 +72,7 @@ void power_off() {
 	interrupt_deinit();
 	timer_deinit();
 	keyboard_deinit();
+	mouse_deinit();
 	spi_deinit();
 	protocol_reset();
 	PWRON_RESET_ASSERT();
@@ -100,6 +102,7 @@ void power_on() {
 	PWRON_RESET_DEASSERT();
 	spi_init();
 	timer_init();
+	mouse_init();
 }
 
 bool power_button = 1, power_button_old = 1;

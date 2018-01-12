@@ -2,6 +2,7 @@
 #include "protocol.h"
 #include "keyboard.h"
 #include "power.h"
+#include "mouse.h"
 #include "interrupt.h"
 
 struct {
@@ -16,6 +17,11 @@ void protocol_reset() {
 
 void protocol_tick() {
 	int16_t dat;
+	uint8_t buf[4];
+	uint8_t len = 0;
+	uint8_t pos = 0;
+	
+	
 	if(protocol.cmd == PROTOCOL_COMMAND_NONE)
 		protocol.cmd = spi_recv();
 	
@@ -41,11 +47,30 @@ void protocol_tick() {
 			}
 			break;
 		
+		case PROTOCOL_COMMAND_MOUSE_EVENT:
+			mouse_state_get(buf);
+			len = 4;
+			spi_send(0x00);
+			protocol.cmd = PROTOCOL_COMMAND_SEND_BUFFER;
+			break;
+			
 		case PROTOCOL_COMMAND_POWER_OFF:
 			protocol.cmd = PROTOCOL_COMMAND_NONE;
 			power_off();
 			break;
+		
+		/* Special case for dumping buffers */
+		case PROTOCOL_COMMAND_SEND_BUFFER:
+			if(pos == len) {
+				spi_send(0xFF);
+				pos = 0;
+				protocol.cmd = PROTOCOL_COMMAND_NONE;
+			} else {
+				spi_send(buf[pos++]);
+			}
 			
+			break;
+		
 		default:
 			spi_send(0xFF);
 			protocol.cmd = PROTOCOL_COMMAND_NONE;

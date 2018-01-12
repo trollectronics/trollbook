@@ -3,6 +3,7 @@
 
 typedef enum ProtocolCommand ProtocolCommand;
 enum ProtocolCommand {
+	PROTOCOL_COMMAND_SEND_BUFFER = -2,
 	PROTOCOL_COMMAND_NONE = -1,
 	PROTOCOL_COMMAND_STATUS,
 	PROTOCOL_COMMAND_CONTROL,
