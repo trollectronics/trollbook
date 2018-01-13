@@ -22,7 +22,7 @@ _start:
 	move.l #0x80008000, %d0
 	movec %d0, %cacr
 	
-	bra main
+	bra.l main
 	
 	cmp #0, %d0
 	bne fail

@@ -20,6 +20,7 @@ MuilPane *muil_pane_create(int x, int y, int w, int h, MuilWidget *root_widget) 
 	pane->background = draw_rect_set_new(1);
 	pane->border = draw_line_set_new(4, 2);
 	pane->root_widget = NULL;
+	pane->needs_redraw = true;
 	muil_pane_resize(pane, x, y, w , h);
 	muil_pane_set_root_widget(pane, root_widget);
 
@@ -38,6 +39,7 @@ void muil_pane_resize(MuilPane *pane, int x, int y, int w, int h) {
 	pane->y = y;
 	pane->w = w;
 	pane->h = h;
+	pane->needs_redraw = true;
 
 	draw_rect_set_move(pane->background, 0, x, y, x + w, y + h);
 	draw_line_set_move(pane->border, 0, x, y, x + w, y);
@@ -55,10 +57,13 @@ void muil_pane_set_root_widget(MuilPane *pane, MuilWidget *root_widget) {
 }
 
 void muil_pane_render(MuilPane *pane) {
-	draw_set_color(muil_color.window_background);
-	draw_rect_set_draw(pane->background, 1);
-	draw_set_color(muil_color.window_border);
-	draw_line_set_draw(pane->border, 4);
+	if(pane->needs_redraw) {
+		draw_set_color(muil_color.window_background);
+		draw_rect_set_draw(pane->background, 1);
+		draw_set_color(muil_color.window_border);
+		draw_line_set_draw(pane->border, 4);
+		pane->needs_redraw = false;
+	}
 
 	if(pane->root_widget != NULL)
 		pane->root_widget->render(pane->root_widget);

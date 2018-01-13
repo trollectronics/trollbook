@@ -10,6 +10,8 @@
 #ifndef MUIL_PANE_H
 #define MUIL_PANE_H
 
+#include <stdbool.h>
+
 typedef struct {
 	int x;
 	int y;
@@ -18,6 +20,7 @@ typedef struct {
 	DrawLineSet *border;
 	DrawRectSet *background;
 	MuilWidget *root_widget;
+	bool needs_redraw;
 } MuilPane;
 
 struct MuilPaneList {

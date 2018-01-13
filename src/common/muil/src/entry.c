@@ -48,6 +48,7 @@ MuilWidget *muil_widget_create_entry(DrawFont *font) {
 	widget->render =muil_entry_render;
 	widget->x = widget->y = widget->w = widget->h = 0;
 	widget->enabled = 1;
+	widget->needs_redraw = true;
 
 	return widget;
 }
@@ -92,6 +93,7 @@ void muil_entry_event_key(MuilWidget *widget, unsigned int type, MuilEvent *e) {
 			draw_text_surface_string_append(p->surface, p->offset);
 			tw = draw_font_string_w(p->font, p->offset);
 			draw_line_set_move(p->cursor, 0, widget->x + tw + 3, widget->y + 2, widget->x + tw + 3, widget->y + widget->h - 2);
+			widget->needs_redraw = true;
 			break;
 	}
 }
@@ -120,6 +122,7 @@ void muil_entry_set_prop(MuilWidget *widget, int prop, MuilPropertyValue value) 
 			draw_text_surface_reset(p->surface);
 			draw_text_surface_string_append(p->surface, p->offset);
 			draw_line_set_move(p->cursor, 0, widget->x + tw + 3, widget->y + 2, widget->x + tw + 3, widget->y + widget->h - 2);
+			widget->needs_redraw = true;
 			break;
 	}
 }
@@ -150,6 +153,7 @@ void muil_entry_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->y = y;
 	widget->w = w;
 	widget->h = h;
+	widget->needs_redraw = true;
 
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
@@ -181,18 +185,26 @@ void muil_entry_render(MuilWidget *widget) {
 	static int blink_semaphore = 0;
 	struct MuilEntryProperties *p = widget->properties;
 	
-	draw_set_color(muil_color.widget_border);
-	draw_line_set_draw(p->border, 4);
+	if(widget->needs_redraw) {
+		draw_set_color(muil_color.widget_border);
+		draw_line_set_draw(p->border, 4);
+		
+		draw_set_color(muil_color.text);
+		draw_text_surface_draw(p->surface);
+		draw_set_color(muil_color.widget_border);
+		
+		widget->needs_redraw = false;
+	}
 	
-	draw_set_color(muil_color.text);
-	draw_text_surface_draw(p->surface);
-	draw_set_color(muil_color.widget_border);
-
 	if(widget == muil_selected_widget) {
-		if(blink_semaphore > 60)
+		if(blink_semaphore == 60) {
 			blink_semaphore = 0;
-		else if(blink_semaphore > 30)
+			draw_set_color(muil_color.widget_background);
 			draw_line_set_draw(p->cursor, 1);
+		} else if(blink_semaphore == 30) {
+			draw_set_color(muil_color.text);
+			draw_line_set_draw(p->cursor, 1);
+		}
 		blink_semaphore++;
 	}
 }

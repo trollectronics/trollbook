@@ -43,6 +43,7 @@ MuilWidget *muil_widget_create_button(MuilWidget *child) {
 
 	widget->x = widget->y = widget->w = widget->h = 0;
 	widget->enabled = 1;
+	widget->needs_redraw = true;
 
 	return widget;
 }
@@ -81,9 +82,11 @@ void muil_button_event_key(MuilWidget *widget, unsigned int type, MuilEvent *e) 
 	switch(type) {
 		case MUIL_EVENT_TYPE_KEYBOARD_PRESS:
 			p->activated = 1;
+			widget->needs_redraw = true;
 			break;
 		case MUIL_EVENT_TYPE_KEYBOARD_RELEASE:
 			p->activated = 0;
+			widget->needs_redraw = true;
 			break;
 	}
 }
@@ -97,6 +100,7 @@ void muil_button_event_click(MuilWidget *widget, unsigned int type, MuilEvent *e
 			if(e->mouse->buttons == MUIL_EVENT_MOUSE_BUTTON_LEFT)
 				muil_selected_widget = widget;
 			p->activated = 1;
+			widget->needs_redraw = true;
 			break;
 		case MUIL_EVENT_TYPE_MOUSE_RELEASE:
 			if(((e->mouse->buttons)&MUIL_EVENT_MOUSE_BUTTON_LEFT) == MUIL_EVENT_MOUSE_BUTTON_LEFT || !p->activated)
@@ -108,6 +112,7 @@ void muil_button_event_click(MuilWidget *widget, unsigned int type, MuilEvent *e
 			widget->event_handler->send(widget, MUIL_EVENT_TYPE_UI_WIDGET_ACTIVATE, &ee);
 		case MUIL_EVENT_TYPE_MOUSE_LEAVE:
 			p->activated = 0;
+			widget->needs_redraw = true;
 			break;
 	}
 }
@@ -127,6 +132,7 @@ void muil_button_set_prop(MuilWidget *widget, int prop, MuilPropertyValue value)
 			break;
 		case MUIL_BUTTON_PROP_ACTIVATED:
 			p->activated = value.i;
+			widget->needs_redraw = true;
 			break;
 		case MUIL_BUTTON_PROP_BORDER:
 			break;
@@ -161,6 +167,8 @@ void muil_button_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->y = y;
 	widget->w = w;
 	widget->h = h;
+	widget->needs_redraw = true;
+	
 	p->child->resize(p->child, x + 2 +muil_padding, y + 2 +muil_padding, w - 4 -muil_padding * 2, h - 4 -muil_padding * 2);
 
 	draw_line_set_move(p->border, 0, x, y, x + w - 1, y);
@@ -186,10 +194,14 @@ void muil_button_request_size(MuilWidget *widget, int *w, int *h) {
 }
 
 void muil_button_render(MuilWidget *widget) {
-	struct MuilButtonProperties *p = widget->properties;
-	p->child->render(p->child);
-	draw_set_color(muil_color.widget_border);
-	draw_line_set_draw(p->border, 8);
-	if(p->activated)
-		draw_line_set_draw(p->active_border, 4);
+	if(widget->needs_redraw) {
+		struct MuilButtonProperties *p = widget->properties;
+		p->child->render(p->child);
+		draw_set_color(muil_color.widget_border);
+		draw_line_set_draw(p->border, 8);
+		if(p->activated)
+			draw_line_set_draw(p->active_border, 4);
+		
+		widget->needs_redraw = false;
+	}
 }

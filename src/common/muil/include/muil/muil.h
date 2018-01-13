@@ -55,6 +55,7 @@ typedef struct MuilWidget {
 	int w;
 	int h;
 	bool enabled;
+	bool needs_redraw;
 } MuilWidget;
 
 extern MuilWidget *muil_selected_widget;

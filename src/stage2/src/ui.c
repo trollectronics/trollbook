@@ -5,6 +5,8 @@
 #include "peripheral.h"
 
 void ui(void *arg) {
+	static char dir[8][32];
+	
 	struct MuilPaneList panelist;
 	MuilWidget *vbox;
 	MuilWidget *button;

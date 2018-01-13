@@ -10,13 +10,15 @@
 #ifndef MUIL_EVENT_H
 #define MUIL_EVENT_H
 
+#include <input.h>
+
 struct MuilPaneList;
 
-#define KEYSYM_RETURN 1
-#define KEYSYM_SPACE 2
-#define KEYSYM_KP_ENTER 3
+#define KEY(k) INPUT_KEY_##k
 
-#define KEY(k) KEYSYM_##k
+//~ #define KEYSYM_RETURN KEY(RETURN)
+//~ #define KEYSYM_SPACE ' '
+//~ #define KEYSYM_KP_ENTER KEY(RETURN)
 
 //Check if point (px, py) is inside the bounds of a rectangle
 #define PINR(px, py, x, y, w, h) ((px)>(x)&&(py)>(y)&&(px)<((x)+(w))&&(py)<((y)+(h)))
@@ -72,23 +74,6 @@ typedef struct {
 	
 } MuilEventJoystick;
 
-typedef struct {
-	unsigned int	left	: 1;
-	unsigned int	right	: 1;
-	unsigned int	up	: 1;
-	unsigned int	down	: 1;
-	unsigned int	x	: 1;
-	unsigned int	y	: 1;
-	unsigned int	a	: 1;
-	unsigned int	b	: 1;
-	unsigned int	start	: 1;
-	unsigned int	select	: 1;
-	unsigned int	l	: 1;
-	unsigned int	r	: 1;
-	unsigned int	lmb	: 1;
-	unsigned int	rmb	: 1;
-	unsigned int	padding	: 2;
-} MuilEventButtons;
 
 typedef struct {
 	
@@ -98,7 +83,6 @@ typedef union {
 	MuilEventKeyboard *keyboard;
 	MuilEventMouse *mouse;
 	MuilEventJoystick *joystick;
-	MuilEventButtons *buttons;
 	MuilEventUI *ui;
 } MuilEvent;
 

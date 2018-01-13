@@ -7,49 +7,51 @@
  */
 
 
-//#include <string.h>
+#include <stdbool.h>
 
 #include <muil/muil.h>
+#include <peripheral.h>
+#include <input.h>
 
 //higher value for lower speed, yeah it's stupid but whatever
 #define KEYBOARD_REPEAT_SPEED 3
 #define KEYBOARD_REPEAT_DELAY 20
 
-#define SETMOD(m) e_k.modifiers=(key_action==DARNIT_KEYACTION_PRESS)?e_k.modifiers|MUIL_EVENT_KEYBOARD_MOD_##m :e_k.modifiers&~MUIL_EVENT_KEYBOARD_MOD_##m
+#define SETMOD(m) e_k.modifiers = (key_action == INPUT_KEYBOARD_EVENT_TYPE_PRESS) ? e_k.modifiers | MUIL_EVENT_KEYBOARD_MOD_##m : e_k.modifiers & ~MUIL_EVENT_KEYBOARD_MOD_##m
 
 int muil_event_global_removed = 0;
 
 void muil_events(struct MuilPaneList *panes, int render) {
+	input_poll();
 	
 	//override for dialogues such as message boxes.
 	if(muil_panelist_dialogue.pane) {
 		muil_panelist_render(panes);
 		panes = &muil_panelist_dialogue;
 	}
-	#if 0
+	
 
 	MuilEvent e;
 	MuilEventMouse e_m;
-	MuilEventButtons e_b;
 	MuilEventUI e_u;
 	static MuilEventKeyboard e_k = {0, 0, 0}, e_k_repeat = {0, 0, 0};
 	static int repeat = 0;
 
-	DARNIT_KEYS buttons;
-	buttons = d_keys_get();
-	memcpy(&e_b, &buttons, sizeof(MuilEventButtons));
-
-	DARNIT_MOUSE mouse;
-	mouse = d_mouse_get();
+	InputMouseEvent mouse;
+	mouse = input_mouse_get();
 
 	e_m.x = mouse.x;
 	e_m.y = mouse.y;
-	e_m.buttons = (mouse.lmb) | (mouse.rmb << 2);
+	e_m.buttons = mouse.buttons;
 	e_m.wheel = mouse.wheel;
-
+	
+	//Update cursor on screen
+	*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x28)) = mouse.x;
+	*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x2C)) = mouse.y;
+	
 	int key_action = 0;
-	DARNIT_KEY_RAW rawkey = d_key_raw_pop();
-	key_action = rawkey.action;
+	InputKeyboardEvent rawkey = input_keyboard_event_pop();
+	key_action = rawkey.type;
 	e_k.keysym = rawkey.keysym;
 
 	switch(e_k.keysym) {
@@ -71,15 +73,18 @@ void muil_events(struct MuilPaneList *panes, int render) {
 		case KEY(RALT):
 			SETMOD(RALT);
 			break;
-		case KEY(LSUPER):
+		case KEY(LTROLL):
 			SETMOD(LSUPER);
 			break;
-		case KEY(RSUPER):
+		case KEY(RTROLL):
 			SETMOD(RSUPER);
 			break;
 	}
-
-	e_k.character = rawkey.unicode;
+	
+	if(rawkey.keysym & 0x80)
+		e_k.character = 0x0;
+	else
+		e_k.character = rawkey.keysym;
 
 
 	e.keyboard = &e_k;
@@ -92,13 +97,13 @@ void muil_events(struct MuilPaneList *panes, int render) {
 			}
 			repeat++;
 		}
-		if(key_action == DARNIT_KEYACTION_PRESS) {
+		if(key_action == INPUT_KEYBOARD_EVENT_TYPE_PRESS) {
 			if(e_k.character || e_k.keysym == 8) {
 				e_k_repeat = e_k;
 				repeat = 0;
 			}
 			muil_selected_widget->event_handler->send(muil_selected_widget, MUIL_EVENT_TYPE_KEYBOARD_PRESS, &e);
-		} else if(key_action == DARNIT_KEYACTION_RELEASE) {
+		} else if(key_action == INPUT_KEYBOARD_EVENT_TYPE_RELEASE) {
 			if(e_k.keysym == e_k_repeat.keysym) {
 				e_k_repeat.character = 0;
 				e_k_repeat.keysym = 0;
@@ -109,9 +114,9 @@ void muil_events(struct MuilPaneList *panes, int render) {
 		}
 	} else {
 		//Global keyboard events
-		if(key_action == DARNIT_KEYACTION_PRESS)
+		if(key_action == INPUT_KEYBOARD_EVENT_TYPE_PRESS)
 			muil_event_global_send(MUIL_EVENT_TYPE_KEYBOARD_PRESS, &e);
-		else if(key_action == DARNIT_KEYACTION_RELEASE)
+		else if(key_action == INPUT_KEYBOARD_EVENT_TYPE_RELEASE)
 			muil_event_global_send(MUIL_EVENT_TYPE_KEYBOARD_RELEASE, &e);
 	}
 
@@ -119,17 +124,16 @@ void muil_events(struct MuilPaneList *panes, int render) {
 	e.mouse = &e_m;
 	if((muil_e_m_prev.buttons & e_m.buttons) < e_m.buttons)
 		muil_event_global_send(MUIL_EVENT_TYPE_MOUSE_PRESS, &e);
-	if((muil_e_m_prev.buttons & e_m.buttons) <muil_e_m_prev.buttons)
+	if((muil_e_m_prev.buttons & e_m.buttons) < muil_e_m_prev.buttons)
 		muil_event_global_send(MUIL_EVENT_TYPE_MOUSE_RELEASE, &e);
 	if(e_m.buttons)
 		muil_event_global_send(MUIL_EVENT_TYPE_MOUSE_DOWN, &e);
 	muil_event_global_send(MUIL_EVENT_TYPE_MOUSE_ENTER, &e);
 
 	//Mouse events for widgets
-	#endif
+	
 	struct MuilPaneList *p;
 	for(p = panes; p; p = p->next) {
-		#if 0
 		if(p->pane->root_widget->event_handler) {
 			MuilWidget *w = p->pane->root_widget;
 
@@ -152,19 +156,15 @@ void muil_events(struct MuilPaneList *panes, int render) {
 			} else if(PINR(muil_e_m_prev.x,muil_e_m_prev.y, w->x, w->y, w->w, w->h))
 				w->event_handler->send(w, MUIL_EVENT_TYPE_MOUSE_LEAVE, &e);
 		}
-		#endif
+		
 		if(render && p->pane)
 			muil_pane_render(p->pane);
 	}
-
-	#if 0
-	e.buttons = &e_b;
-	muil_event_global_send(MUIL_EVENT_TYPE_BUTTONS, &e);
+	
 	e.mouse = &e_m;
 	muil_event_global_send(MUIL_EVENT_TYPE_UI, &e);
 
 	muil_e_m_prev = e_m;
-	#endif
 }
 
 void muil_event_add(MuilWidget *widget, void (*handler)(MuilWidget *, unsigned int, MuilEvent *), unsigned int mask) {

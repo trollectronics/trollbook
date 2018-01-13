@@ -37,6 +37,7 @@ MuilWidget *muil_widget_create_progressbar(DrawFont *font) {
 	widget->render =muil_progressbar_render;
 	widget->x = widget->y = widget->w = widget->h = 0;
 	widget->enabled = 1;
+	widget->needs_redraw = true;
 
 	return widget;
 }
@@ -97,6 +98,7 @@ void muil_progressbar_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->y = y;
 	widget->w = w;
 	widget->h = h;
+	widget->needs_redraw = true;
 
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
@@ -127,13 +129,17 @@ void muil_progressbar_request_size(MuilWidget *widget, int *w, int *h) {
 }
 
 void muil_progressbar_render(MuilWidget *widget) {
-	struct MuilProgressbarProperties *p = widget->properties;
-	draw_line_set_draw(p->border, 4);
+	if(widget->needs_redraw) {
+		struct MuilProgressbarProperties *p = widget->properties;
+		draw_line_set_draw(p->border, 4);
 
-	//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_XOR);
-	draw_set_color(muil_color.selected);
-	draw_rect_set_draw(p->bar, 1);
-	//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_NONE);
-	draw_set_color(muil_color.text);
-	draw_text_surface_draw(p->surface);
+		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_XOR);
+		draw_set_color(muil_color.selected);
+		draw_rect_set_draw(p->bar, 1);
+		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_NONE);
+		draw_set_color(muil_color.text);
+		draw_text_surface_draw(p->surface);
+		
+		widget->needs_redraw = false;
+	}
 }

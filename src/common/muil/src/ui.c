@@ -8,6 +8,7 @@
 
 
 #include <muil/muil.h>
+#include <peripheral.h>
 
 int muil_padding;
 MuilWidget *muil_selected_widget;
@@ -29,6 +30,10 @@ void muil_init(int padding) {
 	muil_panelist_dialogue.next = NULL;
 	muil_panelist_dialogue.pane = NULL;
 	//d_input_unicode(1);
+	
+	*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x20)) = 0x0;
+	for(int i = 0; i < 8*16; i++)
+		*((volatile uint32_t *) (PERIPHERAL_VGA_BASE + 0x24)) = 0x3;
 }
 
 void *muil_widget_destroy(MuilWidget *widget) {

@@ -49,6 +49,7 @@ MuilWidget *muil_widget_create_listbox(DrawFont *font) {
 	widget->render =muil_listbox_render;
 	widget->x = widget->y = widget->w = widget->h = 0;
 	widget->enabled = 1;
+	widget->needs_redraw = true;
 
 	return widget;
 }
@@ -258,6 +259,7 @@ void muil_listbox_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->y = y;
 	widget->w = w;
 	widget->h = h;
+	widget->needs_redraw = true;
 
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
@@ -298,27 +300,32 @@ void muil_listbox_request_size(MuilWidget *widget, int *w, int *h) {
 }
 
 void muil_listbox_render(MuilWidget *widget) {
-	struct MuilListboxProperties *p = widget->properties;
-	draw_set_color(muil_color.widget_border);
-	draw_line_set_draw(p->border, 4);
-	if(!p->offset)
-		return;
-	
-	struct MuilListboxList *l;
-	int i = p->scroll;
-	for(l = p->offset; l; l = l->next, i++) {
-		if(!l->surface)
-			break;
-		draw_set_color(muil_color.text);
-		draw_text_surface_draw(l->surface);
+	if(widget->needs_redraw) {
+		struct MuilListboxProperties *p = widget->properties;
+		draw_set_color(muil_color.widget_border);
+		draw_line_set_draw(p->border, 4);
+		if(!p->offset)
+			return;
+		
+		struct MuilListboxList *l;
+		int i = p->scroll;
+		for(l = p->offset; l; l = l->next, i++) {
+			if(!l->surface)
+				break;
+			draw_set_color(muil_color.text);
+			draw_text_surface_draw(l->surface);
+		}
+		
+		if(p->selected >= p->scroll && p->selected < i) {
+			//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_XOR);
+			draw_set_color(muil_color.selected);
+			draw_rect_set_draw(p->selected_rect, 1);
+			//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_NONE);
+		}
+		
+		draw_set_color(muil_color.widget_border);
+		draw_rect_set_draw(p->scrollbar, 1);
+		
+		widget->needs_redraw = false;
 	}
-	
-	if(p->selected >= p->scroll && p->selected < i) {
-		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_XOR);
-		draw_set_color(muil_color.selected);
-		draw_rect_set_draw(p->selected_rect, 1);
-		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_NONE);
-	}
-	draw_set_color(muil_color.widget_border);
-	draw_rect_set_draw(p->scrollbar, 1);
 }

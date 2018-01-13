@@ -41,6 +41,7 @@ MuilWidget *muil_widget_create_imageview(DrawBitmap *bitmap) {
 	widget->render =muil_imageview_render;
 	widget->x = widget->y = widget->w = widget->h = 0;
 	widget->enabled = 1;
+	widget->needs_redraw = true;
 	
 	MuilPropertyValue v = {.p = (void *) bitmap};
 	widget->set_prop(widget, MUIL_IMAGEVIEW_PROP_BITMAP, v);
@@ -136,6 +137,7 @@ void muil_imageview_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->y = y;
 	widget->w = w;
 	widget->h = h;
+	widget->needs_redraw = true;
 
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
@@ -146,9 +148,13 @@ void muil_imageview_resize(MuilWidget *widget, int x, int y, int w, int h) {
 }
 
 void muil_imageview_render(MuilWidget *widget) {
-	struct MuilImageviewProperties *p = widget->properties;
-	
-	draw_bitmap_draw(p->bitmap);
-	draw_set_color(muil_color.widget_border);
-	draw_line_set_draw(p->border, 4);
+	if(widget->needs_redraw) {
+		struct MuilImageviewProperties *p = widget->properties;
+		
+		draw_bitmap_draw(p->bitmap);
+		draw_set_color(muil_color.widget_border);
+		draw_line_set_draw(p->border, 4);
+		
+		widget->needs_redraw = false;
+	}
 }

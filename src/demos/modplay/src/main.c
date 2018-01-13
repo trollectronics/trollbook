@@ -97,6 +97,8 @@ int main(int argc, char **argv) {
 	fat_get_label(label);
 	printf(" - Volume label: %s\n\n", label);
 	
+	browse();
+	printf("Playing /MUSIC.MOD\n");
 	play("/MUSIC.MOD");
 	for(;;);
 	
