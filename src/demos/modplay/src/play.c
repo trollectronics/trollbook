@@ -15,8 +15,8 @@ void play(const char *filename) {
 	int buffer;
 	
 	static volatile uint16_t *sound_buffer[] = {
-		(volatile uint16_t *) (LLRAM_BASE + 800*480),
 		(volatile uint16_t *) (LLRAM_BASE + 800*480 + 1024),
+		(volatile uint16_t *) (LLRAM_BASE + 800*480 + 2048),
 	};
 	
 	terminal_clear();
@@ -39,7 +39,7 @@ void play(const char *filename) {
 	fat_close(fd);
 	printf("\n");
 	
-	sound_setup((void *) (LLRAM_BASE + 800*480));
+	sound_setup((void *) (LLRAM_BASE + 800*480 + 1024));
 	
 	rm = rm_init(48000, mod_buffer, size);
 	rm_repeat_set(rm, false);
