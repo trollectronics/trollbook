@@ -16,6 +16,7 @@
 
 struct MuilCheckboxProperties {
 	int activated;
+	DrawRectSet *background;
 	DrawLineSet *border;
 	DrawLineSet *active_border;
 };

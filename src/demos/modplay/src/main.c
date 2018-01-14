@@ -98,8 +98,6 @@ int main(int argc, char **argv) {
 	printf(" - Volume label: %s\n\n", label);
 	
 	browse();
-	printf("Playing /MUSIC.MOD\n");
-	play("/MUSIC.MOD");
 	for(;;);
 	
 	fail:

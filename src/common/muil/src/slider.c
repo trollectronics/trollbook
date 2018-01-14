@@ -30,6 +30,7 @@ MuilWidget *muil_widget_create_slider(unsigned int steps) {
 	widget->event_handler->add(widget,muil_slider_event_mouse_release, MUIL_EVENT_TYPE_MOUSE_LEAVE);
 
 	struct MuilSliderProperties *p = widget->properties;
+	p->background = draw_rect_set_new(1);
 	p->line = draw_line_set_new(1 + steps, 1);
 	p->handle = draw_rect_set_new(1);
 	p->value = 0;
@@ -51,6 +52,7 @@ MuilWidget *muil_widget_create_slider(unsigned int steps) {
 void *muil_widget_destroy_slider(MuilWidget *widget) {
 	struct MuilSliderProperties *p = widget->properties;
 	draw_rect_set_free(p->handle);
+	draw_rect_set_free(p->background);
 	draw_line_set_free(p->line);
 	return muil_widget_destroy(widget);
 }
@@ -117,7 +119,9 @@ void muil_slider_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->w = w;
 	widget->h = h;
 	widget->needs_redraw = true;
-
+	
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
+	
 	draw_line_set_move(p->line, 0, x + 2, y + h / 2, x + w - 2, y + h / 2);
 	int i;
 	for(i = 0; i < p->steps; i++) {
@@ -138,6 +142,10 @@ void muil_slider_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_slider_render(MuilWidget *widget) {
 	if(widget->needs_redraw) {
 		struct MuilSliderProperties *p = widget->properties;
+		
+		draw_set_color(muil_color.window_background);
+		draw_rect_set_draw(p->background, 1);
+		
 		draw_set_color(muil_color.widget_border);
 		draw_line_set_draw(p->line, 1 + p->steps);
 		draw_set_color(muil_color.selected);

@@ -32,6 +32,7 @@ MuilWidget *muil_widget_create_button(MuilWidget *child) {
 	struct MuilButtonProperties *p = widget->properties;
 	p->child = child;
 	p->activated = 0;
+	p->background = draw_rect_set_new(1);
 	p->border = draw_line_set_new(8, 1);
 	p->active_border = draw_line_set_new(4, 1);
 	widget->destroy =muil_widget_destroy_button;
@@ -50,9 +51,9 @@ MuilWidget *muil_widget_create_button(MuilWidget *child) {
 
 MuilWidget *muil_widget_create_button_text(DrawFont *font, const char *text) {
 	MuilWidget *widget, *label;
-	label =muil_widget_create_label(font, text);
-	widget =muil_widget_create_button(label);
-	widget->destroy =muil_widget_destroy_button_recursive;
+	label = muil_widget_create_label(font, text);
+	widget = muil_widget_create_button(label);
+	widget->destroy = muil_widget_destroy_button_recursive;
 	return widget;
 }
 
@@ -62,6 +63,7 @@ MuilWidget *muil_widget_create_button_image() {
 
 void *muil_widget_destroy_button(MuilWidget *widget) {
 	struct MuilButtonProperties *p = widget->properties;
+	draw_rect_set_free(p->background);
 	draw_line_set_free(p->border);
 	draw_line_set_free(p->active_border);
 	return muil_widget_destroy(widget);
@@ -170,7 +172,9 @@ void muil_button_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->needs_redraw = true;
 	
 	p->child->resize(p->child, x + 2 +muil_padding, y + 2 +muil_padding, w - 4 -muil_padding * 2, h - 4 -muil_padding * 2);
-
+	
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
+	
 	draw_line_set_move(p->border, 0, x, y, x + w - 1, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w - 1, y + h);
 	draw_line_set_move(p->border, 2, x, y, x, y + h - 1);
@@ -196,6 +200,11 @@ void muil_button_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_button_render(MuilWidget *widget) {
 	if(widget->needs_redraw) {
 		struct MuilButtonProperties *p = widget->properties;
+		
+		draw_set_color(muil_color.window_background);
+		draw_rect_set_draw(p->background, 1);
+		
+		p->child->needs_redraw = true;
 		p->child->render(p->child);
 		draw_set_color(muil_color.widget_border);
 		draw_line_set_draw(p->border, 8);

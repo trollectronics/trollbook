@@ -24,6 +24,7 @@ MuilWidget *muil_widget_create_progressbar(DrawFont *font) {
 	struct MuilProgressbarProperties *p = widget->properties;
 	p->surface = NULL;
 	p->font = font;
+	p->background = draw_rect_set_new(1);
 	p->border = draw_line_set_new(4, 1);
 	p->bar = draw_rect_set_new(1);
 	p->progress = 0;
@@ -44,6 +45,7 @@ MuilWidget *muil_widget_create_progressbar(DrawFont *font) {
 
 void *muil_widget_destroy_progressbar(MuilWidget *widget) {
 	struct MuilProgressbarProperties *p = widget->properties;
+	draw_rect_set_free(p->background);
 	draw_rect_set_free(p->bar);
 	draw_line_set_free(p->border);
 	draw_text_surface_free(p->surface);
@@ -99,7 +101,9 @@ void muil_progressbar_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->w = w;
 	widget->h = h;
 	widget->needs_redraw = true;
-
+	
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
+	
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
 	draw_line_set_move(p->border, 2, x, y, x, y + h);
@@ -131,6 +135,10 @@ void muil_progressbar_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_progressbar_render(MuilWidget *widget) {
 	if(widget->needs_redraw) {
 		struct MuilProgressbarProperties *p = widget->properties;
+		
+		draw_set_color(muil_color.widget_background);
+		draw_rect_set_draw(p->background, 1);
+		
 		draw_line_set_draw(p->border, 4);
 
 		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_XOR);

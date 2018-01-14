@@ -15,6 +15,7 @@
 #define MUIL_LABEL_PROP_TEXT 2
 
 struct MuilLabelProperties {
+	DrawRectSet *background;
 	DrawFont *font;
 	DrawTextSurface *surface;
 	char *text;

@@ -20,6 +20,7 @@ MuilWidget *muil_widget_create_label(DrawFont *font, const char *text) {
 	struct MuilLabelProperties *p = widget->properties;
 	p->surface = NULL;
 	p->font = font;
+	p->background = draw_rect_set_new(1);
 	widget->event_handler = NULL;
 	widget->destroy =muil_widget_destroy_label;
 	widget->set_prop =muil_label_set_prop;
@@ -38,6 +39,7 @@ MuilWidget *muil_widget_create_label(DrawFont *font, const char *text) {
 
 void *muil_widget_destroy_label(MuilWidget *widget) {
 	struct MuilLabelProperties *p = widget->properties;
+	draw_rect_set_free(p->background);
 	draw_text_surface_free(p->surface);
 	return muil_widget_destroy(widget);
 }
@@ -89,6 +91,7 @@ void muil_label_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	draw_font_string_geometrics(p->font, p->text, w, &text_w, &text_h);
 	p->surface = draw_text_surface_new(p->font, draw_utf8_chars_in_string(p->text), w, x + (w / 2) - (text_w / 2), y + (h / 2) - (text_h / 2));
 	draw_text_surface_string_append(p->surface, p->text);
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
 }
 
 void muil_label_request_size(MuilWidget *widget, int *w, int *h) {
@@ -108,6 +111,10 @@ void muil_label_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_label_render(MuilWidget *widget) {
 	if(widget->needs_redraw) {
 		struct MuilLabelProperties *p = widget->properties;
+		
+		draw_set_color(muil_color.window_background);
+		draw_rect_set_draw(p->background, 1);
+		
 		
 		draw_set_color(muil_color.text);
 		draw_text_surface_draw(p->surface);

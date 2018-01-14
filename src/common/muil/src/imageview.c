@@ -29,6 +29,7 @@ MuilWidget *muil_widget_create_imageview(DrawBitmap *bitmap) {
 
 	struct MuilImageviewProperties *p = widget->properties;
 	p->bitmap = NULL;
+	p->background = draw_rect_set_new(1);
 	p->border = draw_line_set_new(4, 1);
 	p->image_w = 0;
 	p->image_h = 0;
@@ -56,6 +57,7 @@ void *muil_widget_destroy_imageview(MuilWidget *widget) {
 	struct MuilImageviewProperties *p = widget->properties;
 	
 	//draw_bitmap_free(p->bitmap);
+	draw_rect_set_free(p->background);
 	draw_line_set_free(p->border);
 	return muil_widget_destroy(widget);
 }
@@ -138,7 +140,9 @@ void muil_imageview_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->w = w;
 	widget->h = h;
 	widget->needs_redraw = true;
-
+	
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
+	
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
 	draw_line_set_move(p->border, 2, x, y, x, y + h);
@@ -150,6 +154,9 @@ void muil_imageview_resize(MuilWidget *widget, int x, int y, int w, int h) {
 void muil_imageview_render(MuilWidget *widget) {
 	if(widget->needs_redraw) {
 		struct MuilImageviewProperties *p = widget->properties;
+		
+		draw_set_color(muil_color.window_background);
+		draw_rect_set_draw(p->background, 1);
 		
 		draw_bitmap_draw(p->bitmap);
 		draw_set_color(muil_color.widget_border);

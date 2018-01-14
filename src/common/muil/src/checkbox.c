@@ -31,6 +31,7 @@ MuilWidget *muil_widget_create_checkbox() {
 
 	struct MuilCheckboxProperties *p = widget->properties;
 	p->activated = 0;
+	p->background = draw_rect_set_new(1);
 	p->border = draw_line_set_new(4, 1);
 	p->active_border = draw_line_set_new(2, 1);
 	widget->destroy =muil_widget_destroy_checkbox;
@@ -49,6 +50,7 @@ MuilWidget *muil_widget_create_checkbox() {
 
 void *muil_widget_destroy_checkbox(MuilWidget *widget) {
 	struct MuilCheckboxProperties *p = widget->properties;
+	draw_rect_set_free(p->background);
 	draw_line_set_free(p->border);
 	draw_line_set_free(p->active_border);
 	return muil_widget_destroy(widget);
@@ -134,7 +136,9 @@ void muil_checkbox_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->w = w;
 	widget->h = h;
 	widget->needs_redraw = true;
-
+	
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
+	
 	draw_line_set_move(p->border, 0, x + w / 2 - 4, y + h / 2 - 4, x + w / 2 + 4, y + h / 2 - 4);
 	draw_line_set_move(p->border, 1, x + w / 2 - 4, y + h / 2 + 4, x + w / 2 + 4, y + h / 2 + 4);
 	draw_line_set_move(p->border, 2, x + w / 2 - 4, y + h / 2 - 4, x + w / 2 - 4, y + h / 2 + 4);
@@ -154,6 +158,10 @@ void muil_checkbox_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_checkbox_render(MuilWidget *widget) {
 	if(widget->needs_redraw) {
 		struct MuilCheckboxProperties *p = widget->properties;
+		
+		draw_set_color(muil_color.widget_background);
+		draw_rect_set_draw(p->background, 1);
+		
 		draw_set_color(muil_color.widget_border);
 		draw_line_set_draw(p->border, 4);
 		if(p->activated)

@@ -25,9 +25,9 @@ MuilWidget *muil_widget_create_entry(DrawFont *font) {
 		return NULL;
 	}
 	widget->event_handler->handlers = NULL;
-	widget->event_handler->add =muil_event_add;
-	widget->event_handler->remove =muil_event_remove;
-	widget->event_handler->send =muil_event_send;
+	widget->event_handler->add = muil_event_add;
+	widget->event_handler->remove = muil_event_remove;
+	widget->event_handler->send = muil_event_send;
 	widget->event_handler->add(widget,muil_entry_event_click, MUIL_EVENT_TYPE_MOUSE);
 	widget->event_handler->add(widget,muil_entry_event_key, MUIL_EVENT_TYPE_KEYBOARD);
 
@@ -37,15 +37,16 @@ MuilWidget *muil_widget_create_entry(DrawFont *font) {
 	memset(p->text, 0, MUIL_ENTRY_LENGTH + 1);
 	p->offset = p->text;
 	p->cursor_pos = 0;
+	p->background = draw_rect_set_new(1);
 	p->cursor = draw_line_set_new(1, 1);
 	p->border = draw_line_set_new(4, 1);
 
-	widget->destroy =muil_widget_destroy_entry;
-	widget->set_prop =muil_entry_set_prop;
-	widget->get_prop =muil_entry_get_prop;
-	widget->resize =muil_entry_resize;
-	widget->request_size =muil_entry_request_size;
-	widget->render =muil_entry_render;
+	widget->destroy = muil_widget_destroy_entry;
+	widget->set_prop = muil_entry_set_prop;
+	widget->get_prop = muil_entry_get_prop;
+	widget->resize = muil_entry_resize;
+	widget->request_size = muil_entry_request_size;
+	widget->render = muil_entry_render;
 	widget->x = widget->y = widget->w = widget->h = 0;
 	widget->enabled = 1;
 	widget->needs_redraw = true;
@@ -55,6 +56,7 @@ MuilWidget *muil_widget_create_entry(DrawFont *font) {
 
 void *muil_widget_destroy_entry(MuilWidget *widget) {
 	struct MuilEntryProperties *p = widget->properties;
+	draw_rect_set_free(p->background);
 	draw_line_set_free(p->cursor);
 	draw_line_set_free(p->border);
 	draw_text_surface_free(p->surface);
@@ -154,7 +156,9 @@ void muil_entry_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->w = w;
 	widget->h = h;
 	widget->needs_redraw = true;
-
+	
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
+	
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
 	draw_line_set_move(p->border, 2, x, y, x, y + h);
@@ -175,7 +179,7 @@ void muil_entry_request_size(MuilWidget *widget, int *w, int *h) {
 		*w = ww;
 	if(!h)
 		return;
-	struct MuilLabelProperties *p = widget->properties;
+	struct MuilEntryProperties *p = widget->properties;
 	int text_h = draw_font_glyph_h(p->font);
 
 	*h = text_h + 4;
@@ -186,6 +190,9 @@ void muil_entry_render(MuilWidget *widget) {
 	struct MuilEntryProperties *p = widget->properties;
 	
 	if(widget->needs_redraw) {
+		draw_set_color(muil_color.widget_background);
+		draw_rect_set_draw(p->background, 1);
+		
 		draw_set_color(muil_color.widget_border);
 		draw_line_set_draw(p->border, 4);
 		

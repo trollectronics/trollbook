@@ -161,6 +161,7 @@ void muil_vbox_resize(MuilWidget *widget, int x, int y, int w, int h) {
 			i++;
 		}
 	}
+	
 	free(requested);
 }
 

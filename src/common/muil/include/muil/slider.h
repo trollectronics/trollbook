@@ -16,6 +16,7 @@
 #define MUIL_SLIDER_PROP_STEPS 4
 
 struct MuilSliderProperties {
+	DrawRectSet *background;
 	DrawLineSet *line;
 	DrawRectSet *handle;
 	unsigned int value;

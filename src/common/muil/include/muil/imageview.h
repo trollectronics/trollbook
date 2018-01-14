@@ -16,6 +16,7 @@
 #define MUIL_IMAGEVIEW_PROP_IMAGE_HEIGHT 3
 
 struct MuilImageviewProperties {
+	DrawRectSet *background;
 	DrawBitmap *bitmap;
 	DrawLineSet *border;
 	int image_w;

@@ -60,16 +60,27 @@ static void list_dir(const char *path, MuilWidget *listbox) {
 	}
 }
 
+static struct MuilPaneList panelist;
+static MuilWidget *vbox;
+static MuilWidget *button;
+static MuilWidget *label;
+static MuilWidget *listbox;
+static MuilWidget *entry;
+
 void button_callback() {
+	MuilPropertyValue v;
+	char path[16] = "/";
 	
+	v = listbox->get_prop(listbox, MUIL_LISTBOX_PROP_SELECTED);
+	if(v.i < 0)
+		return;
+	
+	strcat(path, muil_listbox_get(listbox, v.i));
+	
+	play(path);
 }
 
 void browse() {
-	struct MuilPaneList panelist;
-	MuilWidget *vbox;
-	MuilWidget *button;
-	MuilWidget *label;
-	MuilWidget *listbox;
 	DrawFont *font = draw_font_new(smallfont_data, 8, 8);
 	
 	muil_init(4);
@@ -80,7 +91,7 @@ void browse() {
 	muil_vbox_add_child(vbox, label = muil_widget_create_label(font, "Load MOD file"), 0);
 	muil_vbox_add_child(vbox, listbox = muil_widget_create_listbox(font), 1);
 	muil_vbox_add_child(vbox, muil_widget_create_spacer(4), 0);
-	muil_vbox_add_child(vbox, muil_widget_create_entry(font), 0);
+	muil_vbox_add_child(vbox, entry = muil_widget_create_entry(font), 0);
 	muil_vbox_add_child(vbox, button = muil_widget_create_button_text(font, "Play"), 0);
 	
 	list_dir("/", listbox);

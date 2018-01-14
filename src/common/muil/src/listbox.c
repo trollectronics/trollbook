@@ -33,6 +33,7 @@ MuilWidget *muil_widget_create_listbox(DrawFont *font) {
 	p->list = NULL;
 	p->offset = NULL;
 	p->font = font;
+	p->background = draw_rect_set_new(1);
 	p->border = draw_line_set_new(4, 1);
 	p->selected_rect = draw_rect_set_new(1);
 	p->scrollbar = draw_rect_set_new(1);
@@ -57,6 +58,7 @@ MuilWidget *muil_widget_create_listbox(DrawFont *font) {
 void *muil_widget_destroy_listbox(MuilWidget *widget) {
 	struct MuilListboxProperties *p = widget->properties;
 	muil_listbox_clear(widget);
+	draw_rect_set_free(p->background);
 	draw_line_set_free(p->border);
 	draw_rect_set_free(p->selected_rect);
 	draw_rect_set_free(p->scrollbar);
@@ -260,7 +262,9 @@ void muil_listbox_resize(MuilWidget *widget, int x, int y, int w, int h) {
 	widget->w = w;
 	widget->h = h;
 	widget->needs_redraw = true;
-
+	
+	draw_rect_set_move(p->background, 0, x, y, x + w, y + h);
+	
 	draw_line_set_move(p->border, 0, x, y, x + w, y);
 	draw_line_set_move(p->border, 1, x, y + h, x + w, y + h);
 	draw_line_set_move(p->border, 2, x, y, x, y + h);
@@ -302,6 +306,10 @@ void muil_listbox_request_size(MuilWidget *widget, int *w, int *h) {
 void muil_listbox_render(MuilWidget *widget) {
 	if(widget->needs_redraw) {
 		struct MuilListboxProperties *p = widget->properties;
+		
+		draw_set_color(muil_color.widget_background);
+		draw_rect_set_draw(p->background, 1);
+		
 		draw_set_color(muil_color.widget_border);
 		draw_line_set_draw(p->border, 4);
 		if(!p->offset)

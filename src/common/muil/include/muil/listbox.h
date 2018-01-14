@@ -23,6 +23,7 @@ struct MuilListboxProperties {
 	DrawFont *font;
 	struct MuilListboxList *list;
 	struct MuilListboxList *offset;
+	DrawRectSet *background;
 	DrawLineSet *border;
 	DrawRectSet *scrollbar;
 	int size;
