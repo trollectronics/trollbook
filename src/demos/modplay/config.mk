@@ -26,7 +26,7 @@ INCLUDEDIRS	= $(shell realpath $(TOPDIR)/include) $(MODULESINCLUDE)
 # Compiler and linker flags
 INCLUDES	= $(addprefix -I,$(INCLUDEDIRS))
 
-export CFLAGS		:= -Wall -Os -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040 $(INCLUDES)
+export CFLAGS		:= -Wall -O3 -std=c99 -ffreestanding -fno-builtin -nostdlib -static -m68040 $(INCLUDES)
 export ASFLAGS		:= -msoft-float
 export LDFLAGS		:= -T $(LINKSCRIPT) -lgcc
 

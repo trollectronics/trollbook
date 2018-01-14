@@ -1,9 +1,9 @@
-#include "modplay.h"
-#include "terminal.h"
-#include "fat.h"
-#include "printf.h"
-#include "mem.h"
-#include "sound.h"
+#include <rickmod.h>
+#include <terminal.h>
+#include <fat.h>
+#include <printf.h>
+#include <mem.h>
+#include <sound.h>
 #include "main.h"
 
 void play(const char *filename) {
@@ -42,6 +42,7 @@ void play(const char *filename) {
 	sound_setup((void *) (LLRAM_BASE + 800*480));
 	
 	rm = rm_init(48000, mod_buffer, size);
+	rm_repeat_set(rm, false);
 	printf("MOD: %s\n", rm->name);
 	for(i = 0; i < 31; i++) {
 		printf("%s\n", rm->sample[i].name);
@@ -53,8 +54,11 @@ void play(const char *filename) {
 	rm_mix_u8(rm, (uint8_t *) sound_buffer[0], 512);
 	rm_mix_u8(rm, (uint8_t *) sound_buffer[1], 512);
 	sound_start();
-	for(;;) {
+	do {
 		buffer = sound_wait();
 		rm_mix_u8(rm, (uint8_t *) sound_buffer[buffer], 512);
-	}
+	} while(!rm_end_reached(rm));
+	sound_stop();
+	rm_free(rm);
+	free(mod_buffer);
 }
