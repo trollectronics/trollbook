@@ -3,9 +3,10 @@
 #include <fat.h>
 #include <font.h>
 #include <peripheral.h>
+#include "main.h"
 
 static void list_dir(const char *path, MuilWidget *listbox) {
-	int files, fd, i, j, k;
+	int files, i, j;
 	static char filename[32];
 	
 	uint8_t stat;

@@ -3,22 +3,23 @@
 #include "fat.h"
 #include "printf.h"
 #include "mem.h"
+#include "sound.h"
 #include "main.h"
 
 void play(const char *filename) {
 	int i, j, fd;
 	uint32_t size;
 	uint32_t *src, *dst;
-	uint8_t *tmp;
 	struct RickmodState *rm;
 	void *mod_buffer;
 	int buffer;
 	
 	static volatile uint16_t *sound_buffer[] = {
-		(volatile uint16_t *) (LLRAM_BASE /*+ 800*480/2*/),
-		((volatile uint16_t *) (LLRAM_BASE) /*+ 800*480/2*/ + 512),
+		(volatile uint16_t *) (LLRAM_BASE + 800*480),
+		(volatile uint16_t *) (LLRAM_BASE + 800*480 + 1024),
 	};
 	
+	terminal_clear();
 	printf("open file %s\n", filename);
 	fd = fat_open(filename, O_RDONLY);
 	size = fat_fsize(fd);
@@ -38,7 +39,7 @@ void play(const char *filename) {
 	fat_close(fd);
 	printf("\n");
 	
-	sound_setup();
+	sound_setup((void *) (LLRAM_BASE + 800*480));
 	
 	rm = rm_init(48000, mod_buffer, size);
 	printf("MOD: %s\n", rm->name);
@@ -46,8 +47,8 @@ void play(const char *filename) {
 		printf("%s\n", rm->sample[i].name);
 	}
 	
-	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
-	//sound_hw[2] = (uint32_t) LLRAM_BASE + 800*480/2;
+	//volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
+	//sound_hw[2] = (uint32_t) LLRAM_BASE + 800*480;
 	
 	rm_mix_u8(rm, (uint8_t *) sound_buffer[0], 512);
 	rm_mix_u8(rm, (uint8_t *) sound_buffer[1], 512);

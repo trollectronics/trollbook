@@ -1,51 +1,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "peripheral.h"
+#include "sound.h"
 
 #define HEADER_TEST(data, string) (data[0] == string[0] && data[1] == string[1] && data[2] == string[2] && data[3] == string[3])
 
 #define PARSE_8(data) ((uint32_t) (data[0]))
 #define PARSE_16(data) ((uint32_t) (data[0] | (data[1] << 8)))
 #define PARSE_32(data) ((uint32_t) (data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24)))
-
-void sound_setup() {
-	int i;
-	volatile uint16_t *buf= (volatile uint16_t *) LLRAM_BASE;
-	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
-	
-	for(i = 0; i < 1024; i++) {
-		buf[i] = 0;
-	}
-	
-	sound_hw[0] = 0x0;
-	sound_hw[2] = 0x0;
-	sound_hw[3] = 3;
-	sound_hw[4] = 512;
-}
-
-void sound_start() {
-	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
-	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
-	sound_hw[0] = 0x1;
-	interrupt_hw[32 + 11] = 0x0;
-}
-
-void sound_stop() {
-	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
-	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
-	sound_hw[0] = 0x0;
-	interrupt_hw[32 + 11] = 0x0;
-}
-
-int sound_wait() {
-	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
-	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
-	
-	while(!interrupt_hw[32 + 11]);
-	interrupt_hw[32 + 11] = 0x0;
-	
-	return !(sound_hw[1] & 0x1);
-}
 
 void wav_play(void *data) {
 	uint8_t *wav_data = data;
@@ -129,7 +91,7 @@ void wav_play(void *data) {
 		if(skip)
 			continue;
 		
-		sound_setup();
+		sound_setup((void *) LLRAM_BASE);
 		i = 0;
 		for(buffer = 0; buffer < 2; buffer++) {
 			for(j = 0; j < 512; j++, i++) {

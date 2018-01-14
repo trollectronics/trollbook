@@ -42,6 +42,17 @@ architecture arch of llram_bus_adapter is
 	
 	signal bus_q_internal, bus_q_next : std_logic_vector(bus_q'range);
 	signal bus_ack_next, bus_ack_internal : std_logic;
+	
+	type buffer_rec is record
+		addr : std_logic_vector(17 downto 0);
+		data : std_logic_vector(15 downto 0);
+		siz : std_logic_vector(1 downto 0);
+	end record;
+	
+	type buffer_entry is array(natural range <>) of buffer_rec;
+	
+	signal write_buffer : buffer_entry(3 downto 0);
+	signal buffer_pos : unsigned(1 downto 0);
 begin
 	bus_q <= bus_q_internal when bus_ce = '1' else (others => 'Z');
 	ll_lb <= ll_lb_internal;

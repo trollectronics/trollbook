@@ -3,6 +3,7 @@
 #include "terminal.h"
 #include "sd.h"
 #include "fat.h"
+#include "main.h"
 
 uint8_t fat_buf[512];
 

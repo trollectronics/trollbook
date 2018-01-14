@@ -54,7 +54,7 @@ void draw_text_surface_draw(DrawTextSurface *surface) {
 	col = surface->x;
 	row = surface->y;
 	line_x = 0;
-	for(buf = surface->buf; c = *buf; line_x += glyph_w, buf++) {
+	for(buf = surface->buf; (c = *buf); line_x += glyph_w, buf++) {
 		if(line_x + glyph_w > surface->linelen) {
 			col = surface->x;
 			row += glyph_h;

@@ -5,4 +5,7 @@
 
 extern uint8_t fat_buf[512];
 
+void browse();
+void play();
+
 #endif

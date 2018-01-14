@@ -271,3 +271,5 @@ set_global_assignment -name VHDL_FILE vga.vhd
 set_global_assignment -name HEX_FILE pal565.hex
 set_global_assignment -name HEX_FILE bootrom.hex
 set_global_assignment -name QIP_FILE cursor.qip
+set_global_assignment -name FMAX_REQUIREMENT "24.768 MHz" -section_id clk24
+set_instance_assignment -name CLOCK_SETTINGS clk24 -to clk12

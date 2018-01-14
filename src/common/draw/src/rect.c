@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <mem.h>
 #include <draw/rect.h>
+#include <draw/pixel.h>
 
 #define MIN(a, b) (((a) < (b) ? (a) : (b)))
 #define MAX(a, b) (((a) > (b) ? (a) : (b)))

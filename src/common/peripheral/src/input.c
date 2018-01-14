@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include "delay.h"
 #include "spi.h"
 #include "input.h"
 
@@ -37,7 +38,6 @@ static const char matrix_key_shift[4][17] = {
 	{INPUT_KEY_LSHIFT, 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ';', ':', '_', INPUT_KEY_RSHIFT, INPUT_KEY_RFN, ' ', INPUT_KEY_LFN, INPUT_KEY_LEFT, INPUT_KEY_LMB, },
 };
 
-static bool matrix[4][17];
 static const int matrix_cols[17] = {2, 1, 3, 6, 7, 0, 4, 5, 8, 12, 10, 14, 15, 11, 9, 13, 16};
 
 static struct {
@@ -105,7 +105,6 @@ InputMouseEvent input_mouse_get() {
 }
 
 void input_poll() {
-	int i, j;
 	uint8_t reg, status;
 	spi_set_clockdiv(165);
 	
