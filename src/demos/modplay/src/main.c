@@ -71,6 +71,8 @@ int main(int argc, char **argv) {
 	int type;
 	char label[12];
 	
+	interrupt_init();
+	
 	terminal_init();
 	terminal_clear();
 	

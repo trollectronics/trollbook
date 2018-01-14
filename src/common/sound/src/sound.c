@@ -20,8 +20,8 @@ void sound_setup(void *buf_addr) {
 void sound_start() {
 	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
 	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
-	sound_hw[0] = 0x1;
 	interrupt_hw[32 + 11] = 0x0;
+	sound_hw[0] = 0x1;
 }
 
 void sound_stop() {

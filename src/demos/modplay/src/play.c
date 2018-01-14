@@ -4,20 +4,70 @@
 #include <printf.h>
 #include <mem.h>
 #include <sound.h>
+#include <interrupt.h>
+#include <peripheral.h>
 #include "main.h"
+
+static volatile uint16_t *sound_buffer[] = {
+	(volatile uint16_t *) (LLRAM_BASE + 800*480 + 1024),
+	(volatile uint16_t *) (LLRAM_BASE + 800*480 + 2048),
+};
+
+static int buffer;
+static bool done;
+static struct RickmodState *rm;
+
+static void audio_callback(int number) {
+	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
+	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
+	
+	rm_mix_u8(rm, (uint8_t *) sound_buffer[buffer], 512);
+	
+	if(rm_end_reached(rm))
+		done = true;
+	
+	interrupt_hw[32 + PERIPHERAL_ID_AUDIO] = 0x0;
+	buffer = (sound_hw[1] & 0x1);
+}
+
+static void player_ui() {
+	uint16_t vol;
+	int vol_l, vol_r;
+	int i;
+	
+	vol = sound_buffer[buffer][0];
+	vol_l = (vol >> 8) & 0xFF;
+	vol_r = vol & 0xFF;
+	
+	printf("left: ");
+	
+	for(i = 0; i < 16; i++) {
+		if(vol_l > 0)
+			printf("|");
+		else
+			printf(" ");
+		
+		vol_l -= 16;
+	}
+	
+	printf(" right: ");
+	
+	for(i = 0; i < 16; i++) {
+		if(vol_r > 0)
+			printf("|");
+		else
+			printf(" ");
+		
+		vol_r -= 16;
+	}
+	
+}
 
 void play(const char *filename) {
 	int i, j, fd;
 	uint32_t size;
 	uint32_t *src, *dst;
-	struct RickmodState *rm;
 	void *mod_buffer;
-	int buffer;
-	
-	static volatile uint16_t *sound_buffer[] = {
-		(volatile uint16_t *) (LLRAM_BASE + 800*480 + 1024),
-		(volatile uint16_t *) (LLRAM_BASE + 800*480 + 2048),
-	};
 	
 	terminal_clear();
 	printf("open file %s\n", filename);
@@ -53,12 +103,25 @@ void play(const char *filename) {
 	
 	rm_mix_u8(rm, (uint8_t *) sound_buffer[0], 512);
 	rm_mix_u8(rm, (uint8_t *) sound_buffer[1], 512);
+	
+	done = false;
+	terminal_clear();
+	
+	interrupt_register(1, audio_callback);
+	interrupt_perihperal_enable(PERIPHERAL_ID_AUDIO, 1);
+	interrupt_global_enable();
+	
 	sound_start();
-	do {
-		buffer = sound_wait();
-		rm_mix_u8(rm, (uint8_t *) sound_buffer[buffer], 512);
-	} while(!rm_end_reached(rm));
+	
+	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
+	while(!done) {
+		//printf("\r%i  ", (sound_hw[1] & 0x1));
+		printf("\r");
+		player_ui();
+	}
+	
 	sound_stop();
+	interrupt_global_disable();
 	rm_free(rm);
 	free(mod_buffer);
 }
