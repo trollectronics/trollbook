@@ -61,13 +61,14 @@ void muil_progressbar_set_prop(MuilWidget *widget, int prop, MuilPropertyValue v
 			p->progress = value.i;
 			//sprintf(p->text, "%i%%", value.i);
 			draw_rect_set_move(p->bar, 0, widget->x + 2, widget->y + 2, widget->x + 2 + ((widget->w - 4)*value.i / 100), widget->y + widget->h - 2);
-			if(p->surface != NULL)
-				draw_text_surface_free(p->surface);
+			//if(p->surface != NULL)
+			//	draw_text_surface_free(p->surface);
 			int text_w;
 			int text_h;
-			draw_font_string_geometrics(p->font, p->text, widget->w, &text_w, &text_h);
-			p->surface = draw_text_surface_new(p->font, draw_utf8_chars_in_string(p->text), widget->w, widget->x + (widget->w / 2) - (text_w / 2), widget->y + (widget->h / 2) - (text_h / 2));
-			draw_text_surface_string_append(p->surface, p->text);
+			//draw_font_string_geometrics(p->font, p->text, widget->w, &text_w, &text_h);
+			//p->surface = draw_text_surface_new(p->font, draw_utf8_chars_in_string(p->text), widget->w, widget->x + (widget->w / 2) - (text_w / 2), widget->y + (widget->h / 2) - (text_h / 2));
+			//draw_text_surface_string_append(p->surface, p->text);
+			widget->needs_redraw = true;
 			break;
 	}
 }
@@ -130,6 +131,7 @@ void muil_progressbar_request_size(MuilWidget *widget, int *w, int *h) {
 	struct MuilLabelProperties *p = widget->properties;
 	int text_h = draw_font_glyph_h(p->font);
 	*h = text_h + 4;
+	*h = 8 + 4;
 }
 
 void muil_progressbar_render(MuilWidget *widget) {
@@ -146,7 +148,7 @@ void muil_progressbar_render(MuilWidget *widget) {
 		draw_rect_set_draw(p->bar, 1);
 		//d_render_logic_op(DARNIT_RENDER_LOGIC_OP_NONE);
 		draw_set_color(muil_color.text);
-		draw_text_surface_draw(p->surface);
+		//draw_text_surface_draw(p->surface);
 		
 		widget->needs_redraw = false;
 	}

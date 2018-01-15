@@ -1,11 +1,17 @@
 #include <stdint.h>
-#include "printf.h"
-#include "terminal.h"
-#include "sd.h"
-#include "fat.h"
+#include <draw/font.h>
+#include <font.h>
+#include <printf.h>
+#include <terminal.h>
+#include <interrupt.h>
+#include <muil/muil.h>
+#include <sd.h>
+#include <fat.h>
 #include "main.h"
 
 uint8_t fat_buf[512];
+
+DrawFont *font_small;
 
 static const char *sd_card_type_name[] = {
 	[SD_CARD_TYPE_MMC] = "MMC",
@@ -99,6 +105,11 @@ int main(int argc, char **argv) {
 	terminal_set_fg(TERMINAL_COLOR_WHITE);
 	fat_get_label(label);
 	printf(" - Volume label: %s\n\n", label);
+	
+	font_small = draw_font_new(smallfont_data, 8, 8);
+	muil_init(4);
+	
+	player_init();
 	
 	browse();
 	for(;;);

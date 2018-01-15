@@ -171,7 +171,12 @@ void muil_hbox_request_size(MuilWidget *widget, int *w, int *h) {
 	MuilWidgetList *c;
 	struct MuilHboxProperties *p = widget->properties;
 	for(c = p->children; c; c = c->next) {
-		if(!c->expand) {
+		if(c->expand) {
+			req_w = -1;
+			req_h = -1;
+			c->widget->request_size(c->widget, &req_w, &req_h);
+			hh = req_h > hh ? req_h : hh;
+		} else {
 			req_w = *w;
 			req_h = -1;
 			c->widget->request_size(c->widget, &req_w, &req_h);
@@ -182,7 +187,7 @@ void muil_hbox_request_size(MuilWidget *widget, int *w, int *h) {
 	if(w)
 		*w = ww;
 	if(h)
-		*h = hh;
+		*h = hh + muil_padding*2;
 }
 
 void muil_hbox_render(MuilWidget *widget) {

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stddef.h>
 #include <rickmod.h>
 #include <terminal.h>
 #include <fat.h>
@@ -6,7 +8,10 @@
 #include <sound.h>
 #include <interrupt.h>
 #include <peripheral.h>
+#include <muil/muil.h>
 #include "main.h"
+
+#define ABS(a) ((a) > 0 ? (a) : -(a))
 
 static volatile uint16_t *sound_buffer[] = {
 	(volatile uint16_t *) (LLRAM_BASE + 800*480 + 1024),
@@ -30,37 +35,47 @@ static void audio_callback(int number) {
 	buffer = (sound_hw[1] & 0x1);
 }
 
-static void player_ui() {
+static struct {
+	MuilWidget *vbox;
+	MuilWidget *label_title;
+	MuilWidget *list_samples;
+	MuilWidget *hbox_chan;
+	MuilWidget *progress_level[2];
+	MuilWidget *button_stop;
+	
+	struct MuilPaneList pane_list;
+} player_ui;
+
+void player_init() {
+	player_ui.pane_list.pane = muil_pane_create(200, 100, 400, 280, player_ui.vbox = muil_widget_create_vbox());
+	player_ui.pane_list.next = NULL;
+	
+	muil_vbox_add_child(player_ui.vbox, player_ui.label_title = muil_widget_create_label(font_small, "MOD file"), 0);
+	muil_vbox_add_child(player_ui.vbox, player_ui.list_samples = muil_widget_create_listbox(font_small), 1);
+	
+	muil_vbox_add_child(player_ui.vbox, player_ui.hbox_chan = muil_widget_create_hbox(), 0);
+	muil_hbox_add_child(player_ui.hbox_chan, player_ui.progress_level[0] = muil_widget_create_progressbar(font_small), 1);
+	muil_hbox_add_child(player_ui.hbox_chan, player_ui.progress_level[1] = muil_widget_create_progressbar(font_small), 1);
+	
+	muil_vbox_add_child(player_ui.vbox, player_ui.button_stop = muil_widget_create_button_text(font_small, "Stop"), 0);
+}
+
+static void player_ui_volumes_bargraphs() {
 	uint16_t vol;
-	int vol_l, vol_r;
-	int i;
+	int vol_l, vol_r, prev;
+	MuilPropertyValue v;
 	
 	vol = sound_buffer[buffer][0];
 	vol_l = (vol >> 8) & 0xFF;
 	vol_r = vol & 0xFF;
 	
-	printf("left: ");
+	vol_l = 100*(ABS(vol_l - 128))/128;
+	vol_r = 100*(ABS(vol_r - 128))/128;
 	
-	for(i = 0; i < 16; i++) {
-		if(vol_l > 0)
-			printf("|");
-		else
-			printf(" ");
-		
-		vol_l -= 16;
-	}
-	
-	printf(" right: ");
-	
-	for(i = 0; i < 16; i++) {
-		if(vol_r > 0)
-			printf("|");
-		else
-			printf(" ");
-		
-		vol_r -= 16;
-	}
-	
+	v.i = vol_l;
+	player_ui.progress_level[0]->set_prop(player_ui.progress_level[0], MUIL_PROGRESSBAR_PROP_PROGRESS, v);
+	v.i = vol_r;
+	player_ui.progress_level[1]->set_prop(player_ui.progress_level[1], MUIL_PROGRESSBAR_PROP_PROGRESS, v);
 }
 
 void play(const char *filename) {
@@ -68,6 +83,7 @@ void play(const char *filename) {
 	uint32_t size;
 	uint32_t *src, *dst;
 	void *mod_buffer;
+	MuilPropertyValue v;
 	
 	terminal_clear();
 	printf("open file %s\n", filename);
@@ -93,9 +109,13 @@ void play(const char *filename) {
 	
 	rm = rm_init(48000, mod_buffer, size);
 	rm_repeat_set(rm, false);
-	printf("MOD: %s\n", rm->name);
+	//printf("MOD: %s\n", rm->name);
+	v.p = rm->name;
+	player_ui.label_title->set_prop(player_ui.label_title, MUIL_LABEL_PROP_TEXT, v);
+	
+	muil_listbox_clear(player_ui.list_samples);
 	for(i = 0; i < 31; i++) {
-		printf("%s\n", rm->sample[i].name);
+		muil_listbox_add(player_ui.list_samples, rm->sample[i].name);
 	}
 	
 	//volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
@@ -107,6 +127,8 @@ void play(const char *filename) {
 	done = false;
 	terminal_clear();
 	
+	muil_pane_resize(player_ui.pane_list.pane, player_ui.pane_list.pane->x, player_ui.pane_list.pane->y, player_ui.pane_list.pane->w, player_ui.pane_list.pane->h);
+	
 	interrupt_register(1, audio_callback);
 	interrupt_perihperal_enable(PERIPHERAL_ID_AUDIO, 1);
 	interrupt_global_enable();
@@ -116,8 +138,10 @@ void play(const char *filename) {
 	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
 	while(!done) {
 		//printf("\r%i  ", (sound_hw[1] & 0x1));
-		printf("\r");
-		player_ui();
+		//printf("\r");
+		//player_ui();
+		player_ui_volumes_bargraphs();
+		muil_events(&player_ui.pane_list, true);
 	}
 	
 	sound_stop();
