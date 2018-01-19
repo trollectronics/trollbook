@@ -1,9 +1,6 @@
-(kicad_pcb (version 20160815) (host pcbnew no-vcs-found-undefined)
+(kicad_pcb (version 20171130) (host pcbnew no-vcs-found-70f516b~61~ubuntu16.04.1)
 
   (general
-    (links 816)
-    (no_connects 0)
-    (area 52 38.468802 224.934721 153.800001)
     (thickness 1.6)
     (drawings 10)
     (tracks 3818)
@@ -74,6 +71,9 @@
     (pcbplotparams
       (layerselection 0x010f0_ffffffff)
       (usegerberextensions true)
+      (usegerberattributes false)
+      (usegerberadvancedattributes false)
+      (creategerberjobfile false)
       (excludeedgelayer true)
       (linewidth 0.100000)
       (plotframeref false)
@@ -364,8 +364,6 @@
     (via_drill 0.4)
     (uvia_dia 0.3)
     (uvia_drill 0.1)
-    (diff_pair_gap 0.25)
-    (diff_pair_width 0.2)
     (add_net +3V3)
     (add_net /A0)
     (add_net /A1)
@@ -833,9 +831,9 @@
       (net 52 /D15))
     (pad 54 smd rect (at -10.4 -5.2 90) (size 0.3 2) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
-    (model /home/axel/Projekt/trollbook/hardware-rev2/3d/tssop-ii-54-0.8mm.wrl
-      (at (xyz -0.41 -0.3 0))
-      (scale (xyz 1 1 1))
+    (model 3d/tssop-ii-54-0.8mm.wrl
+      (offset (xyz -10.414 -5.5 0))
+      (scale (xyz 1 0.8 1))
       (rotate (xyz 0 0 0))
     )
   )
@@ -985,9 +983,9 @@
       (net 39 /D31))
     (pad 54 smd rect (at -10.4 -5.2 90) (size 0.3 2) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
-    (model /home/axel/Projekt/trollbook/hardware-rev2/3d/tssop-ii-54-0.8mm.wrl
-      (at (xyz -0.41 -0.3 0))
-      (scale (xyz 1 1 1))
+    (model 3d/tssop-ii-54-0.8mm.wrl
+      (offset (xyz -10.414 -5.5 0))
+      (scale (xyz 1 0.8 1))
       (rotate (xyz 0 0 0))
     )
   )
@@ -1360,8 +1358,8 @@
       (net 65 /D2))
     (pad 138 smd rect (at -14.30528 -17.55648) (size 0.381 2.032) (layers F.Cu F.Paste F.Mask)
       (net 66 /D0))
-    (model /home/axel/Projekt/trollbook/hardware-rev2/3d/cqfp-184-0.65mm.wrl
-      (at (xyz -0.5639999999999999 -0.664 0))
+    (model 3d/cqfp-184-0.65mm.wrl
+      (offset (xyz -14.32559978485107 -16.8655997467041 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -2047,7 +2045,7 @@
       (net 120 /LLA17))
     (pad 44 smd rect (at -8.4 -5.6 270) (size 0.3 2) (layers F.Cu F.Paste F.Mask)
       (net 121 /LLA18))
-    (model /home/axel/Projekt/trollbook/hardware-rev2/3d/tsop44.wrl
+    (model 3d/tsop44.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 -90))
@@ -2274,7 +2272,7 @@
     (pad 10 thru_hole oval (at 2.54 10.16 270) (size 1.7272 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_2x05.wrl
-      (at (xyz 0.05 -0.2 0))
+      (offset (xyz 1.269999980926514 -5.079999923706055 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -2321,7 +2319,7 @@
     (pad 10 thru_hole oval (at 2.54 10.16 270) (size 1.7272 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_2x05.wrl
-      (at (xyz 0.05 -0.2 0))
+      (offset (xyz 1.269999980926514 -5.079999923706055 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -2428,8 +2426,8 @@
       (net 1 GND))
     (pad GND smd rect (at 21.04 -2.325 180) (size 2 3) (layers B.Cu B.Paste B.Mask)
       (net 1 GND))
-    (model /home/axel/Projekt/trollbook/hardware-rev2/3d/fh12-40s.wrl
-      (at (xyz 0.385 -0.159 0))
+    (model 3d/fh12-40s.wrl
+      (offset (xyz 9.778999853134156 -4.038599939346313 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 -90))
     )
@@ -3153,7 +3151,7 @@
     (pad 4 thru_hole oval (at 0 7.62 180) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 257 /AUDIOL))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_1x04.wrl
-      (at (xyz 0 -0.15 0))
+      (offset (xyz 0 -3.809999942779541 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -3190,7 +3188,7 @@
     (pad 4 thru_hole oval (at 0 7.62 180) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 214 /VGALED_ANODE))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_1x04.wrl
-      (at (xyz 0 -0.15 0))
+      (offset (xyz 0 -3.809999942779541 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -3251,7 +3249,7 @@
     (pad 16 thru_hole oval (at 0 38.1 180) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 220 /SPI0SS7))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_1x16.wrl
-      (at (xyz 0 -0.75 0))
+      (offset (xyz 0 -19.04999971389771 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -3292,7 +3290,7 @@
     (pad 6 thru_hole oval (at 0 12.7 90) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 251 "Net-(P7-Pad6)"))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_1x06.wrl
-      (at (xyz 0 -0.25 0))
+      (offset (xyz 0 -6.349999904632568 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -3764,7 +3762,7 @@
     (pad 4 thru_hole oval (at 0 7.62 180) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 141 /CLK33))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_1x04.wrl
-      (at (xyz 0 -0.15 0))
+      (offset (xyz 0 -3.809999942779541 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -3821,7 +3819,7 @@
       (net 141 /CLK33))
     (pad 4 smd rect (at -2.5 -2 90) (size 1.8 2) (layers F.Cu F.Paste F.Mask)
       (net 2 +3V3))
-    (model /home/axel/Projekt/trollbook/hardware-rev2/3d/vcc1-osc.wrl
+    (model 3d/vcc1-osc.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
@@ -3850,7 +3848,7 @@
       (net 2 +3V3))
     (pad 3 smd rect (at 1.27 -1.0205) (size 1.1 1.2) (layers F.Cu F.Paste F.Mask)
       (net 229 /CLK12))
-    (model /home/axel/Projekt/trollbook/hardware-rev2/3d/abra-osc.wrl
+    (model 3d/abra-osc.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
@@ -4231,6 +4229,11 @@
     (pad 2 smd rect (at -2.75082 0 90) (size 3.59918 1.6002) (layers F.Cu F.Paste F.Mask)
       (net 1 GND))
     (model Capacitors_SMD.3dshapes/c_elec_6.3x7.7.wrl
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model ${KISYS3DMOD}/Capacitors_SMD.3dshapes/CP_Elec_6.3x7.7.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -6300,7 +6303,7 @@
     (pad 5 thru_hole oval (at 0 10.16 180) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 252 /EXTINT3))
     (model Pin_Headers.3dshapes/Pin_Header_Straight_1x05.wrl
-      (at (xyz 0 -0.2 0))
+      (offset (xyz 0 -5.079999923706055 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
@@ -6486,10 +6489,10 @@
   (module mod:trollectronics-logo (layer F.Cu) (tedit 0) (tstamp 56D47530)
     (at 130 120.75)
     (fp_text reference G*** (at 0 0) (layer F.SilkS) hide
-      (effects (font (thickness 0.3)))
+      (effects (font (size 1.524 1.524) (thickness 0.3)))
     )
     (fp_text value LOGO (at 0.75 0) (layer F.SilkS) hide
-      (effects (font (thickness 0.3)))
+      (effects (font (size 1.524 1.524) (thickness 0.3)))
     )
     (fp_poly (pts (xy -6.636586 11.889944) (xy -6.427341 12.004768) (xy -6.273295 12.205297) (xy -6.170289 12.499021)
       (xy -6.114165 12.89343) (xy -6.100207 13.303198) (xy -6.120585 13.804575) (xy -6.183816 14.197909)
@@ -7071,7 +7074,7 @@
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (dimension 140 (width 0.3) (layer Eco1.User)
-    (gr_text "140.000 mm" (at 154.93472 44.818802) (layer Eco1.User) (tstamp 581F4AD4)
+    (gr_text "140.000 mm" (at 154.93472 44.818802) (layer Eco1.User)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
     )
     (feature1 (pts (xy 84.93472 38.468802) (xy 84.93472 46.168802)))
@@ -7083,7 +7086,7 @@
     (arrow2b (pts (xy 224.93472 43.468802) (xy 223.808216 44.055223)))
   )
   (dimension 70 (width 0.3) (layer Eco1.User)
-    (gr_text "70.000 mm" (at 58.65 85 270) (layer Eco1.User) (tstamp 581F4AD5)
+    (gr_text "70.000 mm" (at 58.65 85 270) (layer Eco1.User)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
     )
     (feature1 (pts (xy 65 120) (xy 57.3 120)))
