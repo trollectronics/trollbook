@@ -67,7 +67,7 @@ unsigned int draw_utf8_get_char(const char *str_s) {
 
 	if ((len = get_char_len(str)) == 0)
 		return UTF8_REPLACEMENT_CHAR;
-	if (!draw_utf8_valid(str) == -1)
+	if (draw_utf8_valid(str) == -1)
 		return UTF8_REPLACEMENT_CHAR;
 
 	shift = 1;
@@ -102,7 +102,7 @@ int draw_utf8_find_char_index(const char *str_s, unsigned int pos) {
 	int i, j;
 
 	for (i = j = 0; str_s[i] != 0 && j != pos; j++)
-		i += draw_utf8_encoded_length(&str_s[i]);
+		i += draw_utf8_char_length(&str_s[i]);
 	return (j != pos) ? -1 : i;
 }
 
@@ -121,7 +121,7 @@ int draw_utf8_counted_string_size(const char *str_s, unsigned int chars) {
 	int i, j;
 
 	for (i = j = 0; i < chars; i++)
-		j += draw_utf8_encoded_length(&str_s[j]);
+		j += draw_utf8_char_length(&str_s[j]);
 	return j;
 }
 
@@ -131,7 +131,7 @@ int draw_utf8_chars_in_string(const char *str_s) {
 	int i, j;
 
 	for (i = j = 0; str_s[i] != 0; j++)
-		i += draw_utf8_encoded_length(&str_s[i]);
+		i += draw_utf8_char_length(&str_s[i]);
 	return j;
 }
 

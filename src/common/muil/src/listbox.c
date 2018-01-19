@@ -77,7 +77,7 @@ void muil_listbox_add(MuilWidget *widget, const char *text) {
 	(*l)->text[127] = 0;
 	p->size++;
 	muil_listbox_scroll(widget, p->scroll);
-	//widget->resize(widget, widget->x, widget->y, widget->w, widget->h);
+	widget->resize(widget, widget->x, widget->y, widget->w, widget->h);
 }
 
 void muil_listbox_clear(MuilWidget *widget) {
@@ -129,8 +129,12 @@ void muil_listbox_scroll(MuilWidget *widget, int pos) {
 	int text_h;
 	struct MuilListboxList *l, *ll;
 	int i = 0;
+	
 	if(!(p->size && widget->w > 0 && widget->h > 0))
 		return;
+	
+	int oldscroll = p->scroll;
+	
 	for(l = p->list; l; l = l->next) {
 		text_h = 2;
 		for(ll = l; ll; ll = ll->next) {
@@ -160,7 +164,8 @@ void muil_listbox_scroll(MuilWidget *widget, int pos) {
 		i++;
 	}
 	p->scroll_max = i;
-	widget->resize(widget, widget->x, widget->y, widget->w, widget->h);
+	if(p->scroll != oldscroll)
+		widget->resize(widget, widget->x, widget->y, widget->w, widget->h);
 }
 
 void muil_listbox_event_mouse(MuilWidget *widget, unsigned int type, MuilEvent *e) {

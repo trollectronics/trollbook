@@ -62,7 +62,7 @@ void player_init() {
 
 static void player_ui_volumes_bargraphs() {
 	uint16_t vol;
-	int vol_l, vol_r, prev;
+	int vol_l, vol_r;
 	MuilPropertyValue v;
 	
 	vol = sound_buffer[buffer][0];
@@ -135,11 +135,7 @@ void play(const char *filename) {
 	
 	sound_start();
 	
-	volatile uint32_t *sound_hw = (volatile uint32_t *) PERIPHERAL_SOUND_BASE;
 	while(!done) {
-		//printf("\r%i  ", (sound_hw[1] & 0x1));
-		//printf("\r");
-		//player_ui();
 		player_ui_volumes_bargraphs();
 		muil_events(&player_ui.pane_list, true);
 	}

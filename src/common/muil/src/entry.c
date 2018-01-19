@@ -73,12 +73,12 @@ void muil_entry_event_key(MuilWidget *widget, unsigned int type, MuilEvent *e) {
 			if(e->keyboard->keysym == 8) {
 				if(p->cursor_pos <= 0)
 					return;
-				while(draw_utf8_valid(&p->text[--p->cursor_pos]));
+				while(draw_utf8_valid((unsigned char *) &p->text[--p->cursor_pos]));
 				p->text[p->cursor_pos] = 0;
 
 				if(p->offset > p->text + draw_utf8_char_length(p->text)) {
 					while(draw_font_string_w(p->font, p->offset) < widget->w - 4)
-						while(draw_utf8_valid(p->offset--));
+						while(draw_utf8_valid((unsigned char *) p->offset--));
 					p->offset += draw_utf8_char_length(p->offset);
 				} else if(p->offset == p->text + draw_utf8_char_length(p->text))
 					p->offset = p->text;
