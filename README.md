@@ -14,23 +14,25 @@ display and backlight.
 The hardware specs as of now can be summed up as following:
 
  - Motorola 68040FE33V CPU, running at 33 MHz
- - Altera Flex10KA FPGA for glue logic and peripherals (video, uart, spi etc.)
- - 512 kB of SRAM (used for frame buffer and stage 2 BIOS code)
+ - Altera Flex10KA FPGA for glue logic and peripherals (video, uart, spi, audio etc.)
+ - Atmel attiny48 for scanning keyboard matrix and mouse, interfacing to I2C peripherals
+ - 512 kB of SRAM (used for frame buffer, sound buffer and stage 2 BIOS code)
  - 64 MB of SDRAM
  - 800x480 resolution 7" TFT display, driven at 256 colors (from a 16-bpp palette)
- - Stereo audio DAC, samplerate of 44.1 kHz.
+ - Stereo audio DAC, 8 bit/channel, samplerate of 48 kHz
  - SD card interface over SPI
- - On-board SPI Flash ROM (512 kB) for bootstrapping code
+ - On-board SPI Flash ROM (512 kB) for BIOS code
+ - 7.4 V, 2.2 Ah battery pack with custom balancing circuitry (which sucks)
 
-The (blue) mainboard is a 10x10 cm 4-layer board, designed by us and manufactured by a Chinese PCB fab
-
-The power supply board is temporary, a new keyboard/power supply and a case will be designed to better suit a laptop/palmtop form factor.
+The (blue) mainboard is a 10x10 cm 4-layer board, designed by us and manufactured by a Chinese PCB fab.
+The larger upper board is a CNC milled peripheral board sporting the keyboard, mouse, IO ports and power supplies.
+We desperately need to make a proper case...
 
 ## This repository
 This repository contains the following:
- - Hardware schematics and layout (done in kicad)
-   - Old Rev 1, has never been build or tested
-   - Current Rev 2
+ - Hardware schematics and layout (kicad)
+   - Current Rev 2 motherboard
+   - Peripheral board
  - VHDL code for the glue logic/peripheral controller FPGA
  - Source code
   - Stage 1 boot, resides in a small ROM block in the FPGA
