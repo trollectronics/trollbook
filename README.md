@@ -7,6 +7,7 @@ working on for a while.
 In its current state, it boots up into a BIOS menu capable of doing
 a few simple things like browsing a FAT formatted SD-card, flashing its bootrom
 from SD-card and excuting programs from SD-card.
+One of the included demo programs can play .MOD music files from SD card.
 
 The entire setup uses about 4.3 Watts while running, including
 display and backlight.
@@ -35,9 +36,9 @@ This repository contains the following:
    - Peripheral board
  - VHDL code for the glue logic/peripheral controller FPGA
  - Source code
-  - Stage 1 boot, resides in a small ROM block in the FPGA
-  - Stage 2 bios, resides in the large SPI rom
-  - Demo code for feature testing/demonstration
+   - Stage 1 boot, resides in a small ROM block in the FPGA
+   - Stage 2 bios, resides in the large SPI rom
+   - Demo code for feature testing/demonstration
 
 ## Companion projects
 The following projects have been developed for the system:
