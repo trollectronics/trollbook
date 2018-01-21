@@ -30,6 +30,8 @@ void list_dir(void *arg);
 
 int end;
 
+bool do_debug = false;
+
 typedef struct RomHeader RomHeader;
 struct RomHeader {
 	uint32_t magic;
@@ -262,7 +264,7 @@ static void execute_elf(void *arg) {
 	mmu040_init();
 	terminal_clear();
 	printf("MMU Init\n");
-	if(!(entry = elf_load(elf_begin))) {
+	if(!(entry = elf_load(elf_begin, do_debug))) {
 		printf("Failed to load ELF\n");
 		input_poll();
 		return;
@@ -272,11 +274,17 @@ static void execute_elf(void *arg) {
 	//printf("Here we have 0x%X\n", *((uint32_t *) entry));
 	//input_poll();
 	mmu_disable();
-	mmu_enable_and_jump(entry, 0, NULL);
+	if(do_debug) {
+		char *argv[] = {"debug"};
+		mmu_enable_and_jump(entry, 1, argv);
+	} else {
+		mmu_enable_and_jump(entry, 0, NULL);
+	}
 }
 
-void execute_elf_path(const char *_path) {
+void execute_elf_path(const char *_path, bool debug) {
 	strcpy(path, _path);
+	do_debug = debug;
 	execute_elf(NULL);
 }
 

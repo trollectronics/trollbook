@@ -2,6 +2,7 @@
 #define	_ELF_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define	ELF_MAGIC1		0x7F
 #define	ELF_MAGIC2		'E'
@@ -158,6 +159,6 @@ struct ElfProgramHeader {
 	uint32_t align;
 };
 
-int (*(elf_load(void *elf)))(int argc, char **argv);
+int (*(elf_load(void *elf, bool debug)))(int argc, char **argv);
 
 #endif

@@ -8,7 +8,7 @@
 #include "printf.h"
 #include "mem.h"
 
-int (*(elf_load(void *elf)))(int argc, char **argv) {
+int (*(elf_load(void *elf, bool debug)))(int argc, char **argv) {
 	ElfHeader *header = elf;
 	ElfProgramHeader *program_header;
 	int i, j;
@@ -62,7 +62,7 @@ int (*(elf_load(void *elf)))(int argc, char **argv) {
 		
 		printf("%s @ 0x%X alloc=%u load=%u\n", write_protected ? "Text" : "Data/BSS", program_header->virtual_address, alloc_count*PAGE_SIZE, file_count);
 		for(j = 0; j < alloc_count; j++) {
-			p = mmu040_allocate_frame((program_header->virtual_address & ~0xFFF) + PAGE_SIZE*j, write_protected);
+			p = mmu040_allocate_frame((program_header->virtual_address & ~0xFFF) + PAGE_SIZE*j, debug ? false : write_protected);
 			
 			if(file_count) {
 				if(file_count < PAGE_SIZE) {
