@@ -24,7 +24,6 @@ static void test_lowres(void *arg);
 static void autoboot(void *arg);
 void color_demo(void *arg);
 static void test_sound(void *arg);
-void ui(void *arg);
 
 uint8_t fat_buf[512];
 
@@ -44,18 +43,15 @@ Menu menu_main = {
 	"Trollectronics Trollbook BIOS\nMain menu\n----------------------------------------\n",
 	false,
 	0,
-	11,
+	8,
 	{
 		{"Boot kernel.elf", autoboot, NULL},
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
 		{"Serial file transfer to SD", serial_transfer_recv, NULL},
 		{"Test SPI ROM", test_spi_rom, NULL},
-		{"Test Sound", test_sound, NULL},
 		{"Test keyboard", input_test_keyboard, NULL},
-		{"Test UI", ui, NULL},
 		{"Test Low-res video mode", test_lowres, NULL},
 		{"SDRAM Memtest", test_sdram, NULL},
-		{"Color demo", color_demo, NULL},
 		{"Reboot", reboot, NULL},
 	},
 };
@@ -263,7 +259,6 @@ int main() {
 	fat_get_label(label);
 	printf(" - Volume label: %s\n\n", label);
 	
-	//ui();
 	menu_execute(&menu_main);
 	
 	for(;;);

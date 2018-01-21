@@ -28,6 +28,8 @@ void select_file_action(void *arg);
 
 void list_dir(void *arg);
 
+int end;
+
 typedef struct RomHeader RomHeader;
 struct RomHeader {
 	uint32_t magic;
@@ -234,7 +236,8 @@ static void execute_elf(void *arg) {
 	int fd, size, i, j;
 	void *entry;
 	//extern void *end;
-	uint8_t *tmp = (void *)(0xDDD00 + 96*1024);
+	void *elf_begin = ((void *)(&end)) + 4*1024;
+	uint8_t *tmp = elf_begin;
 	
 	printf("Load file to RAM\n");
 	fd = fat_open(path, O_RDONLY);
@@ -259,7 +262,7 @@ static void execute_elf(void *arg) {
 	mmu040_init();
 	terminal_clear();
 	printf("MMU Init\n");
-	if(!(entry = elf_load((void *) (0xDDD00 + 96*1024)))) {
+	if(!(entry = elf_load(elf_begin))) {
 		printf("Failed to load ELF\n");
 		input_poll();
 		return;

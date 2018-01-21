@@ -52,6 +52,7 @@ void menu_execute(void *m) {
 	for(;;) {
 		terminal_set_pos(x, y);
 		menu_display(menu);
+		
 		btn = input_poll();
 		
 		if(btn.up) {
