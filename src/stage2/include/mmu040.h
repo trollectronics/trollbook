@@ -10,7 +10,7 @@
 #define PAGE_SIZE (1 << PAGE_OFFSET_BITS)
 #define PAGE_MASK (PAGE_SIZE - 1)
 
-#define MEM_MMU_TABLE_AREA (16UL*1024UL*1024UL)
+#define MEM_MMU_TABLE_AREA (0xE0000000UL)
 
 typedef enum Mmu040PageSize Mmu040PageSize;
 enum Mmu040PageSize {
