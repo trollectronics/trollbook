@@ -50,7 +50,7 @@ Menu menu_main = {
 		{"Browse SD card filesystem", menu_execute, &menu_dir},
 		{"Serial file transfer to SD", serial_transfer_recv, NULL},
 		{"Test SPI ROM", test_spi_rom, NULL},
-		{"Test keyboard", input_test_keyboard, NULL},
+		{"Test input", input_test_keyboard, NULL},
 		{"Test Low-res video mode", test_lowres, NULL},
 		{"SDRAM Memtest", test_sdram, NULL},
 		{"Reboot", reboot, NULL},

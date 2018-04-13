@@ -17,9 +17,9 @@ void protocol_reset() {
 
 void protocol_tick() {
 	int16_t dat;
-	uint8_t buf[4];
-	uint8_t len = 0;
-	uint8_t pos = 0;
+	static uint8_t buf[4];
+	static uint8_t len = 0;
+	static uint8_t pos = 0;
 	
 	
 	if(protocol.cmd == PROTOCOL_COMMAND_NONE)
@@ -48,9 +48,17 @@ void protocol_tick() {
 			break;
 		
 		case PROTOCOL_COMMAND_MOUSE_EVENT:
+			spi_send(0x00);
+			mouse_vel_get(buf);
+			len = 4;
+			protocol.cmd = PROTOCOL_COMMAND_SEND_BUFFER;
+			break;
+			
+		/* Emulate a digitizer */
+		case PROTOCOL_COMMAND_DIGITIZER_EVENT:
+			spi_send(0x00);
 			mouse_state_get(buf);
 			len = 4;
-			spi_send(0x00);
 			protocol.cmd = PROTOCOL_COMMAND_SEND_BUFFER;
 			break;
 			

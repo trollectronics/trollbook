@@ -259,7 +259,7 @@ static void execute_elf(void *arg) {
 	fat_close(fd);
 	printf("File loaded\n");
 	printf("Highest addr used is 0x%X\n", tmp);
-	input_poll();
+	//input_poll();
 	
 	mmu040_init();
 	terminal_clear();
@@ -270,7 +270,7 @@ static void execute_elf(void *arg) {
 		return;
 	}
 	printf("ELF load successful, entry is 0x%X, press any key\n", entry);
-	input_poll();
+	//input_poll();
 	//printf("Here we have 0x%X\n", *((uint32_t *) entry));
 	//input_poll();
 	mmu_disable();

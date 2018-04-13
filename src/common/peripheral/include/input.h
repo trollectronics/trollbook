@@ -54,8 +54,8 @@ struct InputKeyboardEvent {
 
 typedef struct InputMouseEvent InputMouseEvent;
 struct InputMouseEvent {
-	uint16_t x;
-	uint16_t y;
+	int16_t x;
+	int16_t y;
 	uint8_t buttons;
 	int8_t wheel;
 };

@@ -6,7 +6,7 @@
 #include "spi.h"
 #include "delay.h"
 #include "input.h"
-#include "../../tgb/protocol.h"
+#include "../../kbd/protocol.h"
 
 static const char matrix_key[4][17] = {
 	{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '\'', 'B', 'T', 'A', 'U', 'C', },
@@ -22,9 +22,18 @@ static bool matrix[4][17];
 static const int matrix_cols[17] = {2, 1, 3, 6, 7, 0, 4, 5, 8, 12, 10, 14, 15, 11, 9, 13, 16};
 //static const int matrix_cols[17] = {0, 1, 2, 3, 4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
+typedef struct InputMouseEvent InputMouseEvent;
+struct InputMouseEvent {
+	int16_t x;
+	int16_t y;
+	uint8_t buttons;
+	int8_t wheel;
+};
+
 void input_test_keyboard(void *arg) {
 	int i, j;
 	uint8_t reg;
+	InputMouseEvent mouse = {};
 	spi_set_clockdiv(165);
 	bool change;
 	
@@ -34,6 +43,7 @@ void input_test_keyboard(void *arg) {
 		dumbdelay(1000);
 		
 		spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		dumbdelay(100);
 		reg = spi_send_recv(0xFF);
 		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
@@ -47,6 +57,27 @@ void input_test_keyboard(void *arg) {
 				}
 			}
 		}
+		
+		if(reg != 0xFF && reg & 0x02) {
+			spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+			dumbdelay(100);
+			spi_send_recv(0xFF);
+			dumbdelay(100);
+			
+			mouse.x = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT)) << 8;
+			dumbdelay(100);
+			mouse.x |= spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+			dumbdelay(100);
+			mouse.y = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT)) << 8;
+			dumbdelay(100);
+			mouse.y |= spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+			dumbdelay(100);
+			
+			spi_send_recv(0xFF);
+			dumbdelay(100);
+			
+		}
+		
 		spi_select_slave(SPI_SLAVE_NONE);
 		
 		if(change) {
@@ -62,6 +93,7 @@ void input_test_keyboard(void *arg) {
 				}
 				printf("\n");
 			}
+			printf("\n(%i, %i)\n", mouse.x, mouse.y);
 		} else {
 			dumbdelay(100000);
 		}
@@ -144,6 +176,7 @@ InputButtons input_poll_keyboard(void *arg) {
 		dumbdelay(10000);
 		
 		spi_send_recv(PROTOCOL_COMMAND_STATUS);
+		dumbdelay(100);
 		reg = spi_send_recv(0xFF);
 		if(reg != 0xFF && reg & 0x1) {
 			spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);

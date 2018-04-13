@@ -8,6 +8,8 @@
 #define SCANCODE_MMB 66
 #define SCANCODE_LMB 67
 
+#define MOUSE_SCALING 4
+
 typedef enum ProtocolCommand ProtocolCommand;
 enum ProtocolCommand {
 	PROTOCOL_COMMAND_SEND_BUFFER = -2,
@@ -24,14 +26,14 @@ enum ProtocolCommand {
 	PROTOCOL_COMMAND_DIGITIZER_EVENT,
 };
 
-static const char matrix_key[4][17] = {
+static const uint8_t matrix_key[4][17] = {
 	{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '\'', INPUT_KEY_BACKSPACE, INPUT_KEY_LTROLL, INPUT_KEY_LALT, INPUT_KEY_UP, INPUT_KEY_LCTRL, },
 	{'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', '^', INPUT_KEY_RETURN, INPUT_KEY_RALT, '<', INPUT_KEY_RIGHT, INPUT_KEY_RMB, },
 	{'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'o', 'a', '\'', INPUT_KEY_ESC, INPUT_KEY_TAB, '~', INPUT_KEY_DOWN, INPUT_KEY_MMB, },
 	{INPUT_KEY_LSHIFT, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', INPUT_KEY_RSHIFT, INPUT_KEY_RFN, ' ', INPUT_KEY_LFN, INPUT_KEY_LEFT, INPUT_KEY_LMB, },
 };
 
-static const char matrix_key_shift[4][17] = {
+static const uint8_t matrix_key_shift[4][17] = {
 	{'!', '"', '#', '$', '%', '&', '/', '(', ')', '=', '?', '`', INPUT_KEY_BACKSPACE, INPUT_KEY_LTROLL, INPUT_KEY_LALT, INPUT_KEY_UP, INPUT_KEY_LCTRL, },
 	{'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', '^', INPUT_KEY_RETURN, INPUT_KEY_RALT, '>', INPUT_KEY_RIGHT, INPUT_KEY_RMB, },
 	{'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'O', 'A', '*', INPUT_KEY_ESC, INPUT_KEY_TAB, '|', INPUT_KEY_DOWN, INPUT_KEY_MMB, },
@@ -48,8 +50,8 @@ static struct {
 } keyboard;
 
 static struct {
-	int16_t x;
-	int16_t y;
+	int32_t x;
+	int32_t y;
 	struct {
 		uint8_t lmb : 1;
 		uint8_t mmb : 1;
@@ -96,8 +98,8 @@ InputKeyboardEvent input_keyboard_event_pop() {
 
 InputMouseEvent input_mouse_get() {
 	InputMouseEvent event;
-	event.x = mouse.x;
-	event.y = mouse.y;
+	event.x = (mouse.x >> MOUSE_SCALING);
+	event.y = (mouse.y >> MOUSE_SCALING);
 	event.buttons = mouse.buttons.lmb | (mouse.buttons.mmb << 1) | (mouse.buttons.rmb << 2);
 	event.wheel = 0;
 	
@@ -112,6 +114,7 @@ void input_poll() {
 	dumbdelay(1000);
 	
 	spi_send_recv(PROTOCOL_COMMAND_STATUS);
+	dumbdelay(100);
 	status = spi_send_recv(0xFF);
 	if(status != 0xFF && status & 0x1) {
 		spi_send_recv(PROTOCOL_COMMAND_KEYBOARD_EVENT);
@@ -129,18 +132,42 @@ void input_poll() {
 	}
 	
 	spi_send_recv(0xFF);
+	dumbdelay(100);
+	spi_send_recv(0xFF);
 	
-	if(status != 0xFF && status & 0x40) {
-		spi_send_recv(PROTOCOL_COMMAND_DIGITIZER_EVENT);
-		//spi_send_recv(0xFF);
+	if(status != 0xFF && status & 0x02) {
+		int16_t vel_x, vel_y;
+		spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+		dumbdelay(100);
+		spi_send_recv(0xFF);
+		dumbdelay(100);
 		
-		mouse.x = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_DIGITIZER_EVENT)) << 8;
-		mouse.x |= spi_send_recv(PROTOCOL_COMMAND_DIGITIZER_EVENT);
-		mouse.y = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_DIGITIZER_EVENT)) << 8;
-		mouse.y |= spi_send_recv(PROTOCOL_COMMAND_DIGITIZER_EVENT);
+		vel_x = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT)) << 8;
+		dumbdelay(100);
+		vel_x |= spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+		dumbdelay(100);
+		vel_y = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT)) << 8;
+		dumbdelay(100);
+		vel_y |= spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+		dumbdelay(100);
 		
 		spi_send_recv(0xFF);
+		dumbdelay(100);
 		
+		mouse.x += vel_x;
+		mouse.y += vel_y;
+		
+		if(mouse.x > (800 << MOUSE_SCALING))
+			mouse.x = (800 << MOUSE_SCALING) - 1;
+		
+		if(mouse.x < 0)
+			mouse.x = 0;
+		
+		if(mouse.y > (480 << MOUSE_SCALING))
+			mouse.y = (480 << MOUSE_SCALING) - 1;
+		
+		if(mouse.y < 0)
+			mouse.y = 0;
 	}
 	spi_select_slave(SPI_SLAVE_NONE);
 }

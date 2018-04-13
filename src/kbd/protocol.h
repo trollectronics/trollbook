@@ -14,6 +14,7 @@ enum ProtocolCommand {
 	PROTOCOL_COMMAND_VOLUME,
 	PROTOCOL_COMMAND_ADC,
 	PROTOCOL_COMMAND_I2C,
+	PROTOCOL_COMMAND_DIGITIZER_EVENT,
 };
 
 typedef struct StatusRegister StatusRegister;
