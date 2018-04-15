@@ -286,7 +286,7 @@ begin
 				d <= x"000000A5"; --x"deadcafe";
 			
 			--write to SPI
-			when 280 =>
+			when 282 =>
 				a <= x"00100800"; --std_logic_vector(to_unsigned(write_a, 32));
 				cpu_siz <= "00";
 				cpu_tt <= "00";
@@ -294,12 +294,12 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 282 =>
+			when 284 =>
 				cpu_ts <= '1';
 				d <= x"00000090"; --x"deadcafe";
 			
 			--read extint
-			when 288 =>
+			when 294 =>
 				a <= x"00100080"; --std_logic_vector(to_unsigned(write_a, 32));
 				d <= (others => 'Z');
 				cpu_siz <= "00";
@@ -308,11 +308,11 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 290=>
+			when 296=>
 				cpu_ts <= '1';
 			
 			-- enable vsync interrupt
-			when 300 =>
+			when 310 =>
 				a <= x"00100028";
 				cpu_siz <= "00";
 				cpu_tt <= "00";
@@ -320,7 +320,7 @@ begin
 				cpu_ts <= '0';
 				cpu_tip <= '0';
 				cpu_tm <= "001";
-			when 302 =>
+			when 312 =>
 				cpu_ts <= '1';
 				d <= x"00000001"; -- priority
 			

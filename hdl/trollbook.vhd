@@ -123,6 +123,11 @@ architecture arch of trollbook is
 	
 	signal ll_ub_internal : std_logic;
 	
+	signal chipset_a : std_logic_vector(7 downto 0);
+	signal chipset_d : std_logic_vector(31 downto 0);
+	signal chipset_q : std_logic_vector(31 downto 0);
+	signal chipset_siz : std_logic_vector(1 downto 0);
+	signal chipset_rw : std_logic;
 	signal chipset_ce : std_logic_vector(15 downto 0);
 	signal chipset_ack : wor_logic_vector(15 downto 0);
 	signal chipset_nack : wor_logic_vector(15 downto 0);
@@ -180,6 +185,17 @@ begin
 		bus_ce_chipset => bus_ce_chipset,
 		bus_ack_chipset => bus_ack_chipset,
 		bus_nack_chipset => bus_nack_chipset,
+		bus_d => bus_d,
+		bus_q => bus_q,
+		bus_rw => bus_rw,
+		bus_siz => bus_siz,
+		
+		chipset_a => chipset_a,
+		chipset_d => chipset_q,
+		chipset_q => chipset_d,
+		chipset_rw => chipset_rw,
+		chipset_siz => chipset_siz,
+		
 		
 		chipset_ce => chipset_ce,
 		chipset_ack => chipset_ack,
@@ -191,8 +207,8 @@ begin
 		port map(reset => internal_reset, clk => clk33,
 		external_interrupt => ext_int,
 		
-		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_a => chipset_a, bus_d => chipset_d, bus_q => chipset_q,
+		bus_rw => chipset_rw, bus_siz => chipset_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
 		chipset_int => chipset_int,
 		
@@ -202,8 +218,8 @@ begin
 	-- u_timer: entity work.timer generic map(peripheral_id => 2, timers => 1)
 		-- port map(reset => internal_reset, clk => clk33,
 		
-		-- chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
-		-- bus_rw => bus_rw, bus_siz => bus_siz,
+		-- chipset_a => chipset_a, bus_d => chipset_d, bus_q => chipset_q,
+		-- bus_rw => chipset_rw, bus_siz => chipset_siz,
 		-- chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
 		-- chipset_int => chipset_int);
 	
@@ -212,15 +228,15 @@ begin
 	u_spi: entity work.spi generic map(peripheral_id => 8)
 		port map(reset => internal_reset, clk => clk33,
 		miso => spi_miso, mosi => spi_mosi_internal, sck => spi_clk_internal, ss => spi_ss,
-		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_a => chipset_a, bus_d => chipset_d, bus_q => chipset_q,
+		bus_rw => chipset_rw, bus_siz => chipset_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
 	
 	u_uart: entity work.uart generic map(peripheral_id => 9)
 		port map(reset => internal_reset, clk => clk33,
 		rx => uart_rx, tx => uart_tx,
-		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_a => chipset_a, bus_d => chipset_d, bus_q => chipset_q,
+		bus_rw => chipset_rw, bus_siz => chipset_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
 	
 	u_vga: entity work.vga generic map(peripheral_id => 10,
@@ -234,8 +250,8 @@ begin
 		
 		power_on => vga_pwr, backlight_pwm => vga_pwm,
 		
-		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_a => chipset_a, bus_d => chipset_d, bus_q => chipset_q,
+		bus_rw => chipset_rw, bus_siz => chipset_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
 		
 		chipset_int => chipset_int);
@@ -246,8 +262,8 @@ begin
 		
 		ll_a => ll_sound_a, ll_d => ll_sound_q, ll_ce => ll_sound_ce, ll_ack => ll_sound_ack,
 		
-		chipset_a => bus_a(7 downto 0), bus_d => bus_d, bus_q => bus_q,
-		bus_rw => bus_rw, bus_siz => bus_siz,
+		chipset_a => chipset_a, bus_d => chipset_d, bus_q => chipset_q,
+		bus_rw => chipset_rw, bus_siz => chipset_siz,
 		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
 		chipset_int => chipset_int);
 	
