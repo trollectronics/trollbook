@@ -35,6 +35,15 @@ static void audio_callback(int number) {
 	buffer = (sound_hw[1] & 0x1);
 }
 
+static void timer_callback(int number) {
+	volatile uint32_t *timer_hw = (volatile uint32_t *) PERIPHERAL_TIMER_BASE;
+	volatile uint32_t *interrupt_hw = (volatile uint32_t *) PERIPHERAL_INTERRUPT_BASE;
+	terminal_putc('.');
+	muil_color.selected = ~muil_color.selected;
+	timer_hw[1] = 0x1;
+	interrupt_hw[32 + PERIPHERAL_ID_TIMER] = 0x0;
+}
+
 static struct {
 	MuilWidget *vbox;
 	MuilWidget *label_title;
@@ -129,8 +138,19 @@ void play(const char *filename) {
 	
 	muil_pane_resize(player_ui.pane_list.pane, player_ui.pane_list.pane->x, player_ui.pane_list.pane->y, player_ui.pane_list.pane->w, player_ui.pane_list.pane->h);
 	
-	interrupt_register(1, audio_callback);
-	interrupt_perihperal_enable(PERIPHERAL_ID_AUDIO, 1);
+	volatile uint32_t *timer_hw = (volatile uint32_t *) PERIPHERAL_TIMER_BASE;
+	
+	timer_hw[0] = 0xFFFF0001UL;
+	timer_hw[4] = 0x3;
+	timer_hw[5] = 0;
+	timer_hw[6] = 500;
+	
+	
+	interrupt_register(3, timer_callback);
+	interrupt_perihperal_enable(PERIPHERAL_ID_TIMER, 3);
+	
+	interrupt_register(5, audio_callback);
+	interrupt_perihperal_enable(PERIPHERAL_ID_AUDIO, 5);
 	interrupt_global_enable();
 	
 	sound_start();
@@ -139,6 +159,8 @@ void play(const char *filename) {
 		player_ui_volumes_bargraphs();
 		muil_events(&player_ui.pane_list, true);
 	}
+	
+	timer_hw[4] = 0x0;
 	
 	sound_stop();
 	interrupt_global_disable();
