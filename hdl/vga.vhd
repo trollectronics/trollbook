@@ -355,7 +355,7 @@ begin
 				end if;
 			end if;
 			
-			if cursor_y_state = drawing and pixel_counter = line_front_porch - 1 then --line len -1 ?
+			if cursor_y_state = drawing and pixel_counter = line_hsync - 1 then --line len -1 ?
 				cursor_y_count <= cursor_y_count + 1;
 				
 				if cursor_y_count = (CURSOR_H - 1) then
