@@ -1,7 +1,7 @@
 #ifndef MOUSE_H_
 #define MOUSE_H_
 
-#define MOUSE_THRESHOLD 32
+#define MOUSE_THRESHOLD 50
 
 #include <stdint.h>
 #include <avr/io.h>
