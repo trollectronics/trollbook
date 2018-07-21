@@ -169,5 +169,41 @@ void input_poll() {
 		if(mouse.y < 0)
 			mouse.y = 0;
 	}
+	
+	if(status != 0xFF && status & 0x40) {
+		int16_t vel_x, vel_y;
+		spi_send_recv(PROTOCOL_COMMAND_DIGITIZER_EVENT);
+		dumbdelay(100);
+		spi_send_recv(0xFF);
+		dumbdelay(100);
+		
+		vel_x = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT)) << 8;
+		dumbdelay(100);
+		vel_x |= spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+		dumbdelay(100);
+		vel_y = ((uint16_t) spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT)) << 8;
+		dumbdelay(100);
+		vel_y |= spi_send_recv(PROTOCOL_COMMAND_MOUSE_EVENT);
+		dumbdelay(100);
+		
+		spi_send_recv(0xFF);
+		dumbdelay(100);
+		
+		mouse.x = vel_x << MOUSE_SCALING;
+		mouse.y = vel_y << MOUSE_SCALING;
+		
+		if(mouse.x > (800 << MOUSE_SCALING))
+			mouse.x = (800 << MOUSE_SCALING) - 1;
+		
+		if(mouse.x < 0)
+			mouse.x = 0;
+		
+		if(mouse.y > (480 << MOUSE_SCALING))
+			mouse.y = (480 << MOUSE_SCALING) - 1;
+		
+		if(mouse.y < 0)
+			mouse.y = 0;
+	}
+	
 	spi_select_slave(SPI_SLAVE_NONE);
 }
