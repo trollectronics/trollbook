@@ -5,9 +5,16 @@
 #include <interrupt.h>
 #include <sd.h>
 #include <fat.h>
+#include <delay.h>
+#include "gfx.h"
 #include "main.h"
 
 uint8_t fat_buf[512];
+
+struct {
+	uint8_t tj0[64000];
+	uint8_t h3y[64000];
+} data;
 
 static const char *sd_card_type_name[] = {
 	[SD_CARD_TYPE_MMC] = "MMC",
@@ -75,6 +82,39 @@ int rand() {
 	return 4;
 }
 
+void load_file(const char *filename, void *buf) {
+	uint32_t *src, *dst;
+	unsigned i, j;
+	unsigned size;
+	int fd;
+	
+	printf("open file %s\n", filename);
+	fd = fat_open(filename, O_RDONLY);
+	if(fd < 0) {
+		printf("failed to open file\n");
+		return;
+	}
+	
+	size = fat_fsize(fd);
+	
+	dst = buf;
+	for(j = 0; j < size; j += 512) {
+		fat_read_sect(fd);
+		src = (uint32_t *) fat_buf;
+		for(i = 0; i < 512/4; i++) {
+			*dst++ = *src++;
+		}
+		printf("\r%u/%u kB", j >> 10, size >> 10);
+	}
+	fat_close(fd);
+	printf("\n");
+}
+
+void load_files() {
+	load_file("/DATA/TJ0.DAT", data.tj0);
+	load_file("/DATA/H3Y.DAT", data.h3y);
+}
+
 int main(int argc, char **argv) {
 	int type;
 	char label[12];
@@ -108,7 +148,19 @@ int main(int argc, char **argv) {
 	fat_get_label(label);
 	printf(" - Volume label: %s\n\n", label);
 	
-	printf("tj0!");
+	
+	//load_files();
+	delay_timer_set_prescale(30000);
+	//gfx_set_lowres();
+	for(;;) {
+		//gfx_blit_fast(data.tj0, 320, 200, 40, 20);
+		printf("tj0\n");
+		delay_timer(3, 1000);
+		//gfx_blit_fast(data.h3y, 320, 200, 40, 20);
+		printf("h3y\n");
+		delay_timer(3, 1000);
+	}
+	
 	for(;;);
 	
 	fail:
