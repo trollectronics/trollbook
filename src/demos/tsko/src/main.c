@@ -11,10 +11,7 @@
 
 uint8_t fat_buf[512];
 
-struct {
-	uint8_t tj0[64000];
-	uint8_t h3y[64000];
-} data;
+DemoData data;
 
 static const char *sd_card_type_name[] = {
 	[SD_CARD_TYPE_MMC] = "MMC",
@@ -88,7 +85,7 @@ void load_file(const char *filename, void *buf) {
 	unsigned size;
 	int fd;
 	
-	printf("open file %s\n", filename);
+	printf("loading file %s\n", filename);
 	fd = fat_open(filename, O_RDONLY);
 	if(fd < 0) {
 		printf("failed to open file\n");
@@ -104,15 +101,52 @@ void load_file(const char *filename, void *buf) {
 		for(i = 0; i < 512/4; i++) {
 			*dst++ = *src++;
 		}
-		printf("\r%u/%u kB", j >> 10, size >> 10);
+		//printf("\r%u/%u kB", j >> 10, size >> 10);
 	}
 	fat_close(fd);
-	printf("\n");
+	//printf("\n");
 }
 
 void load_files() {
-	load_file("/DATA/TJ0.DAT", data.tj0);
+	int fd;
+	uint32_t size;
+	
+	fd = fat_open("/DATA/DANS.MOD", O_RDONLY);
+	size = fat_fsize(fd);
+	data.modfile = malloc(size);
+	data.modsize = size;
+	fat_close(fd);
+	
+	load_file("/DATA/DANS.MOD", data.modfile);
+	
+	
+	load_file("/DATA/A1.DAT", data.a1);
+	load_file("/DATA/A2.DAT", data.a2);
+	load_file("/DATA/AM.DAT", data.am);
+	load_file("/DATA/AND.DAT", data.and);
+	load_file("/DATA/B1.DAT", data.b1);
+	load_file("/DATA/B2.DAT", data.b2);
+	load_file("/DATA/BEJ.DAT", data.bej);
+	load_file("/DATA/C1.DAT", data.c1);
+	load_file("/DATA/C2.DAT", data.c2);
+	load_file("/DATA/C3.DAT", data.c3);
+	load_file("/DATA/C4.DAT", data.c4);
+	load_file("/DATA/C5.DAT", data.c5);
+	load_file("/DATA/FIND.DAT", data.find);
 	load_file("/DATA/H3Y.DAT", data.h3y);
+	load_file("/DATA/HIM.DAT", data.him);
+	load_file("/DATA/JADER.DAT", data.jader);
+	load_file("/DATA/KNOW.DAT", data.know);
+	load_file("/DATA/KRAFT.DAT", data.kraft);
+	load_file("/DATA/ME.DAT", data.me);
+	load_file("/DATA/MIST.DAT", data.mist);
+	load_file("/DATA/MLARGE.DAT", data.mlarge);
+	load_file("/DATA/MSMALL.DAT", data.msmall);
+	load_file("/DATA/TERROR.DAT", data.terror);
+	load_file("/DATA/TJ0.DAT", data.tj0);
+	load_file("/DATA/TSKO.DAT", data.tsko);
+	load_file("/DATA/WANT.DAT", data.want);
+	load_file("/DATA/YOU.DAT", data.you);
 }
 
 int main(int argc, char **argv) {
@@ -148,21 +182,48 @@ int main(int argc, char **argv) {
 	fat_get_label(label);
 	printf(" - Volume label: %s\n\n", label);
 	
+	delay_timer_set_prescale(30000);
 	
+	terminal_clear();
+	printf("Introducing Trollbook\n");
+	delay_timer(3, 500);
+	printf("Completely custom designed and built computer\n");
+	delay_timer(3, 500);
+	printf(" - Motorola 68040 @ 33 MHz\n");
+	delay_timer(3, 500);
+	printf(" - 64 MB RAM\n");
+	delay_timer(3, 500);
+	printf(" - 800x480 LCD display\n");
+	delay_timer(3, 500);
+	printf(" - Stereo 8 bit PCM sound\n");
+	delay_timer(3, 500);
+	printf(" - Palmtop form factor, built in keyboard and mouse\n");
+	delay_timer(3, 500);
+	printf(" - Completely custom graphics and sound controller in FPGA\n");
+	delay_timer(3, 500);
+	printf(" - Custom designed PCBs\n");
+	delay_timer(3, 500);
+	printf(" - All FPGA, BIOS and OS code from scratch\n");
+	delay_timer(3, 2000);
+	printf("\n");
+	printf("First demo running on the device\n");
+	delay_timer(3, 500);
+	printf("We ported an old...\n");
+	delay_timer(3, 500);
+	printf("CLASSIC...\n");
+	delay_timer(3, 500);
+	printf("\n\n\n");
+	
+	printf("h4xxel & slaeshjag of //achtung fulkod\n");
+	printf("\n");
+	delay_timer(3, 5000);
+	
+	terminal_clear();
 	load_files();
 	terminal_clear();
-	delay_timer_set_prescale(30000);
 	gfx_set_lowres();
-	for(;;) {
-		gfx_blit_fast(data.tj0, 320, 200, 40, 20);
-		gfx_buffer_flip();
-		//printf("tj0\n");
-		delay_timer(3, 1000);
-		gfx_blit_fast(data.h3y, 320, 200, 40, 20);
-		gfx_buffer_flip();
-		//printf("h3y\n");
-		delay_timer(3, 1000);
-	}
+	
+	demo();
 	
 	for(;;);
 	
