@@ -3,10 +3,12 @@
 #include <peripheral.h>
 
 static unsigned screen_w;
+static uint32_t vgactrlreg;
 
 void gfx_set_lowres() {
 	volatile uint32_t *vga_hw = (volatile uint32_t *) PERIPHERAL_VGA_BASE;
 	vga_hw[0] = 0x3;
+	vgactrlreg = 0x3;
 	screen_w = 400;
 	//input_poll();
 	//vga_hw[0] = 0x7; //flip buffer
@@ -14,7 +16,14 @@ void gfx_set_lowres() {
 }
 
 void gfx_buffer_flip() {
+	volatile uint32_t *vga_hw = (volatile uint32_t *) PERIPHERAL_VGA_BASE;
 	
+	if(vgactrlreg == 0x3) {
+		vgactrlreg = 0x7;
+	} else {
+		vgactrlreg = 0x3;
+	}
+	vga_hw[0] = vgactrlreg;
 }
 
 void gfx_blit(void *image, int width, int x, int y) {
@@ -29,7 +38,11 @@ void gfx_blit_fast(void *image, unsigned width, unsigned height, unsigned x, uns
 	unsigned i, j;
 	
 	from = image;
-	to = (void *) (0x00080000UL + y*screen_w);
+	if(vgactrlreg == 0x3) {
+		to = (void *) (0x00080000UL + 0x20000UL + y*screen_w);
+	} else {
+		to = (void *) (0x00080000UL + y*screen_w);
+	}
 	
 	width = width >> 2;
 	height = height;

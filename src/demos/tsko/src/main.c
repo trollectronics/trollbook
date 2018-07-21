@@ -149,15 +149,18 @@ int main(int argc, char **argv) {
 	printf(" - Volume label: %s\n\n", label);
 	
 	
-	//load_files();
+	load_files();
+	terminal_clear();
 	delay_timer_set_prescale(30000);
-	//gfx_set_lowres();
+	gfx_set_lowres();
 	for(;;) {
-		//gfx_blit_fast(data.tj0, 320, 200, 40, 20);
-		printf("tj0\n");
+		gfx_blit_fast(data.tj0, 320, 200, 40, 20);
+		gfx_buffer_flip();
+		//printf("tj0\n");
 		delay_timer(3, 1000);
-		//gfx_blit_fast(data.h3y, 320, 200, 40, 20);
-		printf("h3y\n");
+		gfx_blit_fast(data.h3y, 320, 200, 40, 20);
+		gfx_buffer_flip();
+		//printf("h3y\n");
 		delay_timer(3, 1000);
 	}
 	
