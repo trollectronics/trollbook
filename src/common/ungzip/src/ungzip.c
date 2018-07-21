@@ -13,5 +13,5 @@
 
 
 void *ungzip(void *indata, int inlen, int *outlen) {
-	return stbi_zlib_decode_noheader_malloc(indata, inlen, outlen);
+	return stbi_zlib_decode_malloc(indata, inlen, outlen);
 }
