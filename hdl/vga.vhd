@@ -98,6 +98,9 @@ architecture arch of vga is
 	signal ll_ce_next : std_logic;
 	
 	signal palette_clk : std_logic;
+	signal palette_wr_a : std_logic_vector(7 downto 0);
+	signal palette_d : std_logic_vector(15 downto 0);
+	signal palette_write : std_logic;
 	
 	signal cursor_x : std_logic_vector(9 downto 0);
 	signal cursor_y : std_logic_vector(8 downto 0);
@@ -124,10 +127,10 @@ architecture arch of vga is
 	signal backlight_counter : unsigned(16 downto 0);
 begin
 	u_palette: entity work.palette port map(
-		data => (others => '0'),
+		data => palette_d,
 		address => palette_a,
 		inclock => palette_clk,
-		we => '0',
+		we => palette_write,
 		q => rgb
 	);
 	
@@ -371,7 +374,7 @@ begin
 	
 	ll_ce <= ll_ce_internal;
 	
-	process(pixel_counter, second_pixel, ll_d, mode) begin
+	process(pixel_counter, second_pixel, ll_d, mode, palette_write, palette_wr_a) begin
 		second_pixel_next <= second_pixel;
 		palette_a <= (others => '1');
 		
@@ -396,6 +399,10 @@ begin
 				palette_a <= second_pixel(7 downto 0);
 				second_pixel_next <= second_pixel;
 			end if;
+		end if;
+
+		if palette_write = '1' then
+			palette_a <= palette_wr_a;
 		end if;
 	end process;
 	
@@ -426,6 +433,9 @@ begin
 			enabled <= '1';
 			mode_staging <= '0';
 			current_buffer_staging <= '1';
+			palette_write <= '0';
+			palette_wr_a <= (others => '0');
+			palette_d <= (others => '0');
 			
 			backlight_compare <= x"00";
 			
@@ -433,6 +443,7 @@ begin
 			cursor_y <= std_logic_vector(to_unsigned(46, cursor_y'length));
 		elsif falling_edge(clk) then
 			check := chipset_ce(peripheral_id) & bus_rw;
+			palette_write <= '0';
 			
 			case check is
 				when "11" =>
@@ -443,6 +454,13 @@ begin
 							current_buffer_staging <= bus_d(2);
 						when "0001" =>
 							backlight_compare <= bus_d(7 downto 0);
+
+						when "0100" =>
+							palette_wr_a <= bus_d(7 downto 0);
+						when "0101" =>
+							palette_d <= bus_d(15 downto 0);
+							palette_write <= '1';
+
 						when "1010" =>
 							cursor_x <= bus_d(9 downto 0);
 						when "1011" =>
@@ -467,6 +485,10 @@ begin
 						bus_q <= x"0000000" & "0" & current_buffer & mode & enabled;
 					when "0001" =>
 						bus_q <= x"000000" & backlight_compare;
+
+					when "0100" =>
+						bus_q <= x"000000" & palette_wr_a;
+
 					when "1010" =>
 						bus_q <= x"0000" & "000000" & cursor_x;
 					when "1011" =>

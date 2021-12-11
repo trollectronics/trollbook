@@ -391,6 +391,19 @@ begin
 				-- cpu_ts <= '1';
 				-- d <= x"DEADBEEF"; --x"deadcafe";
 			
+			--write to uart
+			when 500 =>
+				a <= x"00100A14"; --std_logic_vector(to_unsigned(write_a, 32));
+				cpu_siz <= "00";
+				cpu_tt <= "00";
+				cpu_rw <= '0';
+				cpu_ts <= '0';
+				cpu_tip <= '0';
+				cpu_tm <= "001";
+			when 502 =>
+				cpu_ts <= '1';
+				d <= x"000012A5"; --x"deadcafe";
+			
 			-- clear vsync interrupt
 			when 915250 =>
 				a <= x"001000A8";
