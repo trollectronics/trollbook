@@ -21,7 +21,8 @@ entity uart is
 		bus_siz : in std_logic_vector(1 downto 0);
 		chipset_ce : in std_logic_vector(15 downto 0);
 		chipset_ack : out wor_logic_vector(15 downto 0);
-		chipset_nack : out wor_logic_vector(15 downto 0)
+		chipset_nack : out wor_logic_vector(15 downto 0);
+		chipset_int : out std_logic_vector(15 downto 0)
 	);
 end uart;
 
@@ -48,6 +49,9 @@ architecture arch of uart is
 	
 	signal tx_internal, tx_next : std_logic;
 	signal rx_prev : std_logic;
+
+	signal interrupt : std_logic;
+	signal tx_empty_ie, rx_full_ie : std_logic;
 begin
 	process(rxstate, rxcount, rx, rx_prev, rx_buffer, rx_full, rx_buffer_internal, chipset_ce, bus_rw, chipset_a, baud_count) begin
 		rxcount_next <= (rxcount - 1) mod 4;
@@ -160,6 +164,9 @@ begin
 			
 			tx_empty <= '1';
 			rx_full <= '0';
+
+			rx_full_ie <= '0';
+			tx_empty_ie <= '0';
 		elsif falling_edge(clk) then
 			if baud_count = 0 then
 				rxcount <= rxcount_next;
@@ -196,19 +203,23 @@ begin
 			
 			if chipset_ce(peripheral_id) = '1' then
 				if bus_rw = '1' then
-					case chipset_a(2) is
-						when '0' =>
+					case chipset_a(3 downto 2) is
+						when "00" =>
 							tx_buffer_internal <= bus_d(7 downto 0);
 							tx_empty <= '0';
 							--txstate <= start;
 							--txcount <= 0;
-						when '1' =>
-							baud_div <= bus_d(31 downto 16);
+						when "01" =>
 							txstate <= idle;
 							rxstate <= idle;
 							rx_prev <= '1';
 							txcount <= 3;
 							rxcount <= 3;
+
+						when "10" =>
+							baud_div <= bus_d(31 downto 16);
+							rx_full_ie <= bus_d(1);
+							tx_empty_ie <= bus_d(0);
 						when others =>
 					end case;
 				end if;
@@ -221,10 +232,12 @@ begin
 			bus_q <= (others => 'Z');
 		elsif falling_edge(clk) then
 			if chipset_ce(peripheral_id) = '1' then
-				if chipset_a(2) = '0' then
+				if chipset_a(3 downto 2) = "00" then
 					bus_q <= x"000000" & rx_buffer;
+				elsif chipset_a(3 downto 2) = "01" then
+					bus_q <= x"0000" & "0000000000000" & rx_active & rx_full & tx_empty;
 				else
-					bus_q <= baud_div & "0000000000000" & rx_active & rx_full & tx_empty;
+					bus_q <= baud_div & "00000000000000" & rx_full_ie & tx_empty_ie;
 				end if;
 			else
 				bus_q <= (others => 'Z');
@@ -232,7 +245,10 @@ begin
 		end if;
 	end process;
 	
+
+	interrupt <= (rx_full and rx_full_ie) or (tx_empty and tx_empty_ie);
 	
+	chipset_int <= (peripheral_id => interrupt, others => 'Z');
 	chipset_ack <= (peripheral_id => '1', others => '0');
 	chipset_nack <= (peripheral_id => '0', others => '0');
 	

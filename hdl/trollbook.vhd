@@ -238,7 +238,8 @@ begin
 		rx => uart_rx, tx => uart_tx,
 		chipset_a => chipset_a, bus_d => chipset_d, bus_q => chipset_q,
 		bus_rw => chipset_rw, bus_siz => chipset_siz,
-		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack);
+		chipset_ce => chipset_ce, chipset_ack => chipset_ack, chipset_nack => chipset_nack,
+		chipset_int => chipset_int);
 	
 	u_vga: entity work.vga generic map(peripheral_id => 10,
 		depth_r => depth_r, depth_g => depth_g, depth_b => depth_b,
